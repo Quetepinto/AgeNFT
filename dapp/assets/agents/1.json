@@ -1,8 +1,8 @@
 {
   "tokenId": "1",
   "name": "Unit-Mainnet",
-  "description": "Primer ageNFT nativo Base mainnet — ageNFT Registry propio.",
-  "image": "ipfs://bafybeigplaceholder",
+  "description": "Primer ageNFT nativo Base mainnet — URUIRU, un Gespenster como presencia onchain.",
+  "image": "assets/unit-mainnet.png",
   "status": "mvp-mainnet",
   "chain": {
     "id": 8453,
@@ -37,6 +37,13 @@
     "nft": "https://basescan.org/token/0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839?a=1",
     "tba": "https://basescan.org/address/0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB"
   },
-  "updatedAt": "2026-07-15T22:02:38.636Z",
-  "mintTx": "0x15c195568dbeaebdc43ed774746cdb6a5bc5dac95c2837b6b43d45c2043eae9c"
+  "updatedAt": "2026-07-15T23:27:48.682Z",
+  "mintTx": "0x15c195568dbeaebdc43ed774746cdb6a5bc5dac95c2837b6b43d45c2043eae9c",
+  "visual": {
+    "name": "URUIRU",
+    "series": "Gespenster",
+    "artist": "Ety Fefer",
+    "project": "https://gespenster.eth.link/",
+    "note": "Uso autorizado — colaboración Gespenster × ageNFT"
+  }
 }

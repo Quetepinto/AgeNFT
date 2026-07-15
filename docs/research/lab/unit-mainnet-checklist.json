@@ -1,0 +1,60 @@
+{
+  "network": "base-mainnet",
+  "tokenId": "1",
+  "contract": "0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839",
+  "tba": "0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB",
+  "owner": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f",
+  "checklist": [
+    {
+      "id": 1,
+      "label": "NFT existe y owner coincide con wallet operacional",
+      "ok": true,
+      "detail": "owner=0xeAf1fe999633B70433cB6B506f9413f73e108C9f"
+    },
+    {
+      "id": 2,
+      "label": "TBA on-chain coincide con manifiesto",
+      "ok": true,
+      "detail": "0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB"
+    },
+    {
+      "id": 3,
+      "label": "Nombre agente = Unit-Mainnet",
+      "ok": true,
+      "detail": "Unit-Mainnet"
+    },
+    {
+      "id": 4,
+      "label": "TBA tiene USDC operativo (≥0.01)",
+      "ok": true,
+      "detail": "5.016819 USDC"
+    },
+    {
+      "id": 5,
+      "label": "TBA tiene ETH para gas (≥0.00005)",
+      "ok": true,
+      "detail": "0.00025 ETH"
+    },
+    {
+      "id": 6,
+      "label": "Registry en manifiesto = contrato AgeNFT",
+      "ok": true,
+      "detail": "0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839"
+    },
+    {
+      "id": 7,
+      "label": "Cerebro x402 probe (402)",
+      "ok": true,
+      "detail": "tx402.ai"
+    },
+    {
+      "id": 8,
+      "label": "Firma EIP-3009 soberana TBA (ERC-1271)",
+      "ok": true,
+      "detail": "owner firma digest → TBA isValidSignature"
+    }
+  ],
+  "score": "8/8",
+  "dryRun": false,
+  "at": "2026-07-15T23:27:34.376Z"
+}

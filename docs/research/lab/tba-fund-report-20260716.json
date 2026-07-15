@@ -1,0 +1,15 @@
+{
+  "action": "fund-tba-mainnet",
+  "tba": "0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB",
+  "tokenId": "1",
+  "usdcAmount": "5",
+  "ethAmount": "0.0001",
+  "usdcTx": "0x140cab7e2c76fe180990fbe240d38c53ab42a231f1a5f93803a1cd460ce04a0e",
+  "ethTx": "0xc6ee7213bc5938a0557abf378cb81d7f071624c2b118f37ec25c026fd2f3711c",
+  "tbaAfter": {
+    "eth": "0.00025",
+    "usdc": "5.017661"
+  },
+  "note": "Traslado EOA → TBA tesorería Unit-Mainnet / URUIRU",
+  "at": "2026-07-16T01:26:19+02:00"
+}

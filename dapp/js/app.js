@@ -134,7 +134,13 @@ async function main() {
     const img = document.getElementById('avatar');
     const fallback = document.getElementById('avatar-fallback');
     if (agent.image && !agent.image.includes('placeholder')) {
-      img.src = agent.image.replace('ipfs://', 'https://ipfs.io/ipfs/');
+      const src = agent.image.startsWith('http') || agent.image.startsWith('ipfs')
+        ? agent.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
+        : assetUrl(agent.image);
+      img.src = src;
+      img.alt = agent.visual?.name
+        ? `${agent.visual.name} — Gespenster`
+        : agent.name || 'Agente';
       img.hidden = false;
       fallback.hidden = true;
     } else {

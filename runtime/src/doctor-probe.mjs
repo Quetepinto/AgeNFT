@@ -7,7 +7,6 @@ import { resolveAgentEnv } from './agenft-env.mjs';
 import { resolveBrain } from './manifest-loader.mjs';
 import { inferBrain } from './brain-tx402.mjs';
 import { checkBrainBudget, checkPayerBalanceUsdc } from './budget-tracker.mjs';
-import { loadPayerAccount } from './payer-key.mjs';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -16,9 +15,8 @@ const { manifest, dataDir } = ctx;
 const brain = resolveBrain(manifest);
 
 const budget = checkBrainBudget(manifest, dataDir, { pay: true });
-const payer = loadPayerAccount();
-let payerBal = null;
-if (payer) payerBal = await checkPayerBalanceUsdc(payer.address);
+const treasury = manifest.treasury.address;
+let treasuryBal = await checkPayerBalanceUsdc(treasury);
 
 const probe = await inferBrain({
   brain,
@@ -35,9 +33,9 @@ if (!budget.allowed) {
   issues.push(`budget: ${budget.reason}`);
 }
 
-if (payer && payerBal && payerBal.usdc < 0.002) {
+if (treasuryBal.usdc < 0.002) {
   health = health === 'dormant' ? 'dormant' : 'impaired';
-  issues.push(`payer USDC bajo: ${payerBal.usdc.toFixed(6)}`);
+  issues.push(`TBA USDC bajo: ${treasuryBal.usdc.toFixed(6)}`);
 }
 
 if (!probe.ok) {
@@ -56,7 +54,7 @@ const report = {
   health,
   issues,
   budget: budget.status,
-  payer: payer ? { address: payer.address, usdcMainnet: payerBal?.usdc ?? null } : null,
+  treasury: { address: treasury, usdcMainnet: treasuryBal.usdc },
   brainProbe: { ok: probe.ok, status: probe.status },
 };
 
@@ -68,7 +66,7 @@ writeFileSync(
 
 if (health !== 'healthy') {
   console.log(
-    `⚠️ ageNFT Doctor [${health}] Unit-1 #${manifest.identity.agentId}\n` +
+    `⚠️ ageNFT Doctor [${health}] ${manifest.name} #${manifest.identity.agentId}\n` +
       issues.map((i) => `• ${i}`).join('\n') +
       `\nTBA: ${manifest.treasury.address}`,
   );

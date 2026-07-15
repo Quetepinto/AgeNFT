@@ -1,0 +1,16 @@
+{
+  "network": "base-mainnet",
+  "tba": "0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB",
+  "tokenId": "1",
+  "payer": "0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB",
+  "payerMode": "tba",
+  "ok": true,
+  "status": 200,
+  "costUsd": 0,
+  "usdcBefore": "0.019109",
+  "usdcAfter": "0.018457",
+  "usdcDelta": "0.000652",
+  "content": "No puedo confirmar pagos ni verificar transacciones desde un TBA por mi cuenta. Si realizaste un pago desde un TBA, proporcióname el hash de la transacción o el detalle para que pueda verificarlo en la red.",
+  "verdict": "PASS — pago soberano TBA",
+  "at": "2026-07-15T21:50:50.078Z"
+}

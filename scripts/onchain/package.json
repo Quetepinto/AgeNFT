@@ -7,7 +7,9 @@
     "probe": "node probe-organs.mjs",
     "transfer-test": "node transfer-test.mjs",
     "transfer-checklist": "node transfer-checklist.mjs 115",
-    "recover": "node recover-agent.mjs 115"
+    "bridge": "node bridge-to-base.mjs",
+    "balances": "node wallet-balances.mjs",
+    "swap-usdc": "node swap-eth-usdc-base.mjs"
   },
   "dependencies": {
     "viem": "^2.31.0"

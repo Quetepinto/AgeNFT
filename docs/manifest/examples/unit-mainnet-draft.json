@@ -1,0 +1,120 @@
+{
+  "type": "ageNFT/v1",
+  "name": "Unit-Mainnet",
+  "description": "Primer ageNFT nativo Base mainnet — ageNFT Registry propio (pendiente mint).",
+  "image": "ipfs://bafybeigplaceholder",
+  "createdAt": "2026-07-15T21:45:00.000Z",
+  "updatedAt": "2026-07-15T21:45:00.000Z",
+
+  "identity": {
+    "chain": "eip155:8453",
+    "registry": "PENDING_AGENFT_REGISTRY",
+    "agentId": null,
+    "nft": {
+      "standard": "erc721",
+      "contract": "PENDING_AGENFT_COLLECTION",
+      "tokenId": "PENDING"
+    },
+    "lab": {
+      "stack": "ageNFT-Registry",
+      "legacy": "Unit-1 #115 Sepolia VIMS — no migrar token",
+      "fundingWallet": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f"
+    }
+  },
+
+  "treasury": {
+    "type": "erc6551",
+    "address": "PENDING_TBA",
+    "chain": "base",
+    "preferredAssets": [
+      {
+        "symbol": "USDC",
+        "network": "eip155:8453",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+      },
+      {
+        "symbol": "ETH",
+        "network": "eip155:8453",
+        "address": "native"
+      }
+    ]
+  },
+
+  "runtime": {
+    "engine": "hermes-agent",
+    "hosting": { "primary": "local", "fallbacks": ["akash", "vps"] }
+  },
+
+  "organs": {
+    "brain": {
+      "primary": {
+        "provider": "tx402.ai",
+        "endpoint": "https://tx402.ai/v1/chat/completions",
+        "model": "minimax/minimax-m3",
+        "network": "eip155:8453"
+      },
+      "fallbacks": [],
+      "routing": { "priority": ["sovereign", "opportunistic", "hose", "dormant"] }
+    },
+    "memory": {
+      "format": "agenft-memory-capsule/v1",
+      "operational": {
+        "provider": "toju",
+        "primary": null,
+        "fallbacks": ["w3stor", "ipfs"]
+      },
+      "archive": { "provider": "arweave", "primary": null }
+    },
+    "doctor": {
+      "enabled": true,
+      "probeIntervalSec": 900,
+      "autoFailover": true,
+      "autoTransplant": ["brain", "memory"],
+      "requireOwnerApproval": ["runtime", "treasury"],
+      "maxTransplantsPerDay": 3
+    },
+    "reflexes": {
+      "circuitBreaker": { "maxRequestsPerMinute": 10, "maxTxPerMinute": 3 },
+      "allowedContracts": []
+    },
+    "hands": { "enabled": [], "dex": "aerodrome" }
+  },
+
+  "budget": {
+    "currency": "USD",
+    "profile": "conversational",
+    "minOperatingBalanceUsdc": "5.00",
+    "organs": {
+      "brain": {
+        "limits": {
+          "perDay": { "requests": 200, "usd": "1.00" },
+          "perMonth": { "usd": "25.00" }
+        },
+        "onCapExceeded": "degrade_to_cheapest_then_dormant",
+        "assumptions": { "avgCostPerRequestUsd": 0.002 }
+      },
+      "gas": {
+        "limits": { "perDay": { "usd": "0.50" } },
+        "onCapExceeded": "pause_non_vital_tx"
+      }
+    },
+    "global": {
+      "perDayUsdHardCap": "2.00",
+      "onGlobalCapExceeded": "dormant_except_doctor_probes"
+    }
+  },
+
+  "gateways": {
+    "policy": {
+      "priority": "sovereign-first",
+      "recommended": ["nostr", "matrix", "telegram"],
+      "sovereignDefault": ["nostr", "matrix"]
+    },
+    "chat": [
+      { "platform": "telegram", "enabled": true, "credentials": "runtime-only", "sovereign": false }
+    ]
+  },
+
+  "x402Support": true,
+  "supportedTrust": ["reputation"]
+}

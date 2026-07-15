@@ -15,9 +15,14 @@
     "hermes:turn": "node src/hermes-turn.mjs",
     "hermes:turn:pay": "node src/hermes-turn.mjs --pay",
     "hermes:doctor": "node src/doctor-probe.mjs",
-    "hermes:install": "node ../scripts/hermes/install-unit-1.mjs",
-    "hermes:verify": "node ../scripts/hermes/verify-unit-1.mjs",
-    "dapp:export": "node ../scripts/dapp/export-public-data.mjs"
+    "hermes:install": "node ../scripts/hermes/install-unit-mainnet.mjs",
+    "hermes:install:lab": "node ../scripts/hermes/install-unit-1.mjs",
+    "hermes:verify": "node ../scripts/hermes/verify-unit-mainnet.mjs",
+    "hermes:verify:mainnet": "node ../scripts/hermes/verify-unit-mainnet.mjs",
+    "hermes:verify:lab": "node ../scripts/hermes/verify-unit-1.mjs",
+    "dapp:export": "node ../scripts/dapp/export-public-data.mjs",
+    "telegram:mainnet:pay": "node src/telegram-unit-mainnet-bot.mjs --pay",
+    "telegram:unit1:pay": "AGENFT_TOKEN_ID=115 node src/telegram-unit-mainnet-bot.mjs --pay"
   },
   "dependencies": {
     "@x402/evm": "^2.18.0",

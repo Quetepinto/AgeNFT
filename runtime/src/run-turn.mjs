@@ -10,6 +10,7 @@ import {
   checkOperatingBalance,
 } from './budget-tracker.mjs';
 import { loadPayerKey, loadPayerAccount } from './payer-key.mjs';
+import { resolvePayerSigner } from './tba-payer-signer.mjs';
 import { syncMemoryRemote } from './memory-toju.mjs';
 
 /**
@@ -68,9 +69,11 @@ export async function runTurn({
   }
 
   let payerAddress = null;
+  let payerSigner = null;
+  let payerKind = null;
   if (pay) {
-    const pk = loadPayerKey();
-    if (!pk) {
+    const resolved = await resolvePayerSigner(manifest);
+    if (resolved.kind === 'missing_key') {
       return {
         ok: false,
         dormant: false,
@@ -78,9 +81,40 @@ export async function runTurn({
         exitCode: 1,
       };
     }
-    payerAddress = loadPayerAccount().address;
-    const op = await checkOperatingBalance(manifest, payerAddress);
+    if (resolved.kind === 'insufficient') {
+      return {
+        ok: false,
+        dormant: true,
+        reason: resolved.reason,
+        budget: budget.status,
+        exitCode: 2,
+      };
+    }
+    payerSigner = resolved.signer;
+    payerKind = resolved.kind;
+    payerAddress = payerSigner.address;
+    let op = await checkOperatingBalance(manifest, payerAddress);
+    if (!op.ok && payerKind === 'tba' && resolved.balances?.tbaUsdc) {
+      const floor = Math.min(
+        (manifest.budget?.minOperatingBalanceUsdc ?? 5) * 1_000_000,
+        2000,
+      );
+      const tbaMicro = Number(resolved.balances.tbaUsdc);
+      if (tbaMicro >= floor) {
+        op = {
+          ok: true,
+          balance: { usdc: tbaMicro / 1_000_000, usdMicro: tbaMicro },
+        };
+      }
+    }
+    log('payer mode:', payerKind, payerKind === 'tba' ? '(soberano TBA)' : '(EOA lab)');
     log('payer USDC:', op.balance?.usdc?.toFixed(6) ?? '?');
+    if (resolved.balances) {
+      log(
+        'treasury USDC:',
+        (Number(resolved.balances.tbaUsdc) / 1_000_000).toFixed(6),
+      );
+    }
     if (!op.ok && !force) {
       return {
         ok: false,
@@ -98,7 +132,7 @@ export async function runTurn({
     systemPrompt: ctx.systemPrompt,
     userMessage,
     pay,
-    privateKey: pay ? loadPayerKey() : null,
+    signer: pay ? payerSigner : null,
   });
 
   let assistantText;
@@ -149,6 +183,7 @@ export async function runTurn({
     assistantText,
     mode: result.mode,
     payer: result.payer ?? payerAddress,
+    payerMode: result.payerMode ?? payerKind,
     costUsd: result.costUsd ?? null,
     budget: spend.totals,
     budgetStatus: budget.status,

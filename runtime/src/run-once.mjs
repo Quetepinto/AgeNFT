@@ -48,7 +48,7 @@ if (!out.ok) {
 
 console.log('User:', userMessage);
 console.log('Assistant:', out.assistantText);
-if (out.payer) console.log('Payer:', out.payer);
+if (out.payer) console.log('Payer:', out.payer, out.payerMode ? `(${out.payerMode})` : '');
 if (out.costUsd != null) console.log('Cost USD:', out.costUsd.toFixed(6));
 console.log('Budget recorded:', out.budget);
 console.log('---');

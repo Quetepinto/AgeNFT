@@ -1,0 +1,22 @@
+{
+  "at": "2026-07-15T19:45:29.856Z",
+  "eoa": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f",
+  "before": {
+    "label": "before",
+    "l1Eth": "0.001",
+    "baseEth": "0",
+    "baseUsdc": "0.044168"
+  },
+  "bridgeEth": "0.00065",
+  "swapEth": "0.00012",
+  "txs": {
+    "bridge": "0xe0657f294916ec084d0cd5f1f4b3b6cabf4cc7612f0aedea9e5562f4fe69d869"
+  },
+  "after": {
+    "label": "after",
+    "l1Eth": "0.000307524904732592",
+    "baseEth": "0.00065",
+    "baseUsdc": "0.044168"
+  },
+  "dryRun": false
+}

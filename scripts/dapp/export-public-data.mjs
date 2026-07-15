@@ -75,6 +75,10 @@ if (isMainnet && existsSync(mintMainnet)) {
   agent.mintTx = mint.txHash;
 }
 
+if (manifest.visual) {
+  agent.visual = manifest.visual;
+}
+
 writeFileSync(join(DAPP_ASSETS, `agents/${tokenId}.json`), `${JSON.stringify(agent, null, 2)}\n`);
 
 let budgetSnapshot = {

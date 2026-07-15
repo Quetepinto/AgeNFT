@@ -1,34 +1,48 @@
 {
   "tokenId": "1",
   "agent": "Unit-Mainnet",
-  "exportedAt": "2026-07-15T22:02:38.637Z",
+  "exportedAt": "2026-07-15T23:27:48.684Z",
   "budget": {
     "pay": true,
     "windows": {
       "hour": {
-        "requests": 0,
-        "usd": "0.000000"
+        "requests": 1,
+        "usd": "0.000842"
       },
       "day": {
-        "requests": 2,
-        "usd": "0.001400",
+        "requests": 4,
+        "usd": "0.003038",
         "cap": {
           "requests": 200,
           "usd": "1.00"
         }
       },
       "month": {
-        "requests": 2,
-        "usd": "0.001400",
+        "requests": 4,
+        "usd": "0.003038",
         "cap": {
           "usd": "25.00"
         }
       }
     },
-    "globalDayUsd": "0.001400",
+    "globalDayUsd": "0.003038",
     "globalCap": "2.00"
   },
   "recentEvents": [
+    {
+      "at": "2026-07-15T23:27:15.272Z",
+      "organ": "brain",
+      "pay": true,
+      "usd": "0.000842",
+      "success": true
+    },
+    {
+      "at": "2026-07-15T22:55:27.775Z",
+      "organ": "brain",
+      "pay": true,
+      "usd": "0.000796",
+      "success": true
+    },
     {
       "at": "2026-07-15T21:50:27.714Z",
       "organ": "brain",

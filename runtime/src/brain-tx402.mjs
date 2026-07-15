@@ -1,5 +1,12 @@
 /** Cerebro vía tx402.ai — probe (402) o inferencia pagada (--pay). */
-export async function inferBrain({ brain, systemPrompt, userMessage, pay = false, privateKey }) {
+export async function inferBrain({
+  brain,
+  systemPrompt,
+  userMessage,
+  pay = false,
+  privateKey,
+  signer = null,
+}) {
   const body = {
     model: brain.primary.model ?? 'minimax/minimax-m3',
     messages: [
@@ -13,11 +20,15 @@ export async function inferBrain({ brain, systemPrompt, userMessage, pay = false
     return probeBrain(brain.primary.endpoint, body);
   }
 
-  if (!privateKey) {
-    throw new Error('Pago requiere VALIDATION_PRIVATE_KEY o AGENFT_PAYER_PRIVATE_KEY');
+  if (signer) {
+    return paidBrainWithSigner(brain.primary.endpoint, body, signer);
   }
 
-  return paidBrain(brain.primary.endpoint, body, privateKey);
+  if (!privateKey) {
+    throw new Error('Pago requiere signer TBA/EOA o VALIDATION_PRIVATE_KEY');
+  }
+
+  return paidBrainWithKey(brain.primary.endpoint, body, privateKey);
 }
 
 async function probeBrain(endpoint, body) {
@@ -71,28 +82,13 @@ async function probeBrain(endpoint, body) {
   };
 }
 
-async function paidBrain(endpoint, body, privateKey) {
+async function paidBrainWithSigner(endpoint, body, signer) {
   const { wrapFetchWithPayment, x402Client } = await import('@x402/fetch');
   const { ExactEvmScheme } = await import('@x402/evm/exact/client');
-  const { createWalletClient, http, publicActions } = await import('viem');
-  const { privateKeyToAccount } = await import('viem/accounts');
-  const { base } = await import('viem/chains');
   const { checkPayerBalanceUsdc } = await import('./budget-tracker.mjs');
 
-  const account = privateKeyToAccount(privateKey);
-  const before = await checkPayerBalanceUsdc(account.address);
-
-  const client = createWalletClient({
-    account,
-    chain: base,
-    transport: http(),
-  }).extend(publicActions);
-
-  const scheme = new ExactEvmScheme({
-    address: account.address,
-    signTypedData: (args) => client.signTypedData(args),
-    readContract: client.readContract,
-  });
+  const before = await checkPayerBalanceUsdc(signer.address);
+  const scheme = new ExactEvmScheme(signer);
   const x402 = new x402Client().register('eip155:8453', scheme);
   const fetchPaid = wrapFetchWithPayment(fetch, x402);
 
@@ -108,7 +104,7 @@ async function paidBrain(endpoint, body, privateKey) {
 
   let costUsdMicro = 0;
   if (res.ok) {
-    const after = await checkPayerBalanceUsdc(account.address);
+    const after = await checkPayerBalanceUsdc(signer.address);
     costUsdMicro = Math.max(0, before.usdMicro - after.usdMicro);
   }
 
@@ -116,10 +112,31 @@ async function paidBrain(endpoint, body, privateKey) {
     mode: 'paid',
     ok: res.ok,
     status: res.status,
-    payer: account.address,
+    payer: signer.address,
+    payerMode: signer.mode ?? 'unknown',
     content,
     costUsdMicro,
     costUsd: costUsdMicro / 1_000_000,
     raw: res.ok ? undefined : JSON.stringify(json).slice(0, 300),
   };
+}
+
+async function paidBrainWithKey(endpoint, body, privateKey) {
+  const { createWalletClient, http, publicActions } = await import('viem');
+  const { privateKeyToAccount } = await import('viem/accounts');
+  const { base } = await import('viem/chains');
+
+  const account = privateKeyToAccount(privateKey);
+  const client = createWalletClient({
+    account,
+    chain: base,
+    transport: http(),
+  }).extend(publicActions);
+
+  return paidBrainWithSigner(endpoint, body, {
+    mode: 'eoa',
+    address: account.address,
+    signTypedData: (args) => client.signTypedData(args),
+    readContract: client.readContract,
+  });
 }

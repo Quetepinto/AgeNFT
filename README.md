@@ -2,25 +2,61 @@
 
 **Un agente de IA dentro de un NFT** — no solo una imagen. Identidad onchain, memoria propia, cuenta (TBA) y un “cerebro” que paga sus servicios. Si vendes o transfieres el token, el comprador se lleva **todo el paquete** en una sola transacción.
 
-> **Estado:** beta de laboratorio · Fase 2 ~90% · No es asesoramiento financiero.
+> **Estado:** **Unit-Mainnet #1 en vivo** (Base mainnet) · Sepolia lab legacy · No es asesoramiento financiero.
 
 ---
 
-## Habla con Unit-1 en 5 minutos
+## ⚠️ Migración a Base mainnet
 
-**Unit-1** es el agente de prueba del lab (token #115 en Base Sepolia).
+**Unit-Mainnet #1** ya está minteado con registro propio **AgeNFT**.
+
+| Qué | Dirección / enlace |
+|-----|-------------------|
+| Contrato AgeNFT | [`0x76FC…eB839`](https://basescan.org/address/0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839) |
+| Token #1 + TBA | [`0x9BF1…3CCB`](https://basescan.org/address/0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB) |
+| Manifiesto | [`docs/manifest/examples/unit-mainnet.json`](docs/manifest/examples/unit-mainnet.json) |
+
+**Unit-1 #115** sigue en lab Sepolia (VIMS) — no se migra el token.
+
+| Doc | Qué |
+|-----|-----|
+| [`docs/decisions/chain-base-mainnet.md`](docs/decisions/chain-base-mainnet.md) | Decisión cadena |
+| [`docs/research/mainnet-migration.md`](docs/research/mainnet-migration.md) | Plan |
+| [`docs/research/lab/addresses.base-mainnet.json`](docs/research/lab/addresses.base-mainnet.json) | Direcciones live |
+
+---
+
+## Habla con Unit-Mainnet (MVP)
+
+**Unit-Mainnet** es el agente público en **Base mainnet** — NFT #1, TBA soberana, pagos x402 desde la tesorería del token.
 
 | Qué | Enlace |
 |-----|--------|
-| **Ficha web** (saldo, presupuesto) | https://quetepinto.github.io/AgeNFT/ |
-| **Chat Telegram** (lab, restringido) | [@Unit1_agent_bot](https://t.me/Unit1_agent_bot) |
-| **Código** | Este repositorio |
+| **Ficha web** (TBA, presupuesto) | https://quetepinto.github.io/AgeNFT/ |
+| **Qué viaja al transferir** | [`dapp/transfer.html`](dapp/transfer.html) |
+| **Chat Telegram** | [@Unit1_agent_bot](https://t.me/Unit1_agent_bot) |
+| **NFT en BaseScan** | [token #1](https://basescan.org/token/0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839?a=1) |
 
-1. Abre la **web** y mira la TBA (cuenta del NFT) y el presupuesto.
-2. En **Telegram**, busca `@Unit1_agent_bot` y escribe por ejemplo: *¿Quién eres?*
-3. La respuesta viene del **cerebro ageNFT** (manifiesto + memoria + límites de gasto), no de un chat genérico.
+1. Abre la **web** — saldo USDC/ETH de la TBA en tiempo real.
+2. En **Telegram**, escribe por ejemplo: *¿Quién eres?*
+3. La respuesta viene del **cerebro ageNFT** (manifiesto + memoria + Reflejos), pagando desde la **TBA**.
 
-**Lab hoy:** el cerebro se paga con una wallet de prueba del proyecto; la TBA del NFT pagará sola en una fase posterior.
+**Lab legacy:** [Unit-1 #115 Sepolia](docs/manifest/examples/unit-1-lab.json) — solo archivo; no es el producto MVP.
+
+---
+
+## MVP mainnet — qué incluye hoy
+
+| Pieza | Estado |
+|-------|--------|
+| Mint + TBA Base mainnet | ✅ |
+| Pago cerebro desde TBA (x402) | ✅ |
+| Manifiesto + runtime + memoria local | ✅ |
+| dApp (ficha + transfer) | ✅ |
+| Hermes / Telegram (skill + scripts) | ✅ instalar con `npm run hermes:install` |
+| Checklist E2E | ✅ 8/8 |
+
+Pendiente MVP+: memoria IPFS/toju, vídeo demo. TBA fondeada (~5 USDC). Rostro: **URUIRU** (Gespenster).
 
 ---
 
@@ -56,10 +92,12 @@ Más detalle: [`docs/architecture/design-principles.md`](docs/architecture/desig
 | Fase | Qué |
 |------|-----|
 | 0–1 | Diseño, mint lab, primera inferencia con pago automático (x402) ✅ |
-| 2 | Memoria, presupuesto, transfer checklist, web, Telegram, Doctor cron ✅ ~90% |
-| 3+ | Autonomía (Doctor completo), producto público, OpenSea… ⏸ |
+| 2 | Memoria, presupuesto, transfer, web, Telegram, Doctor | ✅ MVP mainnet |
+| 3+ | Mercado, OpenSea, autonomía completa | ⏸ |
 
-**Agente lab:** Unit-1 #115 · TBA `0x2FF43…e969` · Manifiesto: [`docs/manifest/examples/unit-1-lab.json`](docs/manifest/examples/unit-1-lab.json)
+**Agente MVP:** Unit-Mainnet #1 · TBA soberana · [`unit-mainnet.json`](docs/manifest/examples/unit-mainnet.json)
+
+**Lab legacy:** Unit-1 #115 Sepolia
 
 Roadmap: [`docs/architecture/development-roadmap.md`](docs/architecture/development-roadmap.md)
 
@@ -89,17 +127,18 @@ ageNFT/
 ```bash
 cd runtime && npm install
 
-npm run once              # un turno (probe, sin USDC)
-npm run once:pay          # turno con pago x402 real
+npm run once:pay          # turno — paga desde TBA (auto)
 npm run budget            # estado del presupuesto
-npm run hermes:verify     # checks integración Hermes ↔ ageNFT
-npm run telegram:unit1:pay   # bot Telegram (ver docs lab)
+npm run dapp:export       # actualizar JSON público de la web
+npm run hermes:install    # skill + cron Doctor (Unit-Mainnet)
+npm run hermes:verify     # checks Hermes ↔ ageNFT
 ```
 
 ### Manifiesto v1 (provisional)
 
 - [Schema](docs/manifest/ageNFT-v1-provisional.schema.json)
-- [Ejemplo Unit-1](docs/manifest/examples/unit-1-lab.json)
+- [Ejemplo Unit-Mainnet](docs/manifest/examples/unit-mainnet.json)
+- [Ejemplo Unit-1 lab](docs/manifest/examples/unit-1-lab.json)
 - [Validar](scripts/validate-manifest.mjs): `node scripts/validate-manifest.mjs docs/manifest/examples/unit-1-lab.json`
 
 ### Onchain (lab)
@@ -116,12 +155,13 @@ node transfer-checklist.mjs 115 --dry-run
 
 | Tema | Enlace |
 |------|--------|
-| Plan por fases | [`development-roadmap.md`](docs/architecture/development-roadmap.md) |
-| Anatomía (órganos) | [`digital-body.md`](docs/architecture/digital-body.md) |
-| Chat (Telegram, Nostr…) | [`chat-habitats-messaging.md`](docs/research/chat-habitats-messaging.md) |
-| Bot Telegram lab | [`telegram-unit1-setup.md`](docs/research/lab/telegram-unit1-setup.md) |
-| Publicar web (Pages) | [`GITHUB_SETUP.md`](docs/GITHUB_SETUP.md) |
-| Qué es x402 | [`x402.md`](docs/research/x402.md) |
+| **Migración mainnet** | [`mainnet-migration.md`](docs/research/mainnet-migration.md) |
+| Cadena Base mainnet | [`chain-base-mainnet.md`](docs/decisions/chain-base-mainnet.md) |
+| VIMS → registro propio | [`vims-vs-agenft-registry.md`](docs/research/vims-vs-agenft-registry.md) |
+| Spec contratos | [`agenft-registry-spec.md`](docs/architecture/agenft-registry-spec.md) |
+| Catálogo órganos | [`organ-assembly-catalog.md`](docs/research/organ-assembly-catalog.md) |
+| Próximos pasos | [`next-steps.md`](docs/research/lab/next-steps.md) |
+| Qué es x402 | [`x402.md`](docs/research/x402.md) *(backup)* |
 
 ---
 
@@ -135,4 +175,4 @@ node transfer-checklist.mjs 115 --dry-run
 
 ## Créditos
 
-Runtime compatible con [Hermes Agent](https://github.com/NousResearch/hermes-agent) (MIT). Mint lab en [agent.vims.com](https://agent.vims.com) (Base Sepolia). Cerebro vía [tx402.ai](https://tx402.ai).
+Runtime compatible con [Hermes Agent](https://github.com/NousResearch/hermes-agent) (MIT). Lab histórico: mint VIMS Sepolia (Unit-1). **Producto:** ageNFT Registry en Base mainnet. Cerebro vía [tx402.ai](https://tx402.ai).

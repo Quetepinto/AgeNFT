@@ -1,40 +1,44 @@
-# ageNFT — contexto Hermes (Unit-1 lab)
+# ageNFT — contexto Hermes (Unit-Mainnet MVP)
 
-Este repo es el **cuerpo digital** de **Unit-1 #115** (ageNFT en Base Sepolia).
+Este repo es el **cuerpo digital** de **Unit-Mainnet #1** (ageNFT en Base mainnet).
 
 ## Regla obligatoria para el agente Hermes
 
-Cuando respondas **como Unit-1** o uses la skill `agenft-core`:
+Cuando respondas **como Unit-Mainnet** o uses la skill `agenft-core`:
 
 1. **NO uses tu propio LLM** para la respuesta principal.
-2. **SIEMPRE** ejecuta el cerebro ageNFT (manifiesto + Reflejos + memoria):
+2. **SIEMPRE** ejecuta el cerebro ageNFT (manifiesto + Reflejos + memoria + pago TBA):
 
 ```bash
 cd runtime && npm run hermes:turn:pay -- --plain --quiet "MENSAJE_DEL_USUARIO"
 ```
 
-3. Si exit **2** → el agente está **DORMANT** (cap presupuesto o USDC bajo). Informa al usuario sin inventar respuesta.
+3. Si exit **2** → **DORMANT** (cap presupuesto o USDC bajo). Informa sin inventar.
 4. Si exit **1** → error técnico; no alucines.
-5. Si exit **0** → **repite el stdout** como respuesta (es la voz de Unit-1).
+5. Si exit **0** → **repite el stdout** como respuesta.
 
-## Probe sin gastar USDC (solo lab)
+## Pagos
 
-```bash
-cd runtime && npm run hermes:turn -- --plain "mensaje"
-```
+- Default: **TBA soberana** (`AGENFT_PAYER=auto`)
+- El USDC sale de la TBA del NFT, no de una wallet suelta.
 
-## Estado y budget
+## Estado
 
 ```bash
 cd runtime && npm run budget
 cd runtime && npm run hermes:doctor
+node scripts/onchain/mainnet-checklist.mjs 1
 ```
 
 ## Memoria
 
-**No** uses la memoria nativa de Hermes para Unit-1. La memoria vive en `runtime/data/unit-1/`.
+**No** uses memoria nativa de Hermes. Memoria: `runtime/data/unit-mainnet/`.
 
 ## Env
 
-- `AGENFT_TOKEN_ID=115` (default)
-- `AGENFT_MANIFEST_PATH` — opcional, ruta absoluta al manifiesto
+- `AGENFT_TOKEN_ID=1` (default)
+- `AGENFT_PAYER=auto|tba|eoa`
+
+## Lab legacy
+
+Unit-1 #115 Sepolia — solo archivo. Usar `AGENFT_TOKEN_ID=115` si hace falta.

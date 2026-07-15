@@ -1,6 +1,111 @@
-/** VIMS / Agent-NFT contract ABIs for Base Sepolia lab. */
+/** VIMS / Agent-NFT contract ABIs for Base Sepolia lab + ageNFT mainnet. */
 import { createHash } from 'node:crypto';
 import { keccak256, stringToBytes } from 'viem';
+
+export const BASE_MAINNET = {
+  network: 'base-mainnet',
+  chainId: 8453,
+  caip2: 'eip155:8453',
+  ageNft: '0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839',
+  erc6551Registry: '0x000000006551c19487814612e58FE06813775758',
+  tbaImplementation: '0x41C8f39463A868d3A88af00cd0fe7102F30E44eC',
+  usdc: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+  deployTx: '0x7eea1a5ba586f7793d5b1ccfb6ac1d3256f4afd01dd6685ecaa33f48d82076ea',
+};
+
+export const ageNftAbi = [
+  {
+    type: 'function',
+    name: 'mint',
+    inputs: [
+      { name: 'to', type: 'address' },
+      { name: 'name_', type: 'string' },
+      { name: 'agentURI_', type: 'string' },
+      { name: 'salt', type: 'bytes32' },
+    ],
+    outputs: [
+      { name: 'tokenId', type: 'uint256' },
+      { name: 'tba', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'getAgent',
+    inputs: [{ name: 'tokenId', type: 'uint256' }],
+    outputs: [
+      {
+        type: 'tuple',
+        components: [
+          { name: 'name', type: 'string' },
+          { name: 'agentURI', type: 'string' },
+          { name: 'tba', type: 'address' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getTBA',
+    inputs: [{ name: 'tokenId', type: 'uint256' }],
+    outputs: [{ name: '', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'ownerOf',
+    inputs: [{ name: 'tokenId', type: 'uint256' }],
+    outputs: [{ name: '', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'tokenURI',
+    inputs: [{ name: 'tokenId', type: 'uint256' }],
+    outputs: [{ name: '', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'nextTokenId',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'event',
+    name: 'AgentMinted',
+    inputs: [
+      { name: 'tokenId', type: 'uint256', indexed: true },
+      { name: 'owner', type: 'address', indexed: true },
+      { name: 'tba', type: 'address', indexed: true },
+      { name: 'name', type: 'string', indexed: false },
+      { name: 'agentURI', type: 'string', indexed: false },
+    ],
+    anonymous: false,
+  },
+];
+
+export const erc20Abi = [
+  {
+    type: 'function',
+    name: 'balanceOf',
+    inputs: [{ name: 'account', type: 'address' }],
+    outputs: [{ name: '', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'transfer',
+    inputs: [
+      { name: 'to', type: 'address' },
+      { name: 'amount', type: 'uint256' },
+    ],
+    outputs: [{ name: '', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+];
 
 export const IDENTITY_REGISTRY = '0xfE1ef66Ba95891d3cDf6FB83FE1444Bc3bB9FEeF';
 
