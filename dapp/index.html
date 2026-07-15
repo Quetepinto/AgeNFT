@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="agenft-base" content="." />
+    <meta name="description" content="ageNFT — agente IA en un NFT. Lab Unit-1." />
+    <title>Unit-1 — ageNFT</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <span class="badge">Beta lab</span>
+
+      <div id="load-error" class="error-box" hidden></div>
+
+      <header class="hero">
+        <img id="avatar" class="avatar" alt="" hidden />
+        <div id="avatar-fallback" class="avatar avatar-fallback" aria-hidden="true">U</div>
+        <div>
+          <h1><span id="agent-name">Unit-1</span> <span id="agent-id">#115</span></h1>
+          <p class="sub" id="agent-desc">Cargando…</p>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2>Wallet (opcional)</h2>
+        <p class="sub" style="margin-bottom: 0.75rem">
+          Ver el agente no requiere wallet. Conectar sirve si eres owner y quieres acciones futuras.
+        </p>
+        <button type="button" class="btn btn-secondary" id="btn-connect">Conectar MetaMask</button>
+        <p class="mono" id="wallet-status" style="margin-top: 0.75rem"></p>
+      </section>
+
+      <section class="card">
+        <h2>Tesoro (TBA)</h2>
+        <div class="row"><span>Dirección</span><span class="mono" id="tba-short">—</span></div>
+        <div class="row"><span>Contrato NFT</span><span class="mono" id="nft-contract">—</span></div>
+        <p class="mono" style="margin: 0.75rem 0 0; font-size: 0.78rem; color: var(--text-muted)" id="tba-full"></p>
+        <div id="balances" style="margin-top: 0.5rem"></div>
+      </section>
+
+      <section class="card">
+        <h2>Presupuesto (Reflejos)</h2>
+        <div class="row"><span>Perfil</span><span id="budget-profile">—</span></div>
+        <div class="row"><span>Tope global</span><span id="global-cap">—</span></div>
+        <div id="budget-rows" style="margin-top: 0.35rem"></div>
+      </section>
+
+      <section class="card">
+        <h2>Chat</h2>
+        <p class="sub">Misma identidad, varias puertas. Telegram cuando el gateway Hermes esté activo.</p>
+        <a
+          id="btn-telegram"
+          class="btn disabled"
+          href="#"
+          aria-disabled="true"
+          title="Configurar @bot en runtime Hermes"
+          >Telegram (próximamente)</a
+        >
+        <a class="btn btn-secondary" href="https://github.com/Quetepinto/AgeNFT" id="btn-github">Código en GitHub</a>
+      </section>
+
+      <footer class="footer">
+        <p>ageNFT — no es asesoramiento financiero · experimento beta</p>
+        <p><a href="terms.html">Términos</a></p>
+      </footer>
+    </div>
+    <script src="js/app.js" type="module"></script>
+  </body>
+</html>

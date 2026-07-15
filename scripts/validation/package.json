@@ -1,0 +1,17 @@
+{
+  "name": "agenft-validation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Probes Fase 0 — no es el producto ageNFT",
+  "scripts": {
+    "probe": "node probe-services.mjs",
+    "probe:quick": "node probe-services.mjs --quick"
+  },
+  "dependencies": {
+    "@toju.network/x402": "^0.1.0",
+    "@x402/evm": "^2.18.0",
+    "@x402/fetch": "^2.18.0",
+    "viem": "^2.31.0"
+  }
+}

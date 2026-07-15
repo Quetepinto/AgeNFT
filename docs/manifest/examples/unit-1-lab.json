@@ -1,0 +1,227 @@
+{
+  "type": "ageNFT/v1",
+  "name": "Unit-1",
+  "description": "ageNFT lab agent — full organ stack exercised on VIMS reference deployments.",
+  "image": "ipfs://bafybeigplaceholder",
+  "createdAt": "2026-07-12T18:26:06.000Z",
+  "updatedAt": "2026-07-12T18:27:00.000Z",
+
+  "identity": {
+    "chain": "eip155:84532",
+    "registry": "0xfE1ef66Ba95891d3cDf6FB83FE1444Bc3bB9FEeF",
+    "agentId": 115,
+    "nft": {
+      "standard": "erc721",
+      "contract": "0xfE1ef66Ba95891d3cDf6FB83FE1444Bc3bB9FEeF",
+      "tokenId": "115"
+    },
+    "lab": {
+      "stack": "Agent-NFT/VIMS",
+      "mintTx": "0xb1e415788dcc79c6d3c0a3c1607191adc161252f0a2d7d7f55b2595d4c24d05d",
+      "creatorRoyaltyBps": 500,
+      "x402ServiceId": "0x7dc572efa25b6ab6fd1ae1f911bebb6d672941d7b86a9d1747987610f5085142",
+      "x402PriceUsdc": "1000",
+      "contextFiles": ["skills.md"],
+      "memoryVersions": 1
+    }
+  },
+
+  "treasury": {
+    "type": "erc6551",
+    "address": "0x2FF43DB36d93F3cd55A0F7B15175266F7d31e969",
+    "chain": "base-sepolia",
+    "preferredAssets": [
+      {
+        "symbol": "USDC",
+        "network": "eip155:8453",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+      },
+      {
+        "symbol": "USDC",
+        "network": "eip155:84532",
+        "address": "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+      }
+    ]
+  },
+
+  "runtime": {
+    "engine": "hermes-agent",
+    "hosting": {
+      "primary": "local",
+      "fallbacks": ["akash", "vps"]
+    }
+  },
+
+  "organs": {
+    "brain": {
+      "primary": {
+        "provider": "tx402.ai",
+        "endpoint": "https://tx402.ai/v1/chat/completions",
+        "model": "minimax/minimax-m3",
+        "network": "eip155:8453"
+      },
+      "fallbacks": [],
+      "routing": {
+        "priority": ["opportunistic", "sovereign", "hose", "dormant"]
+      }
+    },
+    "memory": {
+      "format": "pixe-compatible",
+      "operational": {
+        "provider": "vims-agent-memory",
+        "primary": "pixe://lab/unit-0/bootstrap-v1",
+        "onchainRegistry": "0x2eEc7cB85a127D2f2B49EE1957d87797C961a2D1",
+        "fallbacks": ["toju", "w3stor"]
+      },
+      "archive": {
+        "provider": "none",
+        "primary": null
+      },
+      "staticHash": "0xd18f8e619e205c3f22e41df5debb4b034c474d3ad36cb86acefeda3a59b279a7",
+      "experientialHash": "0x8d26fddcbd60bfd34ac735667f8e8989b2f7ecbe181362692b7a26339715d085"
+    },
+    "voice": {
+      "endpoints": [],
+      "paymentReceiver": "0xd180DC89270Df505F5d4B7B36e83318f330014A7",
+      "registeredServices": [
+        {
+          "serviceId": "agenft-lab-chat",
+          "serviceIdHash": "0x7dc572efa25b6ab6fd1ae1f911bebb6d672941d7b86a9d1747987610f5085142",
+          "token": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          "priceUsdc": "0.001"
+        }
+      ]
+    },
+    "presence": {
+      "portrait": "ipfs://bafybeigplaceholder",
+      "idleMode": "static",
+      "idleAsset": null,
+      "liveMode": "auto",
+      "maxTier": "tts",
+      "renderer": {
+        "endpoint": null,
+        "transport": "websocket"
+      },
+      "tts": {
+        "provider": "custom",
+        "voiceId": "unit-1-lab",
+        "x402Endpoint": null
+      },
+      "lipsync": {
+        "provider": "none",
+        "localGpuRequired": false
+      },
+      "fallback": "static",
+      "previewAsset": null,
+      "icon": null,
+      "contexts": {
+        "marketplace-external": { "maxTier": "static", "asset": "image" },
+        "marketplace-native": { "maxTier": "idle-loop", "asset": "previewAsset" },
+        "orphanage": { "maxTier": "idle-loop", "asset": "previewAsset" },
+        "app-full": { "maxTier": "emotion", "useBudget": true },
+        "chat-gateway": { "maxTier": "icon", "asset": "portrait" },
+        "wallet": { "maxTier": "icon" },
+        "social-zora": { "maxTier": "idle-loop", "asset": "previewAsset" }
+      }
+    },
+    "scout": {
+      "enabled": false,
+      "sources": ["https://x402.org", "https://tx402.ai/v1/models"],
+      "validateBeforeAdd": true
+    },
+    "doctor": {
+      "enabled": true,
+      "probeIntervalSec": 900,
+      "autoFailover": true,
+      "autoTransplant": ["brain", "memory"],
+      "requireOwnerApproval": ["runtime", "voice"],
+      "maxTransplantsPerDay": 3
+    },
+    "privacy": {
+      "transport": { "enabled": false, "provider": "none", "routes": [] },
+      "memoryEncryption": false
+    },
+    "reflexes": {
+      "circuitBreaker": { "maxRequestsPerMinute": 10, "maxTxPerMinute": 3 },
+      "allowedContracts": []
+    },
+    "hands": { "enabled": [], "dex": null }
+  },
+
+  "budget": {
+    "currency": "USD",
+    "profile": "conversational",
+    "minOperatingBalanceUsdc": "5.00",
+    "buckets": { "operatingPct": 60, "growthPct": 25, "savingsPct": 10, "riskPct": 5 },
+    "organs": {
+      "brain": {
+        "limits": {
+          "perHour": { "requests": 30, "usd": "0.15" },
+          "perDay": { "requests": 200, "usd": "1.00" },
+          "perMonth": { "usd": "25.00" }
+        },
+        "onCapExceeded": "degrade_to_cheapest_then_dormant",
+        "assumptions": { "avgCostPerRequestUsd": 0.002 }
+      },
+      "memory": {
+        "limits": { "perDay": { "usd": "0.20", "uploadsMb": 50 }, "perMonth": { "usd": "5.00" } },
+        "onCapExceeded": "stop_new_writes_keep_read"
+      },
+      "runtime": {
+        "limits": { "perMonth": { "usd": "10.00" } },
+        "onCapExceeded": "no_upscale_alert_owner"
+      },
+      "scout": {
+        "limits": { "perDay": { "usd": "0.10", "requests": 20 } },
+        "onCapExceeded": "pause_discovery"
+      },
+      "doctor": {
+        "limits": { "perDay": { "usd": "0.25", "transplants": 3 } },
+        "onCapExceeded": "alert_owner_only_manual"
+      },
+      "presence": {
+        "limits": { "perDay": { "usd": "0.15", "requests": 50 }, "perMonth": { "usd": "3.00" } },
+        "onCapExceeded": "degrade_to_idle_loop_then_static"
+      },
+      "gas": {
+        "limits": { "perDay": { "usd": "0.50" } },
+        "onCapExceeded": "pause_non_vital_tx"
+      },
+      "hose": {
+        "countsAgainstTba": false,
+        "ownerLimits": { "perDay": { "requests": 100 } }
+      }
+    },
+    "global": {
+      "perDayUsdHardCap": "2.00",
+      "onGlobalCapExceeded": "dormant_except_doctor_probes"
+    }
+  },
+
+  "collaborators": {
+    "mode": "contract",
+    "policy": "trusted-only",
+    "maxBudgetUsdPerTask": "0.50",
+    "trusted": []
+  },
+
+  "gateways": {
+    "policy": {
+      "whatsapp": "owner-opt-in",
+      "priority": "sovereign-first",
+      "excludedByDefault": ["whatsapp", "signal"],
+      "recommended": ["nostr", "matrix", "simplex", "telegram"],
+      "sovereignDefault": ["nostr", "matrix"]
+    },
+    "chat": [
+      { "platform": "telegram", "enabled": false, "credentials": "runtime-only", "sovereign": false },
+      { "platform": "nostr", "enabled": false, "npub": null, "relays": ["wss://relay.damus.io"], "sovereign": true },
+      { "platform": "matrix", "enabled": false, "homeserver": null, "userId": null },
+      { "platform": "simplex", "enabled": false, "inviteLink": null },
+      { "platform": "whatsapp", "enabled": false, "ownerOptIn": true }
+    ]
+  },
+
+  "x402Support": true,
+  "supportedTrust": ["reputation"]
+}

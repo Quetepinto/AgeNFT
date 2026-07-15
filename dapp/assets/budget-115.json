@@ -1,0 +1,102 @@
+{
+  "tokenId": 115,
+  "agent": "Unit-1",
+  "exportedAt": "2026-07-15T06:35:57.913Z",
+  "budget": {
+    "pay": true,
+    "windows": {
+      "hour": {
+        "requests": 0,
+        "usd": "0.000000",
+        "cap": {
+          "requests": 30,
+          "usd": "0.15"
+        }
+      },
+      "day": {
+        "requests": 0,
+        "usd": "0.000000",
+        "cap": {
+          "requests": 200,
+          "usd": "1.00"
+        }
+      },
+      "month": {
+        "requests": 7,
+        "usd": "0.000863",
+        "cap": {
+          "usd": "25.00"
+        }
+      }
+    },
+    "globalDayUsd": "0.000000",
+    "globalCap": "2.00"
+  },
+  "recentEvents": [
+    {
+      "at": "2026-07-14T19:13:47.173Z",
+      "organ": "brain",
+      "pay": false,
+      "usd": "0.000000",
+      "success": true
+    },
+    {
+      "at": "2026-07-14T19:13:34.554Z",
+      "organ": "brain",
+      "pay": false,
+      "usd": "0.000000",
+      "success": true
+    },
+    {
+      "at": "2026-07-14T19:13:29.828Z",
+      "organ": "brain",
+      "pay": false,
+      "usd": "0.000000",
+      "success": true
+    },
+    {
+      "at": "2026-07-13T05:21:36.538Z",
+      "organ": "brain",
+      "pay": false,
+      "usd": "0.000000",
+      "success": true
+    },
+    {
+      "at": "2026-07-12T21:59:29.044Z",
+      "organ": "brain",
+      "pay": false,
+      "usd": "0.000000",
+      "success": true
+    },
+    {
+      "at": "2026-07-12T21:51:57.288Z",
+      "organ": "brain",
+      "pay": true,
+      "usd": "0.000863",
+      "success": true
+    },
+    {
+      "at": "2026-07-12T21:51:48.817Z",
+      "organ": "brain",
+      "pay": false,
+      "usd": "0.000000",
+      "success": true
+    }
+  ],
+  "manifestCaps": {
+    "brain": {
+      "perHour": {
+        "requests": 30,
+        "usd": "0.15"
+      },
+      "perDay": {
+        "requests": 200,
+        "usd": "1.00"
+      },
+      "perMonth": {
+        "usd": "25.00"
+      }
+    },
+    "globalPerDay": "2.00"
+  }
+}

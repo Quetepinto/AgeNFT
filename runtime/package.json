@@ -1,0 +1,27 @@
+{
+  "name": "agenft-runtime",
+  "private": true,
+  "type": "module",
+  "description": "Runtime mínimo ageNFT — Fase 1",
+  "scripts": {
+    "once": "node src/run-once.mjs",
+    "once:pay": "node src/run-once.mjs --pay",
+    "once:pay:sync": "node src/run-once.mjs --pay --sync-toju",
+    "budget": "node src/budget-status.mjs",
+    "budget:dormant-test": "node src/budget-dormant-test.mjs",
+    "budget:runway": "node src/budget-runway.mjs",
+    "memory:sync": "node src/memory-sync.mjs",
+    "memory:restart-test": "node src/memory-restart-test.mjs",
+    "hermes:turn": "node src/hermes-turn.mjs",
+    "hermes:turn:pay": "node src/hermes-turn.mjs --pay",
+    "hermes:doctor": "node src/doctor-probe.mjs",
+    "hermes:install": "node ../scripts/hermes/install-unit-1.mjs",
+    "hermes:verify": "node ../scripts/hermes/verify-unit-1.mjs",
+    "dapp:export": "node ../scripts/dapp/export-public-data.mjs"
+  },
+  "dependencies": {
+    "@x402/evm": "^2.18.0",
+    "@x402/fetch": "^2.18.0",
+    "viem": "^2.31.0"
+  }
+}

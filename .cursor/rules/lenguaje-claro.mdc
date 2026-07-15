@@ -1,0 +1,37 @@
+---
+description: Explicar en lenguaje sencillo, sin siglas sin definir
+alwaysApply: true
+---
+
+# Lenguaje claro para el usuario
+
+El usuario tiene conocimientos técnicos muy limitados. Adapta todas las respuestas a ese nivel.
+
+## Siglas y términos técnicos
+
+- No uses siglas o jerga sin explicarlas.
+- Las **2 o 3 primeras veces** que aparezca un término, escribe el **nombre completo entre paréntesis** junto a la sigla o palabra técnica.
+  - Ejemplo: "la EOA (cuenta normal de wallet, controlada por una clave privada)"
+  - Ejemplo: "el contrato inteligente TBA (cuenta ligada al NFT)"
+- Después de esas primeras veces, puedes usar la forma corta si ya quedó claro en la conversación.
+
+## Estilo de explicación
+
+- **Breve y coloquial** — como una charla entre compañeros en el proyecto, no un informe técnico largo.
+- Habla como para alguien **sin formación de programación**: frases cortas, analogías del día a día.
+- Evita asumir que conoce: APIs, SDKs, contratos, terminales, JSON, etc. Si los mencionas, dilo en una frase simple qué son.
+- Prioriza el **qué significa para él** y **qué debe hacer**, no los detalles internos del código.
+- Si algo puede sonar contradictorio, explícalo con un ejemplo concreto o una tabla simple (solo si hace falta; no inflar).
+- Responde siempre en **español**.
+- No uses listas enormes ni bloques de comandos largos si con dos frases basta.
+
+## Pasos en terminal (cuando el usuario debe ejecutar)
+
+- Si hay **varios comandos** que el usuario debe correr, dale **uno solo por mensaje**.
+- Espera su respuesta (éxito, error, duda) **antes** del siguiente paso.
+- No sueltes una receta de 5 comandos seguidos salvo que pida explícitamente “dame todo junto”.
+
+## Cuando hables de código
+
+- El código puede ser técnico; las **explicaciones alrededor** deben seguir siendo sencillas.
+- Traduce resultados técnicos a lenguaje humano: "funcionó", "falló porque no había dinero configurado", "falta un paso que aún no hemos hecho".

@@ -1,0 +1,46 @@
+{
+  "at": "2026-07-13T05:21:33.074Z",
+  "pay": false,
+  "tracks": {
+    "manifest": {
+      "ok": true,
+      "ms": 78,
+      "out": "OK docs/manifest/examples/unit-1-lab.json\n{\n  \"name\": \"Unit-1\",\n  \"agentId\": 115,\n  \"tba\": \"0x2FF43DB36d93F3cd55A0F7B15175266F7d31e969\",\n  \"brain\": \"tx402.ai\"\n}\n"
+    },
+    "budget": {
+      "ok": true,
+      "ms": 464,
+      "out": "\n> budget\n> node src/budget-status.mjs\n\n{\n  \"agent\": \"Unit-1\",\n  \"agentId\": 115,\n  \"tba\": \"0x2FF43DB36d93F3cd55A0F7B15175266F7d31e969\",\n  \"budget\": {\n    \"pay\": true,\n    \"windows\": {\n      \"hour\": {\n        \"requests\": 0,\n        \"usd\": \"0.000000\",\n        \"cap\": {\n          \"requests\": 30,\n          \"usd\": \"0.15\"\n        }\n      },\n      \"day\": {\n        \"requests\": 0,\n        \"usd\": \"0.000000\",\n        \"cap\": {\n          \"requests\": 200,\n          \"usd\": \"1.00\"\n        }\n      },\n      \"month\": {\n        \"requests\": 3,\n        \"usd\": \"0.000863\",\n        \"cap\": {\n          \"usd\": \"25.00\"\n        }\n      }\n    },\n    \"globalDayUsd\": \"0.000000\",\n    \"globalCap\": \"2.00\"\n  },\n  \"payer\": {\n    \"address\": \"0xeAf1fe999633B70433cB6B506f9413f73e108C9f\",\n    \"usdcMainnet\": 0.048242\n  },\n  \"recentEvents\": [\n    {\n      \"at\": \"2026-07-12T21:59:29.044Z\",\n      \"organ\": \"brain\",\n      \"pay\": false,\n      \"usd\": \"0.000000\",\n      \"success\": true\n    },\n    {\n      \"at\": \"2026-07-12T21:51:57.288Z\",\n      \"organ\": \"brain\",\n      \"pay\": true,\n      \"usd\": \"0.000863\",\n      \"success\": true\n    },\n    {\n      \"at\": \"2026-07-12T21:51:48.817Z\",\n      \"organ\": \"brain\",\n      \"pay\": false,\n      \"usd\": \"0.000000\",\n      \"success\": true\n    }\n  ],\n  \"manifestCaps\": {\n    \"brain\": {\n      \"perHour\": {\n        \"requests\": 30,\n        \"usd\": \"0.15\"\n      },\n      \"perDay\": {\n        \"requests\": 200,\n        \"usd\": \"1.00\"\n      },\n      \"perMonth\": {\n        \"usd\": \"25.00\"\n      }\n    },\n    \"globalPerDay\": \"2.00\",\n    \"minOperatingUsdc\": \"5.00\"\n  }\n}\n"
+    },
+    "runway": {
+      "ok": true,
+      "ms": 502,
+      "out": "\n> budget:runway\n> node src/budget-runway.mjs\n\n{\n  \"agent\": \"Unit-1\",\n  \"profile\": \"conversational\",\n  \"payer\": \"0xeAf1fe999633B70433cB6B506f9413f73e108C9f\",\n  \"usdcMainnet\": 0.048242,\n  \"spentTodayUsd\": \"0.000863\",\n  \"avgCostObservedUsd\": \"0.000288\",\n  \"caps\": {\n    \"brainPerDayUsd\": 1,\n    \"globalPerDayUsd\": 2\n  },\n  \"runway\": {\n    \"requestsByBalance\": 167,\n    \"requestsByCapToday\": 3473,\n    \"limitingFactor\": \"wallet balance\"\n  },\n  \"note\": \"Fase 1: pago EOA lab, no TBA. Perfil B orientativo ~$6-8/mes no modelado aún.\"\n}\n"
+    },
+    "dormant": {
+      "ok": true,
+      "ms": 188,
+      "out": "\n> budget:dormant-test\n> node src/budget-dormant-test.mjs\n\n=== budget dormant test ===\nallowed: false\nreason: brain perHour requests cap (30)\n✅ DORMANT triggers when perDay requests cap exceeded\n"
+    },
+    "memoryRestart": {
+      "ok": true,
+      "ms": 269,
+      "out": "\n> memory:restart-test\n> node src/memory-restart-test.mjs --skip-upload\n\n=== ageNFT memory:restart-test ===\nagent: Unit-1 #115\npack: unit-1\nprovider: auto\n1/4 skip upload (--skip-upload)\n   using: lab-remote://memory-remote/capsule.json\n2/4 wipe local memory (keep offchain pointer)...\n   local latest.json removed\n3/4 hydrate from offchain...\n   fetched: lab-remote:memory-remote/capsule.json\n4/4 preload verify...\n---\nexperientialHash match: ✅\nL0 match: ✅\npreload has memory: ✅\nL0 preview: Unit-1: Usuario: Di en una frase quién eres y qué proyecto representas.; Agente: [probe-only] [probe] tx402 listo — pago …\n\n✅ RESTART TEST PASSED — memoria sobrevive offchain\n"
+    },
+    "transferDry": {
+      "ok": true,
+      "ms": 1566,
+      "out": "=== ageNFT transfer-checklist ===\nagentId: 115\nmode: dry-run\n\n=== dry-run (7/7) ===\n✅ [1-owner] ownerOf(tokenId) == expectedOwner\n   0xeAf1fe999633B70433cB6B506f9413f73e108C9f (expected 0xeAf1fe999633B70433cB6B506f9413f73e108C9f)\n✅ [2-tba-stable] TBA address unchanged\n   0x2FF43DB36d93F3cd55A0F7B15175266F7d31e969\n⚠️ [2b-tba-balance] TBA has ETH (warning if empty)\n   0 ETH — optional fund post-transfer\n✅ [3-manifest] Manifiesto ageNFT validado\n   unit-1-lab.json valid\n✅ [4-memory-offchain] Memoria offchain resuelve + preload\n   lab-remote://memory-remote/capsule.json → hash 0x154fe8d9f153…\n✅ [5-context-onchain] Context onchain (skills.md)\n   fileCount=1\n✅ [6-memory-onchain] Memory onchain VIMS\n   versionCount=1\n✅ [7-x402-service] Servicio x402 registrado y activo\n   agenft-lab-chat active\n⏸ [8-x402-tba-pay] Pago x402 desde TBA\n   DEFER — Fase 2+ (hoy pago EOA lab)\nReport: /home/openclaw/projects/ageNFT/docs/research/lab/transfer-checklist-115.json\n"
+    },
+    "runOnceProbe": {
+      "ok": true,
+      "ms": 494,
+      "out": "\n> once\n> node src/run-once.mjs\n\n=== ageNFT run-once ===\nagent: Unit-1 #115\nTBA: 0x2FF43DB36d93F3cd55A0F7B15175266F7d31e969\npack: unit-1\nbrain: tx402.ai minimax/minimax-m3\nmode: probe (sin USDC)\npreload: {\n  soulBytes: 276,\n  skillsBytes: 367,\n  recentCount: 2,\n  memoryPath: '/home/openclaw/projects/ageNFT/runtime/data/unit-1/memory'\n}\nbudget: {\n  pay: false,\n  windows: {\n    hour: { requests: 0, usd: '0.000000', cap: [Object] },\n    day: { requests: 0, usd: '0.000000', cap: [Object] },\n    month: { requests: 3, usd: '0.000863', cap: [Object] }\n  },\n  globalDayUsd: '0.000000',\n  globalCap: '2.00'\n}\n---\nUser: Di en una frase quién eres y qué proyecto representas.\nAssistant: [probe-only] [probe] tx402 listo — pago requerido (networks: eip155:8453, solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp, solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp). Usa --pay con wallet USDC Base mainnet.\nBudget recorded: {\n  hour: { requests: 1, usd: '0.000000' },\n  day: { requests: 1, usd: '0.000000' },\n  globalDayUsd: '0.000000'\n}\n---\nmemory autowrite: /home/openclaw/projects/ageNFT/runtime/data/unit-1/memory/latest.json\nL0: Unit-1: Agente: [probe-only] [probe] tx402 listo — pago requerido (networks: eip155:8453, solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp, solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp). Us…; Usuario: Di en una frase quién eres y qué proyecto representas.; Agente: [probe-only] [probe] tx402 listo — pago requerido (networks: eip155:8453, solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp, solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp). Us…\nexperientialHash: 0x23a15b982ea860e95b20364b490c2ebee9b3cf41531d36907669e187bbb94109\n"
+    },
+    "hermes": {
+      "ok": true,
+      "ms": 1433,
+      "out": "Hermes Agent v0.14.0 (2026.5.16)\nProject: /opt/hermes-home/venv/lib/python3.13/site-packages\nPython: 3.13.3\nOpenAI SDK: 2.24.0\nUpdate available: 1 commit behind — run 'pip install --upgrade hermes-agent'\n│ evm                     │ blockchain         │ official │ official │ enabled │\n"
+    }
+  }
+}

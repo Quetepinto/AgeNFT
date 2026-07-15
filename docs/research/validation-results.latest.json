@@ -1,0 +1,47 @@
+{
+  "at": "2026-07-12T21:58:39.813Z",
+  "quick": false,
+  "withPay": false,
+  "results": [
+    {
+      "name": "Base Sepolia RPC",
+      "ok": true,
+      "detail": "chainId=84532"
+    },
+    {
+      "name": "tx402.ai chat 402",
+      "ok": true,
+      "detail": "status=402 networks=[eip155:8453, solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp, solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp]"
+    },
+    {
+      "name": "tx402.ai models",
+      "ok": true,
+      "detail": "count=5"
+    },
+    {
+      "name": "toju mainnet health",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "toju pricing quote",
+      "ok": true,
+      "detail": "totalCost=1 (units per API)"
+    },
+    {
+      "name": "toju upload 402",
+      "ok": true,
+      "detail": "status=402 network=eip155:8453"
+    },
+    {
+      "name": "toju staging health",
+      "ok": false,
+      "detail": "The operation was aborted due to timeout"
+    },
+    {
+      "name": "agent.vims.com",
+      "ok": true,
+      "detail": "HTTP 200"
+    }
+  ]
+}

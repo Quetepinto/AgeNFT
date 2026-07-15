@@ -1,0 +1,136 @@
+{
+  "$comment": "Copia de minimal.json con perfil conversational documentado en spending-budgets.md",
+  "type": "ageNFT/v1",
+  "name": "Aria-1",
+  "description": "ageNFT perfil conversacional — ~60 req/día, toju + tx402, Hermes runtime.",
+  "image": "ipfs://bafybeigplaceholder",
+  "createdAt": "2026-07-12T00:00:00Z",
+  "updatedAt": "2026-07-12T00:00:00Z",
+
+  "identity": {
+    "chain": "eip155:84532",
+    "registry": "0x8004A16900000000000000000000000000000000",
+    "agentId": 1,
+    "nft": {
+      "standard": "erc721",
+      "contract": "0x0000000000000000000000000000000000000000",
+      "tokenId": "1"
+    }
+  },
+
+  "treasury": {
+    "type": "erc6551",
+    "address": "0x0000000000000000000000000000000000000000",
+    "chain": "base-sepolia",
+    "preferredAssets": [
+      {
+        "symbol": "USDC",
+        "network": "eip155:8453",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+      }
+    ]
+  },
+
+  "runtime": {
+    "engine": "hermes-agent",
+    "hosting": {
+      "primary": "local",
+      "fallbacks": ["akash"]
+    }
+  },
+
+  "organs": {
+    "brain": {
+      "primary": {
+        "provider": "tx402.ai",
+        "endpoint": "https://tx402.ai/v1/chat/completions",
+        "model": "minimax/minimax-m3",
+        "network": "eip155:8453"
+      },
+      "fallbacks": [
+        {
+          "provider": "tx402.ai",
+          "endpoint": "https://tx402.ai/v1/chat/completions",
+          "model": "z-ai/glm-5.1",
+          "network": "eip155:8453"
+        }
+      ],
+      "routing": {
+        "priority": ["sovereign", "opportunistic", "hose", "dormant"]
+      }
+    },
+    "memory": {
+      "format": "agenft-memory/v1",
+      "operational": {
+        "provider": "toju",
+        "primary": "ipfs://pending",
+        "fallbacks": []
+      },
+      "archive": {
+        "provider": "arweave",
+        "primary": null
+      }
+    },
+    "doctor": {
+      "enabled": true,
+      "probeIntervalSec": 900,
+      "autoFailover": true,
+      "autoTransplant": ["brain"],
+      "requireOwnerApproval": ["memory", "runtime"],
+      "maxTransplantsPerDay": 2
+    },
+    "scout": {
+      "enabled": true,
+      "sources": ["https://tx402.ai/v1/models"],
+      "validateBeforeAdd": true
+    },
+    "reflexes": {
+      "circuitBreaker": { "maxRequestsPerMinute": 15 }
+    },
+    "hands": { "enabled": [] }
+  },
+
+  "budget": {
+    "currency": "USD",
+    "profile": "conversational",
+    "minOperatingBalanceUsdc": "5.00",
+    "buckets": { "operatingPct": 60, "growthPct": 25, "savingsPct": 10, "riskPct": 5 },
+    "organs": {
+      "brain": {
+        "limits": {
+          "perDay": { "requests": 60, "usd": "0.50" },
+          "perMonth": { "usd": "15.00" }
+        },
+        "onCapExceeded": "degrade_to_cheapest_then_dormant",
+        "assumptions": { "avgCostPerRequestUsd": 0.002 }
+      },
+      "memory": {
+        "limits": { "perMonth": { "usd": "2.00" } },
+        "onCapExceeded": "stop_new_writes_keep_read"
+      },
+      "runtime": {
+        "limits": { "perMonth": { "usd": "5.00" } },
+        "onCapExceeded": "no_upscale_alert_owner"
+      },
+      "scout": {
+        "limits": { "perDay": { "usd": "0.05" } },
+        "onCapExceeded": "pause_discovery"
+      },
+      "doctor": {
+        "limits": { "perDay": { "transplants": 2, "usd": "0.10" } },
+        "onCapExceeded": "alert_owner_only_manual"
+      },
+      "gas": {
+        "limits": { "perDay": { "usd": "0.20" } },
+        "onCapExceeded": "pause_non_vital_tx"
+      }
+    },
+    "global": {
+      "perDayUsdHardCap": "1.50",
+      "onGlobalCapExceeded": "dormant_except_doctor_probes"
+    }
+  },
+
+  "x402Support": true,
+  "supportedTrust": ["reputation"]
+}

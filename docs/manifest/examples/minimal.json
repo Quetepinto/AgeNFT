@@ -1,0 +1,193 @@
+{
+  "type": "ageNFT/v1",
+  "name": "Unit-0",
+  "description": "Primer ageNFT de prueba — perfil conversacional, stack Base + x402.",
+  "image": "ipfs://bafybeigplaceholder",
+  "createdAt": "2026-07-12T00:00:00Z",
+  "updatedAt": "2026-07-12T00:00:00Z",
+
+  "identity": {
+    "chain": "eip155:84532",
+    "registry": "0x8004A16900000000000000000000000000000000",
+    "agentId": 0,
+    "nft": {
+      "standard": "erc721",
+      "contract": "0x0000000000000000000000000000000000000000",
+      "tokenId": "0"
+    }
+  },
+
+  "treasury": {
+    "type": "erc6551",
+    "address": "0x0000000000000000000000000000000000000000",
+    "chain": "base-sepolia",
+    "preferredAssets": [
+      {
+        "symbol": "USDC",
+        "network": "eip155:8453",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+      },
+      {
+        "symbol": "USDC",
+        "network": "eip155:84532",
+        "address": "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+      }
+    ]
+  },
+
+  "runtime": {
+    "engine": "hermes-agent",
+    "hosting": {
+      "primary": "local",
+      "fallbacks": ["akash", "vps"]
+    }
+  },
+
+  "organs": {
+    "brain": {
+      "primary": {
+        "provider": "tx402.ai",
+        "endpoint": "https://tx402.ai/v1/chat/completions",
+        "model": "minimax/minimax-m3",
+        "network": "eip155:8453"
+      },
+      "fallbacks": [
+        {
+          "provider": "gpu-bridge",
+          "endpoint": "https://gpu-bridge.example/v1/chat/completions",
+          "model": "minimax/minimax-m3",
+          "network": "eip155:8453"
+        }
+      ],
+      "routing": {
+        "priority": ["opportunistic", "sovereign", "hose", "dormant"]
+      }
+    },
+
+    "memory": {
+      "format": "agenft-memory/v1",
+      "operational": {
+        "provider": "toju",
+        "primary": "ipfs://pending-after-first-upload",
+        "fallbacks": ["w3stor"]
+      },
+      "archive": {
+        "provider": "none",
+        "primary": null
+      },
+      "staticHash": null,
+      "experientialHash": null
+    },
+
+    "voice": {
+      "endpoints": [],
+      "paymentReceiver": "0x0000000000000000000000000000000000000000"
+    },
+
+    "scout": {
+      "enabled": false,
+      "sources": ["https://x402.org", "https://tx402.ai/v1/models"],
+      "validateBeforeAdd": true
+    },
+
+    "doctor": {
+      "enabled": true,
+      "probeIntervalSec": 900,
+      "autoFailover": true,
+      "autoTransplant": ["brain", "memory"],
+      "requireOwnerApproval": ["runtime", "voice"],
+      "maxTransplantsPerDay": 3
+    },
+
+    "privacy": {
+      "transport": {
+        "enabled": false,
+        "provider": "none",
+        "routes": []
+      },
+      "memoryEncryption": false
+    },
+
+    "reflexes": {
+      "circuitBreaker": {
+        "maxRequestsPerMinute": 10,
+        "maxTxPerMinute": 3
+      },
+      "allowedContracts": []
+    },
+
+    "hands": {
+      "enabled": [],
+      "dex": null
+    }
+  },
+
+  "budget": {
+    "currency": "USD",
+    "profile": "conversational",
+    "minOperatingBalanceUsdc": "5.00",
+    "buckets": {
+      "operatingPct": 60,
+      "growthPct": 25,
+      "savingsPct": 10,
+      "riskPct": 5
+    },
+    "organs": {
+      "brain": {
+        "limits": {
+          "perHour": { "requests": 30, "usd": "0.15" },
+          "perDay": { "requests": 200, "usd": "1.00" },
+          "perMonth": { "usd": "25.00" }
+        },
+        "onCapExceeded": "degrade_to_cheapest_then_dormant",
+        "assumptions": {
+          "avgCostPerRequestUsd": 0.002
+        }
+      },
+      "memory": {
+        "limits": {
+          "perDay": { "usd": "0.20", "uploadsMb": 50 },
+          "perMonth": { "usd": "5.00" }
+        },
+        "onCapExceeded": "stop_new_writes_keep_read"
+      },
+      "runtime": {
+        "limits": {
+          "perMonth": { "usd": "10.00" }
+        },
+        "onCapExceeded": "no_upscale_alert_owner"
+      },
+      "scout": {
+        "limits": {
+          "perDay": { "usd": "0.10", "requests": 20 }
+        },
+        "onCapExceeded": "pause_discovery"
+      },
+      "doctor": {
+        "limits": {
+          "perDay": { "usd": "0.25", "transplants": 3 }
+        },
+        "onCapExceeded": "alert_owner_only_manual"
+      },
+      "gas": {
+        "limits": {
+          "perDay": { "usd": "0.50" }
+        },
+        "onCapExceeded": "pause_non_vital_tx"
+      },
+      "hose": {
+        "countsAgainstTba": false,
+        "ownerLimits": {
+          "perDay": { "requests": 100 }
+        }
+      }
+    },
+    "global": {
+      "perDayUsdHardCap": "2.00",
+      "onGlobalCapExceeded": "dormant_except_doctor_probes"
+    }
+  },
+
+  "x402Support": true,
+  "supportedTrust": ["reputation"]
+}

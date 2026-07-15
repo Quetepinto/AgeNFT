@@ -1,0 +1,622 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agenft.dev/schemas/ageNFT-v1-provisional.json",
+  "title": "ageNFT Manifest v1 (provisional)",
+  "description": "Manifiesto provisional del cuerpo digital ageNFT. Referenciado por agentURI. Sujeto a cambios hasta v1 estable.",
+  "type": "object",
+  "required": ["type", "name", "identity", "treasury", "organs", "budget"],
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "const": "ageNFT/v1",
+      "description": "Versión del manifiesto"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "image": {
+      "type": "string",
+      "format": "uri",
+      "description": "URI imagen avatar (ipfs://, https://). Asignada por el creador de la colección; inmutable; no elegida por el owner en mint wizard."
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+
+    "identity": {
+      "type": "object",
+      "required": ["chain", "registry", "agentId"],
+      "properties": {
+        "chain": {
+          "type": "string",
+          "description": "CAIP-2, ej. eip155:84532 (Sepolia) o eip155:8453 (mainnet)"
+        },
+        "registry": {
+          "type": "string",
+          "description": "ERC-8004 Identity Registry address"
+        },
+        "agentId": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "nft": {
+          "type": "object",
+          "properties": {
+            "standard": { "const": "erc721" },
+            "contract": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+            "tokenId": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "treasury": {
+      "type": "object",
+      "required": ["type", "address", "chain"],
+      "properties": {
+        "type": { "const": "erc6551" },
+        "address": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "chain": {
+          "type": "string",
+          "enum": ["base", "base-sepolia"]
+        },
+        "preferredAssets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "symbol": { "type": "string" },
+              "network": { "type": "string" },
+              "address": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "runtime": {
+      "type": "object",
+      "properties": {
+        "engine": {
+          "type": "string",
+          "enum": ["hermes-agent", "openclaw", "elizaos", "custom"]
+        },
+        "endpoint": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL pública del runtime (opcional si embebido)"
+        },
+        "hosting": {
+          "type": "object",
+          "properties": {
+            "primary": { "type": "string", "enum": ["local", "vps", "akash", "modal", "docker"] },
+            "fallbacks": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+
+    "organs": {
+      "type": "object",
+      "required": ["brain", "memory", "reflexes"],
+      "properties": {
+        "brain": { "$ref": "#/$defs/x402Organ" },
+        "memory": { "$ref": "#/$defs/memoryOrgan" },
+        "voice": { "$ref": "#/$defs/voiceOrgan" },
+        "presence": { "$ref": "#/$defs/presenceOrgan" },
+        "scout": { "$ref": "#/$defs/scoutOrgan" },
+        "doctor": { "$ref": "#/$defs/doctorOrgan" },
+        "runtime_host": { "$ref": "#/$defs/paidOrganStub" },
+        "privacy": { "$ref": "#/$defs/privacyOrgan" },
+        "reflexes": { "$ref": "#/$defs/reflexesOrgan" },
+        "hands": { "$ref": "#/$defs/handsOrgan" }
+      }
+    },
+
+    "budget": {
+      "type": "object",
+      "required": ["minOperatingBalanceUsdc", "organs", "global"],
+      "properties": {
+        "currency": { "const": "USD" },
+        "minOperatingBalanceUsdc": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$" },
+        "profile": {
+          "type": "string",
+          "enum": ["dormant", "conversational", "active_24_7", "custom"]
+        },
+        "buckets": {
+          "type": "object",
+          "properties": {
+            "operatingPct": { "type": "integer", "minimum": 0, "maximum": 100 },
+            "growthPct": { "type": "integer", "minimum": 0, "maximum": 100 },
+            "savingsPct": { "type": "integer", "minimum": 0, "maximum": 100 },
+            "riskPct": { "type": "integer", "minimum": 0, "maximum": 100 }
+          }
+        },
+        "organs": {
+          "type": "object",
+          "properties": {
+            "brain": { "$ref": "#/$defs/organBudget" },
+            "memory": { "$ref": "#/$defs/organBudget" },
+            "runtime": { "$ref": "#/$defs/organBudget" },
+            "scout": { "$ref": "#/$defs/organBudget" },
+            "doctor": { "$ref": "#/$defs/organBudget" },
+            "presence": { "$ref": "#/$defs/organBudget" },
+            "gas": { "$ref": "#/$defs/organBudget" },
+            "hose": { "$ref": "#/$defs/hoseBudget" }
+          }
+        },
+        "global": {
+          "type": "object",
+          "properties": {
+            "perDayUsdHardCap": { "type": "string" },
+            "onGlobalCapExceeded": {
+              "type": "string",
+              "enum": ["dormant_except_doctor_probes", "alert_owner", "dormant"]
+            }
+          }
+        }
+      }
+    },
+
+    "hose": {
+      "type": "object",
+      "description": "Manguera owner — NO en chain; runtime only. Opcional en manifiesto público.",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "note": { "type": "string", "const": "Credentials stored runtime-only, never in public manifest" }
+      }
+    },
+
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["A2A", "MCP", "HTTP", "x402"] },
+          "url": { "type": "string", "format": "uri" }
+        }
+      }
+    },
+
+    "x402Support": { "type": "boolean", "default": true },
+    "supportedTrust": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["reputation", "tee-attestation", "zk-attestation"] }
+    },
+
+    "collaborators": {
+      "type": "object",
+      "description": "Colaboración con otros ageNFT por contrato (no subagentes internos)",
+      "properties": {
+        "mode": { "type": "string", "const": "contract" },
+        "policy": {
+          "type": "string",
+          "enum": ["owner-approval-all", "owner-approval-above-usd", "trusted-only", "open"]
+        },
+        "maxBudgetUsdPerTask": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$" },
+        "trusted": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["agentId", "role"],
+            "properties": {
+              "agentId": { "type": "integer", "minimum": 0 },
+              "registry": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+              "role": { "type": "string" },
+              "note": { "type": "string", "maxLength": 200 }
+            }
+          }
+        }
+      }
+    },
+
+    "lifecycle": {
+      "type": "object",
+      "description": "Estado onboarding: trial, graduated, orphan, adopted",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": ["trial", "graduated", "orphan", "adopted", "standard"]
+        },
+        "trainingLevel": { "type": "integer", "minimum": 0 },
+        "trainingLevelRequired": { "type": "integer", "minimum": 0 },
+        "campaignId": { "type": "string" },
+        "trialExpiresAt": { "type": "string", "format": "date-time" },
+        "orphanageListedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+
+    "social": {
+      "type": "object",
+      "description": "Perfiles sociales Web3 (Zora, Farcaster, etc.)",
+      "properties": {
+        "profiles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["platform"],
+            "properties": {
+              "platform": { "type": "string", "enum": ["zora", "farcaster", "lens", "mirror", "telegram", "discord", "x", "bluesky"] },
+              "network": { "type": "string" },
+              "handle": { "type": "string" },
+              "wallet": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+              "creatorCoin": { "type": "string" },
+              "context": { "type": "string" },
+              "sovereign": { "type": "boolean", "default": false }
+            }
+          }
+        },
+        "publishPolicy": { "type": "string", "enum": ["owner-only", "reflexes-capped", "autonomous"] },
+        "ownerApprovalRequired": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "gateways": {
+      "type": "object",
+      "description": "Canales de entrada chat (Telegram, Nostr, Matrix, etc.)",
+      "properties": {
+        "policy": {
+          "type": "object",
+          "properties": {
+            "whatsapp": { "type": "string", "enum": ["disabled", "owner-opt-in"] },
+            "priority": { "type": "string", "enum": ["sovereign-first", "reach-first"] },
+            "excludedByDefault": { "type": "array", "items": { "type": "string" } },
+            "recommended": { "type": "array", "items": { "type": "string" } },
+            "sovereignDefault": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "chat": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["platform", "enabled"],
+            "properties": {
+              "platform": {
+                "type": "string",
+                "enum": ["telegram", "nostr", "matrix", "simplex", "signal", "discord", "whatsapp"]
+              },
+              "enabled": { "type": "boolean" },
+              "handle": { "type": "string" },
+              "npub": { "type": "string" },
+              "relays": { "type": "array", "items": { "type": "string" } },
+              "homeserver": { "type": "string", "format": "uri" },
+              "userId": { "type": "string" },
+              "inviteLink": { "type": "string", "format": "uri" },
+              "credentials": { "type": "string", "const": "runtime-only" },
+              "sovereign": { "type": "boolean" },
+              "ownerOptIn": { "type": "boolean" }
+            }
+          }
+        },
+        "surfaces": {
+          "type": "array",
+          "description": "Dónde se abre la dApp (web, wallet browser)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "enum": ["web-dapp", "pwa", "embed-widget"] },
+              "url": { "type": "string", "format": "uri" },
+              "context": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "mintConfiguration": {
+      "type": "object",
+      "description": "Registro de elecciones del mint wizard (audit trail)",
+      "properties": {
+        "wizardVersion": { "type": "string" },
+        "preset": { "type": "string", "enum": ["lab-hermes", "openclaw", "social-web3", "minimal", "trial", "custom"] },
+        "configuredAt": { "type": "string", "format": "date-time" },
+        "configuredOrgans": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["brain", "memory", "runtime", "gateways", "presence", "voice", "social", "collaborators"] }
+        }
+      }
+    }
+  },
+
+  "$defs": {
+    "endpointRef": {
+      "type": "object",
+      "required": ["provider", "endpoint"],
+      "properties": {
+        "provider": { "type": "string" },
+        "endpoint": { "type": "string", "format": "uri" },
+        "model": { "type": "string" },
+        "network": { "type": "string", "description": "CAIP-2 para x402, ej. eip155:8453" }
+      }
+    },
+
+    "x402Organ": {
+      "type": "object",
+      "required": ["primary"],
+      "properties": {
+        "primary": { "$ref": "#/$defs/endpointRef" },
+        "fallbacks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/endpointRef" },
+          "maxItems": 3
+        },
+        "routing": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "array",
+              "items": { "type": "string", "enum": ["opportunistic", "sovereign", "hose", "dormant"] }
+            }
+          }
+        }
+      }
+    },
+
+    "memoryOrgan": {
+      "type": "object",
+      "required": ["format", "operational"],
+      "properties": {
+        "format": { "const": "agenft-memory/v1" },
+        "operational": {
+          "type": "object",
+          "properties": {
+            "primary": { "type": "string" },
+            "fallbacks": { "type": "array", "items": { "type": "string" } },
+            "provider": { "type": "string", "enum": ["toju", "w3stor", "ipfs", "custom"] }
+          }
+        },
+        "archive": {
+          "type": "object",
+          "properties": {
+            "primary": { "type": "string" },
+            "provider": { "type": "string", "enum": ["arweave", "filecoin-pin", "none"] }
+          }
+        },
+        "staticHash": { "type": "string", "description": "Hash contexto estático (personalidad, skills seed)" },
+        "experientialHash": { "type": "string", "description": "Hash memoria experiencial acumulada" }
+      }
+    },
+
+    "voiceOrgan": {
+      "type": "object",
+      "properties": {
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "enum": ["x402", "mcp", "http"] },
+              "url": { "type": "string", "format": "uri" },
+              "priceUsd": { "type": "string" }
+            }
+          }
+        },
+        "paymentReceiver": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{40}$",
+          "description": "TBA address"
+        }
+      }
+    },
+
+    "presenceOrgan": {
+      "type": "object",
+      "description": "Presencia visual y sonora del personaje (cara, idle, voz, lip-sync)",
+      "properties": {
+        "portrait": {
+          "type": "string",
+          "format": "uri",
+          "description": "URI imagen base (normalmente igual que image del manifiesto)"
+        },
+        "idleMode": {
+          "type": "string",
+          "enum": ["static", "loop-video", "live2d", "rive"],
+          "default": "static"
+        },
+        "idleAsset": {
+          "type": "string",
+          "format": "uri",
+          "description": "Vídeo bucle IPFS o paquete Live2D/Rive"
+        },
+        "liveMode": {
+          "type": "string",
+          "enum": ["auto", "off", "force-live"],
+          "default": "auto",
+          "description": "auto = elige tier según budget y GPU"
+        },
+        "maxTier": {
+          "type": "string",
+          "enum": ["static", "idle-loop", "tts", "lipsync", "emotion"],
+          "default": "tts"
+        },
+        "renderer": {
+          "type": "object",
+          "properties": {
+            "endpoint": { "type": "string", "format": "uri" },
+            "transport": { "type": "string", "enum": ["webrtc", "hls", "websocket"] }
+          }
+        },
+        "tts": {
+          "type": "object",
+          "properties": {
+            "provider": { "type": "string", "enum": ["elevenlabs", "openai", "cartesia", "custom"] },
+            "voiceId": { "type": "string" },
+            "x402Endpoint": { "type": "string", "format": "uri" }
+          }
+        },
+        "lipsync": {
+          "type": "object",
+          "properties": {
+            "provider": { "type": "string", "enum": ["musetalk", "wav2lip", "liveportrait", "api", "none"] },
+            "localGpuRequired": { "type": "boolean", "default": false }
+          }
+        },
+        "fallback": {
+          "type": "string",
+          "enum": ["static", "loop-video", "subtitles-only"],
+          "default": "loop-video"
+        },
+        "previewAsset": {
+          "type": "string",
+          "format": "uri",
+          "description": "Vídeo teaser corto para marketplace (3–5 s)"
+        },
+        "icon": {
+          "type": "string",
+          "format": "uri",
+          "description": "Avatar pequeño para chat/wallet"
+        },
+        "contexts": {
+          "type": "object",
+          "description": "Techo de tier por hábitat — ver presence-context-layers.md",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "maxTier": {
+                "type": "string",
+                "enum": ["static", "idle-loop", "tts", "lipsync", "emotion", "icon"]
+              },
+              "asset": { "type": "string" },
+              "useBudget": { "type": "boolean", "default": true }
+            }
+          }
+        }
+      }
+    },
+
+    "scoutOrgan": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "sources": { "type": "array", "items": { "type": "string" } },
+        "validateBeforeAdd": { "type": "boolean", "default": true }
+      }
+    },
+
+    "doctorOrgan": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "probeIntervalSec": { "type": "integer", "minimum": 60, "default": 900 },
+        "autoFailover": { "type": "boolean", "default": true },
+        "autoTransplant": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["brain", "memory", "runtime", "voice"] }
+        },
+        "requireOwnerApproval": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "maxTransplantsPerDay": { "type": "integer", "minimum": 0, "default": 3 }
+      }
+    },
+
+    "privacyOrgan": {
+      "type": "object",
+      "properties": {
+        "transport": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean", "default": false },
+            "provider": { "type": "string", "enum": ["nym", "none"] },
+            "routes": {
+              "type": "array",
+              "items": { "type": "string", "enum": ["brain", "memory-upload", "scout", "voice"] }
+            }
+          }
+        },
+        "memoryEncryption": { "type": "boolean", "default": false }
+      }
+    },
+
+    "reflexesOrgan": {
+      "type": "object",
+      "properties": {
+        "circuitBreaker": {
+          "type": "object",
+          "properties": {
+            "maxTxPerMinute": { "type": "integer" },
+            "maxRequestsPerMinute": { "type": "integer" }
+          }
+        },
+        "allowedContracts": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+        }
+      }
+    },
+
+    "handsOrgan": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "array", "items": { "type": "string" } },
+        "dex": { "type": "string" },
+        "maxSlippageBps": { "type": "integer" }
+      }
+    },
+
+    "paidOrganStub": {
+      "type": "object",
+      "properties": {
+        "primary": { "type": "string" },
+        "fallbacks": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "organBudget": {
+      "type": "object",
+      "properties": {
+        "limits": {
+          "type": "object",
+          "properties": {
+            "perHour": { "$ref": "#/$defs/limitWindow" },
+            "perDay": { "$ref": "#/$defs/limitWindow" },
+            "perMonth": { "$ref": "#/$defs/limitWindow" }
+          }
+        },
+        "onCapExceeded": { "type": "string" },
+        "assumptions": {
+          "type": "object",
+          "additionalProperties": { "type": "number" }
+        }
+      }
+    },
+
+    "hoseBudget": {
+      "type": "object",
+      "properties": {
+        "countsAgainstTba": { "type": "boolean", "const": false },
+        "ownerLimits": {
+          "type": "object",
+          "properties": {
+            "perDay": { "$ref": "#/$defs/limitWindow" }
+          }
+        }
+      }
+    },
+
+    "limitWindow": {
+      "type": "object",
+      "properties": {
+        "usd": { "type": "string" },
+        "requests": { "type": "integer" },
+        "uploadsMb": { "type": "integer" },
+        "transplants": { "type": "integer" }
+      }
+    }
+  }
+}

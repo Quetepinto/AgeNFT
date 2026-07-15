@@ -1,0 +1,15 @@
+{
+  "name": "agenft-onchain",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "read": "node read-agent.mjs",
+    "probe": "node probe-organs.mjs",
+    "transfer-test": "node transfer-test.mjs",
+    "transfer-checklist": "node transfer-checklist.mjs 115",
+    "recover": "node recover-agent.mjs 115"
+  },
+  "dependencies": {
+    "viem": "^2.31.0"
+  }
+}

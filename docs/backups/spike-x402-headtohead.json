@@ -1,0 +1,30 @@
+{
+  "at": "2026-07-13T05:25:19.741Z",
+  "eliza": {
+    "name": "agentwallet",
+    "actions": [
+      "WALLET_BALANCE",
+      "WALLET_TRANSFER",
+      "WALLET_SWAP",
+      "WALLET_BRIDGE",
+      "X402_PAY"
+    ],
+    "requiresAgentAccountV2": true,
+    "note": "AGENTWALLET_ACCOUNT_ADDRESS = AgentAccountV2, not ERC-6551 TBA direct"
+  },
+  "results": [
+    {
+      "path": "A: @x402/fetch (ageNFT run-once)",
+      "ok": true,
+      "status": 200,
+      "content": "",
+      "costUsd": 0.000025,
+      "payer": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f"
+    },
+    {
+      "path": "B: agentwallet-sdk",
+      "ok": false,
+      "status": 402
+    }
+  ]
+}

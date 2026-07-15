@@ -1,0 +1,84 @@
+{
+  "at": "2026-07-13T05:21:36.134Z",
+  "agentId": "115",
+  "mode": "dry-run",
+  "check": {
+    "phase": "dry-run",
+    "expectedOwner": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f",
+    "tba": "0x2FF43DB36d93F3cd55A0F7B15175266F7d31e969",
+    "items": [
+      {
+        "id": "1-owner",
+        "label": "ownerOf(tokenId) == expectedOwner",
+        "ok": true,
+        "detail": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f (expected 0xeAf1fe999633B70433cB6B506f9413f73e108C9f)"
+      },
+      {
+        "id": "2-tba-stable",
+        "label": "TBA address unchanged",
+        "ok": true,
+        "detail": "0x2FF43DB36d93F3cd55A0F7B15175266F7d31e969"
+      },
+      {
+        "id": "2b-tba-balance",
+        "label": "TBA has ETH (warning if empty)",
+        "ok": true,
+        "detail": "0 ETH — optional fund post-transfer",
+        "warn": true
+      },
+      {
+        "id": "3-manifest",
+        "label": "Manifiesto ageNFT validado",
+        "ok": true,
+        "detail": "unit-1-lab.json valid"
+      },
+      {
+        "id": "4-memory-offchain",
+        "label": "Memoria offchain resuelve + preload",
+        "ok": true,
+        "detail": "lab-remote://memory-remote/capsule.json → hash 0x154fe8d9f153…"
+      },
+      {
+        "id": "5-context-onchain",
+        "label": "Context onchain (skills.md)",
+        "ok": true,
+        "detail": "fileCount=1"
+      },
+      {
+        "id": "6-memory-onchain",
+        "label": "Memory onchain VIMS",
+        "ok": true,
+        "detail": "versionCount=1"
+      },
+      {
+        "id": "7-x402-service",
+        "label": "Servicio x402 registrado y activo",
+        "ok": true,
+        "detail": "agenft-lab-chat active"
+      },
+      {
+        "id": "8-x402-tba-pay",
+        "label": "Pago x402 desde TBA",
+        "ok": true,
+        "detail": "DEFER — Fase 2+ (hoy pago EOA lab)",
+        "defer": true
+      }
+    ],
+    "score": "7/7",
+    "snap": {
+      "name": "Unit-1",
+      "tba": "0x2FF43DB36d93F3cd55A0F7B15175266F7d31e969",
+      "active": true,
+      "owner": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f",
+      "ctxCount": "1",
+      "memCount": "1",
+      "svc": {
+        "token": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+        "price": "1000",
+        "active": true
+      },
+      "ownerEth": "0.006981968071360827",
+      "tbaEth": "0"
+    }
+  }
+}

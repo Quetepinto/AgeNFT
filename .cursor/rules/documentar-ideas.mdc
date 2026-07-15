@@ -1,0 +1,15 @@
+---
+description: Documentar ideas del usuario sin pedir confirmación
+alwaysApply: true
+---
+
+# Documentar ideas sin esperar confirmación
+
+Cuando el usuario comparte ideas, decisiones, requisitos de infraestructura, preferencias de diseño o "habría que anotar X":
+
+- **Documentar directamente** en el proyecto (watchlist, roadmap, schema, NOTES, docs/research).
+- **No preguntar** "¿lo documentamos?" si la intención es evidente — para eso se lo cuenta.
+- Hacer backup en `docs/backups/` si el cambio es significativo.
+- Confirmar al usuario **qué archivos** se actualizaron, en lenguaje sencillo.
+
+Excepción: no commitear git salvo petición explícita.

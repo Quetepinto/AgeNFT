@@ -1,0 +1,47 @@
+{
+  "agentId": "114",
+  "probedAt": "2026-07-12T18:25:14.208Z",
+  "identity": {
+    "name": "Unit-0",
+    "owner": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f",
+    "tba": "0xFC9445e80fDc9334FA21A6C858f661264e40ea61",
+    "active": true,
+    "createdAt": "2026-07-12T18:18:54.000Z",
+    "reputationAnchor": "0x0000000000000000000000000000000000000000",
+    "tokenURI": "data:application/json;base64,eyJuYW1lIjoiVW5pdC0wIiwiZGVzY3JpcHRpb24iOiJhZ2VORlQgbGFiIGFnZW50IOKAlCBtaW50ZWQgdmlhIG1pbnRXaXRoRnVsbFN0YWNrIChWSU1TIHJlZmVyZW5jZSBzdGFjaykiLCJleHRlcm5hbF91cmwiOiJodHRwczovL2dpdGh1Yi5jb20vb3BlbmNsYXcvYWdlTkZUIiwiYXR0cmlidXRlcyI6W3sidHJhaXRfdHlwZSI6InN0YWNrIiwidmFsdWUiOiJBZ2VudC1ORlQvdjAuOS4yIn1dfQ==",
+    "creator": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f",
+    "creatorRoyaltyBps": "500",
+    "royaltyVault": "0x721AaCB8568baE42e8d98EBda7a2C44e6Ac54cDD",
+    "balances": {
+      "ownerEth": "0.00899569786435543",
+      "tbaEth": "0"
+    }
+  },
+  "context": {
+    "fileCount": "0",
+    "files": []
+  },
+  "memory": {
+    "versionCount": "0",
+    "latest": null
+  },
+  "x402": {
+    "usdcAllowed": true,
+    "probeServiceId": "0x7dc572efa25b6ab6fd1ae1f911bebb6d672941d7b86a9d1747987610f5085142",
+    "service": {
+      "token": "0x0000000000000000000000000000000000000000",
+      "price": "0",
+      "active": false
+    },
+    "quoteSplit1000usdc": null
+  },
+  "deployments": {
+    "AgentIdentityRegistry": "0xfE1ef66Ba95891d3cDf6FB83FE1444Bc3bB9FEeF",
+    "AgentTBARegistry": "0x1383FA459907ce08f7A6c4619C40f672C0cA7D5e",
+    "AgentMemory": "0x2eEc7cB85a127D2f2B49EE1957d87797C961a2D1",
+    "AgentX402Receiver": "0xd180DC89270Df505F5d4B7B36e83318f330014A7",
+    "AgentContextRegistry": "0x816D8AA61c283d874ae6C9A9c380A43fd325f9D5",
+    "AgentReputationRegistry": "0x5563EE2939F6839CE82B3cA6E50AA285e8d1C316",
+    "AgentPaymentRouter": "0x1d4320d0cdcbA7d60dc1A76cE63AA13a2Cd43b97"
+  }
+}

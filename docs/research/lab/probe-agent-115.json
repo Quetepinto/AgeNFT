@@ -1,0 +1,66 @@
+{
+  "agentId": "115",
+  "probedAt": "2026-07-12T22:06:10.112Z",
+  "identity": {
+    "name": "Unit-1",
+    "owner": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f",
+    "tba": "0x2FF43DB36d93F3cd55A0F7B15175266F7d31e969",
+    "active": true,
+    "createdAt": "2026-07-12T18:26:06.000Z",
+    "reputationAnchor": "0x0000000000000000000000000000000000000000",
+    "tokenURI": "data:application/json;base64,eyJuYW1lIjoiVW5pdC0xIiwiZGVzY3JpcHRpb24iOiJhZ2VORlQgbGFiIGFnZW50IOKAlCBtaW50ZWQgdmlhIG1pbnRXaXRoRnVsbFN0YWNrIChWSU1TIHJlZmVyZW5jZSBzdGFjaykiLCJleHRlcm5hbF91cmwiOiJodHRwczovL2dpdGh1Yi5jb20vb3BlbmNsYXcvYWdlTkZUIiwiYXR0cmlidXRlcyI6W3sidHJhaXRfdHlwZSI6InN0YWNrIiwidmFsdWUiOiJBZ2VudC1ORlQvdjAuOS4yIn1dfQ==",
+    "creator": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f",
+    "creatorRoyaltyBps": "500",
+    "royaltyVault": "0x27f51AB99eEb12596934a15Fd36C15Ba4304D33F",
+    "balances": {
+      "ownerEth": "0.007983577645566542",
+      "tbaEth": "0"
+    }
+  },
+  "context": {
+    "fileCount": "1",
+    "files": [
+      {
+        "name": "skills.md",
+        "storageURI": "ipfs://bafkreiagenftlab115skills",
+        "contentHash": "0xd18f8e619e205c3f22e41df5debb4b034c474d3ad36cb86acefeda3a59b279a7",
+        "category": 2,
+        "enabled": true
+      }
+    ]
+  },
+  "memory": {
+    "versionCount": "1",
+    "latest": {
+      "version": "0",
+      "storageURI": "pixe://lab/unit-0/bootstrap-v1",
+      "contentHash": "0x8d26fddcbd60bfd34ac735667f8e8989b2f7ecbe181362692b7a26339715d085",
+      "versionType": 2,
+      "category": 6
+    }
+  },
+  "x402": {
+    "usdcAllowed": true,
+    "probeServiceId": "0x7dc572efa25b6ab6fd1ae1f911bebb6d672941d7b86a9d1747987610f5085142",
+    "service": {
+      "token": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      "price": "1000",
+      "active": true
+    },
+    "quoteSplit1000usdc": {
+      "gross": "1000",
+      "systemCut": "5",
+      "creatorCut": "50",
+      "agentCut": "945"
+    }
+  },
+  "deployments": {
+    "AgentIdentityRegistry": "0xfE1ef66Ba95891d3cDf6FB83FE1444Bc3bB9FEeF",
+    "AgentTBARegistry": "0x1383FA459907ce08f7A6c4619C40f672C0cA7D5e",
+    "AgentMemory": "0x2eEc7cB85a127D2f2B49EE1957d87797C961a2D1",
+    "AgentX402Receiver": "0xd180DC89270Df505F5d4B7B36e83318f330014A7",
+    "AgentContextRegistry": "0x816D8AA61c283d874ae6C9A9c380A43fd325f9D5",
+    "AgentReputationRegistry": "0x5563EE2939F6839CE82B3cA6E50AA285e8d1C316",
+    "AgentPaymentRouter": "0x1d4320d0cdcbA7d60dc1A76cE63AA13a2Cd43b97"
+  }
+}

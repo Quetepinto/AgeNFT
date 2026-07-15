@@ -1,0 +1,56 @@
+{
+  "type": "ageNFT/v1",
+  "name": "Preset-OpenClaw",
+  "description": "Plantilla mint wizard — OpenClaw runtime + chat flexible.",
+  "image": "ipfs://bafybeigplaceholder",
+  "runtime": {
+    "engine": "openclaw",
+    "hosting": { "primary": "local", "fallbacks": ["vps"] }
+  },
+  "organs": {
+    "brain": {
+      "primary": {
+        "provider": "tx402.ai",
+        "endpoint": "https://tx402.ai/v1/chat/completions",
+        "model": "minimax/minimax-m3",
+        "network": "eip155:8453"
+      },
+      "fallbacks": []
+    },
+    "memory": {
+      "format": "agenft-memory/v1",
+      "operational": { "provider": "ipfs", "primary": null, "fallbacks": [] }
+    },
+    "reflexes": {
+      "circuitBreaker": { "maxRequestsPerMinute": 10, "maxTxPerMinute": 3 }
+    }
+  },
+  "gateways": {
+    "policy": {
+      "whatsapp": "owner-opt-in",
+      "excludedByDefault": ["whatsapp"],
+      "recommended": ["telegram", "nostr", "matrix", "simplex"]
+    },
+    "chat": [
+      { "platform": "telegram", "enabled": false, "credentials": "runtime-only" },
+      { "platform": "nostr", "enabled": false, "relays": ["wss://relay.damus.io"], "sovereign": true }
+    ],
+    "surfaces": [
+      { "type": "web-dapp", "url": "https://app.agenft.dev", "context": "app-full" }
+    ]
+  },
+  "budget": {
+    "currency": "USD",
+    "profile": "conversational",
+    "minOperatingBalanceUsdc": "5.00",
+    "organs": {
+      "brain": { "limits": { "perDay": { "usd": "1.00" } } }
+    },
+    "global": { "perDayUsdHardCap": "2.00", "onGlobalCapExceeded": "dormant_except_doctor_probes" }
+  },
+  "mintConfiguration": {
+    "wizardVersion": "0.1.0",
+    "preset": "openclaw",
+    "configuredOrgans": ["brain", "memory", "runtime", "gateways"]
+  }
+}

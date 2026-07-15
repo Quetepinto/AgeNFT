@@ -1,0 +1,37 @@
+{
+  "tokenId": 115,
+  "name": "Unit-1",
+  "description": "ageNFT lab agent — full organ stack exercised on VIMS reference deployments.",
+  "image": "ipfs://bafybeigplaceholder",
+  "status": "beta-lab",
+  "chain": {
+    "id": 84532,
+    "name": "Base Sepolia",
+    "rpc": "https://sepolia.base.org"
+  },
+  "nft": {
+    "standard": "erc721",
+    "contract": "0xfE1ef66Ba95891d3cDf6FB83FE1444Bc3bB9FEeF",
+    "tokenId": "115"
+  },
+  "tba": "0x2FF43DB36d93F3cd55A0F7B15175266F7d31e969",
+  "budgetProfile": "conversational",
+  "globalCapPerDayUsd": "2.00",
+  "brainCaps": {
+    "perHour": {
+      "requests": 30,
+      "usd": "0.15"
+    },
+    "perDay": {
+      "requests": 200,
+      "usd": "1.00"
+    },
+    "perMonth": {
+      "usd": "25.00"
+    }
+  },
+  "chat": {
+    "telegram": null
+  },
+  "updatedAt": "2026-07-15T06:35:57.911Z"
+}

@@ -1,0 +1,41 @@
+{
+  "agentId": "114",
+  "experiments": [
+    {
+      "step": "context_addFile",
+      "at": "2026-07-12T18:25:24.819Z",
+      "ok": false,
+      "error": "The contract function \"addFile\" reverted with the following signature:\n0x218e0a07"
+    },
+    {
+      "step": "memory_addVersion",
+      "at": "2026-07-12T18:25:25.647Z",
+      "ok": true,
+      "tx": "0x6032181a74389ca8a1fcdafd7b60d4222c8e6e922280ebd4684bf93376fd1906",
+      "storageURI": "pixe://lab/unit-0/bootstrap-v1",
+      "contentHash": "0x930726875fb3e0cedfc6ab4660806f305587b2f9cde3b73374e3144a575983b1",
+      "gasUsed": "211451"
+    },
+    {
+      "step": "x402_registerService",
+      "at": "2026-07-12T18:25:26.729Z",
+      "ok": false,
+      "error": "The contract function \"quoteSplit\" reverted with the following signature:\n0xce997854"
+    },
+    {
+      "step": "transfer_out",
+      "at": "2026-07-12T18:25:27.984Z",
+      "ok": true,
+      "tx": "0x13b6a543b73ef78a40b7dfba6a855c6a7e1f517845ef550ff7730a4fde759fd1",
+      "newOwner": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f",
+      "tbaUnchanged": true,
+      "tba": "0xFC9445e80fDc9334FA21A6C858f661264e40ea61"
+    },
+    {
+      "step": "transfer_back",
+      "at": "2026-07-12T18:25:28.574Z",
+      "ok": false,
+      "error": "Execution reverted with reason: gas required exceeds allowance (0)."
+    }
+  ]
+}

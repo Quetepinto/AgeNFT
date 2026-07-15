@@ -1,0 +1,172 @@
+{
+  "type": "ageNFT/v1",
+  "name": "Unit-0",
+  "description": "Primer ageNFT de laboratorio — mint VIMS reference stack, Base Sepolia.",
+  "image": "ipfs://bafybeigplaceholder",
+  "createdAt": "2026-07-12T18:18:52.810Z",
+  "updatedAt": "2026-07-12T18:18:52.810Z",
+
+  "identity": {
+    "chain": "eip155:84532",
+    "registry": "0xfE1ef66Ba95891d3cDf6FB83FE1444Bc3bB9FEeF",
+    "agentId": 114,
+    "nft": {
+      "standard": "erc721",
+      "contract": "0xfE1ef66Ba95891d3cDf6FB83FE1444Bc3bB9FEeF",
+      "tokenId": "114"
+    },
+    "lab": {
+      "stack": "Agent-NFT/VIMS",
+      "mintTx": "0x36acff6333ea3afc05f1cbca1b1cde29ef9f27732cd5c8bc87301db2a9569fed",
+      "creatorRoyaltyBps": 500
+    }
+  },
+
+  "treasury": {
+    "type": "erc6551",
+    "address": "0xFC9445e80fDc9334FA21A6C858f661264e40ea61",
+    "chain": "base-sepolia",
+    "preferredAssets": [
+      {
+        "symbol": "USDC",
+        "network": "eip155:8453",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+      },
+      {
+        "symbol": "USDC",
+        "network": "eip155:84532",
+        "address": "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+      }
+    ]
+  },
+
+  "runtime": {
+    "engine": "hermes-agent",
+    "hosting": {
+      "primary": "local",
+      "fallbacks": ["akash", "vps"]
+    }
+  },
+
+  "organs": {
+    "brain": {
+      "primary": {
+        "provider": "tx402.ai",
+        "endpoint": "https://tx402.ai/v1/chat/completions",
+        "model": "minimax/minimax-m3",
+        "network": "eip155:8453"
+      },
+      "fallbacks": [],
+      "routing": {
+        "priority": ["opportunistic", "sovereign", "hose", "dormant"]
+      }
+    },
+    "memory": {
+      "format": "agenft-memory/v1",
+      "operational": {
+        "provider": "toju",
+        "primary": "ipfs://pending-after-first-upload",
+        "fallbacks": ["w3stor"]
+      },
+      "archive": {
+        "provider": "none",
+        "primary": null
+      },
+      "staticHash": null,
+      "experientialHash": null
+    },
+    "voice": {
+      "endpoints": [],
+      "paymentReceiver": "0xd180DC89270Df505F5d4B7B36e83318f330014A7"
+    },
+    "scout": {
+      "enabled": false,
+      "sources": ["https://x402.org", "https://tx402.ai/v1/models"],
+      "validateBeforeAdd": true
+    },
+    "doctor": {
+      "enabled": true,
+      "probeIntervalSec": 900,
+      "autoFailover": true,
+      "autoTransplant": ["brain", "memory"],
+      "requireOwnerApproval": ["runtime", "voice"],
+      "maxTransplantsPerDay": 3
+    },
+    "privacy": {
+      "transport": {
+        "enabled": false,
+        "provider": "none",
+        "routes": []
+      },
+      "memoryEncryption": false
+    },
+    "reflexes": {
+      "circuitBreaker": {
+        "maxRequestsPerMinute": 10,
+        "maxTxPerMinute": 3
+      },
+      "allowedContracts": []
+    },
+    "hands": {
+      "enabled": [],
+      "dex": null
+    }
+  },
+
+  "budget": {
+    "currency": "USD",
+    "profile": "conversational",
+    "minOperatingBalanceUsdc": "5.00",
+    "buckets": {
+      "operatingPct": 60,
+      "growthPct": 25,
+      "savingsPct": 10,
+      "riskPct": 5
+    },
+    "organs": {
+      "brain": {
+        "limits": {
+          "perHour": { "requests": 30, "usd": "0.15" },
+          "perDay": { "requests": 200, "usd": "1.00" },
+          "perMonth": { "usd": "25.00" }
+        },
+        "onCapExceeded": "degrade_to_cheapest_then_dormant",
+        "assumptions": { "avgCostPerRequestUsd": 0.002 }
+      },
+      "memory": {
+        "limits": {
+          "perDay": { "usd": "0.20", "uploadsMb": 50 },
+          "perMonth": { "usd": "5.00" }
+        },
+        "onCapExceeded": "stop_new_writes_keep_read"
+      },
+      "runtime": {
+        "limits": { "perMonth": { "usd": "10.00" } },
+        "onCapExceeded": "no_upscale_alert_owner"
+      },
+      "scout": {
+        "limits": { "perDay": { "usd": "0.10", "requests": 20 } },
+        "onCapExceeded": "pause_discovery"
+      },
+      "doctor": {
+        "limits": { "perDay": { "usd": "0.25", "transplants": 3 } },
+        "onCapExceeded": "alert_owner_only_manual"
+      },
+      "gas": {
+        "limits": { "perDay": { "usd": "0.50" } },
+        "onCapExceeded": "pause_non_vital_tx"
+      },
+      "hose": {
+        "countsAgainstTba": false,
+        "ownerLimits": { "perDay": { "requests": 100 } }
+      }
+    },
+    "global": {
+      "perDayUsdHardCap": "2.00",
+      "onGlobalCapExceeded": "dormant_except_doctor_probes"
+    }
+  },
+
+  "x402Support": true,
+  "supportedTrust": ["reputation"]
+}
