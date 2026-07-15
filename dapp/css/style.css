@@ -55,6 +55,17 @@ a:hover {
   border-radius: 999px;
 }
 
+.badge-mainnet {
+  background: rgba(62, 207, 142, 0.15);
+  color: var(--ok);
+  border: 1px solid rgba(62, 207, 142, 0.35);
+}
+
+.card-muted {
+  opacity: 0.92;
+  border-style: dashed;
+}
+
 .hero {
   display: flex;
   gap: 1rem;

@@ -1,0 +1,42 @@
+{
+  "tokenId": "1",
+  "name": "Unit-Mainnet",
+  "description": "Primer ageNFT nativo Base mainnet — ageNFT Registry propio.",
+  "image": "ipfs://bafybeigplaceholder",
+  "status": "mvp-mainnet",
+  "chain": {
+    "id": 8453,
+    "name": "Base mainnet",
+    "rpc": "https://mainnet.base.org",
+    "explorer": "https://basescan.org",
+    "usdc": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+  },
+  "nft": {
+    "standard": "erc721",
+    "contract": "0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839",
+    "tokenId": "1"
+  },
+  "registry": "0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839",
+  "tba": "0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB",
+  "budgetProfile": "conversational",
+  "globalCapPerDayUsd": "2.00",
+  "brainCaps": {
+    "perDay": {
+      "requests": 200,
+      "usd": "1.00"
+    },
+    "perMonth": {
+      "usd": "25.00"
+    }
+  },
+  "payerMode": "tba-sovereign",
+  "chat": {
+    "telegram": "Unit1_agent_bot"
+  },
+  "links": {
+    "nft": "https://basescan.org/token/0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839?a=1",
+    "tba": "https://basescan.org/address/0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB"
+  },
+  "updatedAt": "2026-07-15T22:02:38.636Z",
+  "mintTx": "0x15c195568dbeaebdc43ed774746cdb6a5bc5dac95c2837b6b43d45c2043eae9c"
+}

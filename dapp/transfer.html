@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="agenft-base" content="." />
+    <title>Qué viaja al transferir — ageNFT</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Qué viaja al transferir el NFT</h1>
+      <p class="sub">
+        Un ageNFT es un <strong>cuerpo digital transferible</strong>. Una sola transacción onchain y el
+        comprador hereda el paquete completo.
+      </p>
+
+      <section class="card">
+        <h2>Unit-Mainnet hoy (Base mainnet)</h2>
+        <div class="row"><span>NFT</span><span class="mono">AgeNFT #1</span></div>
+        <div class="row"><span>TBA (tesoro)</span><span class="mono">0x9BF1…3CCB</span></div>
+        <div class="row"><span>USDC + ETH en TBA</span><span>viajan con el token</span></div>
+        <div class="row"><span>Manifiesto</span><span>onchain (agentURI) + copia repo</span></div>
+      </section>
+
+      <section class="card">
+        <h2>Viaja con el token ✅</h2>
+        <ul>
+          <li><strong>Identidad</strong> — NFT + nombre + metadata onchain</li>
+          <li><strong>Tesoro (TBA)</strong> — USDC, ETH y otros activos en la cuenta del token</li>
+          <li><strong>Manifiesto</strong> — cerebro, memoria, chat, presupuesto (ageNFT/v1)</li>
+          <li><strong>Memoria operativa</strong> — cápsulas locales / punteros offchain ligados al agente</li>
+          <li><strong>Reflejos</strong> — límites de gasto definidos en manifiesto</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>No viaja automáticamente ⚠️</h2>
+        <ul>
+          <li><strong>Runtime / servidor</strong> — quien ejecuta el agente (Hermes, VPS) es infra del operador</li>
+          <li><strong>Claves del owner anterior</strong> — el nuevo dueño usa su wallet; la TBA paga con su saldo</li>
+          <li><strong>Telegram / gateways</strong> — hay que reconfigurar credenciales con el nuevo operador</li>
+          <li><strong>Unit-1 Sepolia</strong> — token lab legacy; no se migra a mainnet</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Checklist post-transfer (MVP)</h2>
+        <ol>
+          <li>Verificar owner del NFT en BaseScan</li>
+          <li>Comprobar saldo USDC/ETH en la TBA</li>
+          <li>Actualizar runtime con manifiesto <code>unit-mainnet.json</code></li>
+          <li>Probar un turno: <code>npm run once:pay</code> (payer TBA)</li>
+          <li>Reconfigurar Telegram/Hermes si aplica</li>
+        </ol>
+      </section>
+
+      <p><a href="index.html">← Volver a Unit-Mainnet</a></p>
+
+      <footer class="footer">
+        <p>ageNFT — no es asesoramiento financiero</p>
+      </footer>
+    </div>
+  </body>
+</html>

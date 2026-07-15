@@ -1,0 +1,59 @@
+{
+  "tokenId": "1",
+  "agent": "Unit-Mainnet",
+  "exportedAt": "2026-07-15T22:02:38.637Z",
+  "budget": {
+    "pay": true,
+    "windows": {
+      "hour": {
+        "requests": 0,
+        "usd": "0.000000"
+      },
+      "day": {
+        "requests": 2,
+        "usd": "0.001400",
+        "cap": {
+          "requests": 200,
+          "usd": "1.00"
+        }
+      },
+      "month": {
+        "requests": 2,
+        "usd": "0.001400",
+        "cap": {
+          "usd": "25.00"
+        }
+      }
+    },
+    "globalDayUsd": "0.001400",
+    "globalCap": "2.00"
+  },
+  "recentEvents": [
+    {
+      "at": "2026-07-15T21:50:27.714Z",
+      "organ": "brain",
+      "pay": true,
+      "usd": "0.000721",
+      "success": true
+    },
+    {
+      "at": "2026-07-15T21:42:13.967Z",
+      "organ": "brain",
+      "pay": true,
+      "usd": "0.000679",
+      "success": true
+    }
+  ],
+  "manifestCaps": {
+    "brain": {
+      "perDay": {
+        "requests": 200,
+        "usd": "1.00"
+      },
+      "perMonth": {
+        "usd": "25.00"
+      }
+    },
+    "globalPerDay": "2.00"
+  }
+}

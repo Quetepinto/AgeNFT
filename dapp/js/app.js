@@ -1,4 +1,3 @@
-const USDC_SEPOLIA = '0x036CbD53842c5426634e7929541eC2318f3dCF7e';
 const USDC_DECIMALS = 6;
 
 function basePath() {
@@ -9,7 +8,7 @@ function basePath() {
   const parts = location.pathname.split('/').filter(Boolean);
   const last = parts[parts.length - 1] || '';
   if (last.endsWith('.html')) parts.pop();
-  if (parts[parts.length - 1] === '115') parts.pop();
+  if (parts[parts.length - 1] && /^\d+$/.test(parts[parts.length - 1])) parts.pop();
   if (parts[parts.length - 1] === 'agent') parts.pop();
   return parts.length ? `/${parts.join('/')}` : '';
 }
@@ -18,11 +17,21 @@ function assetUrl(path) {
   return `${basePath()}/${path.replace(/^\//, '')}`;
 }
 
-function tokenFromPath() {
+async function defaultTokenId() {
+  try {
+    const idx = await fetchJson(assetUrl('assets/index.json'));
+    return idx.defaultAgentId || '1';
+  } catch {
+    return '1';
+  }
+}
+
+async function tokenFromPath() {
   const m = location.pathname.match(/\/agent\/(\d+)\/?$/);
   if (m) return m[1];
   const params = new URLSearchParams(location.search);
-  return params.get('id') || '115';
+  if (params.get('id')) return params.get('id');
+  return defaultTokenId();
 }
 
 async function fetchJson(url) {
@@ -47,9 +56,9 @@ async function ethBalance(rpcUrl, address) {
   return Number(BigInt(hex)) / 1e18;
 }
 
-async function usdcBalance(rpcUrl, address) {
+async function usdcBalance(rpcUrl, usdcAddress, address) {
   const data = `0x70a08231${address.slice(2).toLowerCase().padStart(64, '0')}`;
-  const hex = await rpc(rpcUrl, 'eth_call', [{ to: USDC_SEPOLIA, data }, 'latest']);
+  const hex = await rpc(rpcUrl, 'eth_call', [{ to: usdcAddress, data }, 'latest']);
   return Number(BigInt(hex)) / 10 ** USDC_DECIMALS;
 }
 
@@ -68,8 +77,14 @@ function setHtml(id, html) {
   if (el) el.innerHTML = html;
 }
 
+function statusLabel(status) {
+  if (status === 'mvp-mainnet') return 'MVP mainnet';
+  if (status === 'beta-lab') return 'Beta lab';
+  return status || '—';
+}
+
 async function main() {
-  const tokenId = tokenFromPath();
+  const tokenId = await tokenFromPath();
   const errEl = document.getElementById('load-error');
   errEl.hidden = true;
 
@@ -82,15 +97,39 @@ async function main() {
       budget = null;
     }
 
+    const chainName = agent.chain?.name || 'Base';
+    const usdcAddr = agent.chain?.usdc;
+
     document.title = `${agent.name} — ageNFT`;
     setText('agent-name', agent.name);
     setText('agent-id', `#${agent.tokenId}`);
     setText('agent-desc', agent.description || '');
+    setText('agent-status', statusLabel(agent.status));
+    setText('chain-name', chainName);
+    setText('payer-mode', agent.payerMode === 'tba-sovereign' ? 'TBA soberana' : 'EOA lab');
     setText('tba-full', agent.tba);
     setText('tba-short', shortAddr(agent.tba));
     setText('nft-contract', shortAddr(agent.nft?.contract));
     setText('budget-profile', agent.budgetProfile || '—');
     setText('global-cap', agent.globalCapPerDayUsd ? `$${agent.globalCapPerDayUsd}/día` : '—');
+
+    const badge = document.getElementById('status-badge');
+    if (badge) {
+      badge.textContent = statusLabel(agent.status);
+      badge.classList.toggle('badge-mainnet', agent.status === 'mvp-mainnet');
+    }
+
+    const tbaLink = document.getElementById('link-tba');
+    if (tbaLink && agent.links?.tba) {
+      tbaLink.href = agent.links.tba;
+      tbaLink.textContent = 'Ver TBA en explorer';
+    }
+
+    const nftLink = document.getElementById('link-nft');
+    if (nftLink && agent.links?.nft) {
+      nftLink.href = agent.links.nft;
+      nftLink.textContent = 'Ver NFT en explorer';
+    }
 
     const img = document.getElementById('avatar');
     const fallback = document.getElementById('avatar-fallback');
@@ -109,12 +148,12 @@ async function main() {
 
     const [eth, usdc] = await Promise.all([
       ethBalance(agent.chain.rpc, agent.tba),
-      usdcBalance(agent.chain.rpc, agent.tba),
+      usdcBalance(agent.chain.rpc, usdcAddr, agent.tba),
     ]);
 
     balRows.innerHTML = `
-      <div class="row"><span>ETH (Sepolia)</span><span>${eth.toFixed(6)}</span></div>
-      <div class="row"><span>USDC (Sepolia)</span><span>${usdc.toFixed(4)}</span></div>
+      <div class="row"><span>ETH (${chainName})</span><span>${eth.toFixed(6)}</span></div>
+      <div class="row"><span>USDC (${chainName})</span><span>${usdc.toFixed(4)}</span></div>
     `;
 
     const budgetEl = document.getElementById('budget-rows');
@@ -136,6 +175,7 @@ async function main() {
       tg.href = `https://t.me/${agent.chat.telegram.replace('@', '')}`;
       tg.classList.remove('disabled');
       tg.removeAttribute('aria-disabled');
+      tg.textContent = `@${agent.chat.telegram.replace('@', '')}`;
     }
 
     const connectBtn = document.getElementById('btn-connect');

@@ -4,13 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="agenft-base" content="." />
-    <meta name="description" content="ageNFT — agente IA en un NFT. Lab Unit-1." />
-    <title>Unit-1 — ageNFT</title>
+    <meta name="description" content="ageNFT — Unit-Mainnet en Base mainnet." />
+    <title>Unit-Mainnet — ageNFT</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <div class="wrap">
-      <span class="badge">Beta lab</span>
+      <span class="badge badge-mainnet" id="status-badge">MVP mainnet</span>
 
       <div id="load-error" class="error-box" hidden></div>
 
@@ -18,8 +18,11 @@
         <img id="avatar" class="avatar" alt="" hidden />
         <div id="avatar-fallback" class="avatar avatar-fallback" aria-hidden="true">U</div>
         <div>
-          <h1><span id="agent-name">Unit-1</span> <span id="agent-id">#115</span></h1>
+          <h1><span id="agent-name">Unit-Mainnet</span> <span id="agent-id">#1</span></h1>
           <p class="sub" id="agent-desc">Cargando…</p>
+          <p class="sub mono" style="margin-top: 0.35rem">
+            <span id="chain-name">Base mainnet</span> · pagos <span id="payer-mode">TBA</span>
+          </p>
         </div>
       </header>
 
@@ -37,6 +40,11 @@
         <div class="row"><span>Dirección</span><span class="mono" id="tba-short">—</span></div>
         <div class="row"><span>Contrato NFT</span><span class="mono" id="nft-contract">—</span></div>
         <p class="mono" style="margin: 0.75rem 0 0; font-size: 0.78rem; color: var(--text-muted)" id="tba-full"></p>
+        <p style="margin-top: 0.75rem">
+          <a id="link-tba" href="#" target="_blank" rel="noopener">Explorer TBA</a>
+          ·
+          <a id="link-nft" href="#" target="_blank" rel="noopener">Explorer NFT</a>
+        </p>
         <div id="balances" style="margin-top: 0.5rem"></div>
       </section>
 
@@ -49,20 +57,27 @@
 
       <section class="card">
         <h2>Chat</h2>
-        <p class="sub">Misma identidad, varias puertas. Telegram cuando el gateway Hermes esté activo.</p>
+        <p class="sub">Misma identidad, varias puertas. Telegram vía gateway Hermes.</p>
         <a
           id="btn-telegram"
           class="btn disabled"
           href="#"
           aria-disabled="true"
-          title="Configurar @bot en runtime Hermes"
-          >Telegram (próximamente)</a
+          title="Bot Telegram"
+          >Telegram</a
         >
+        <a class="btn btn-secondary" href="transfer.html">Qué viaja al transferir</a>
         <a class="btn btn-secondary" href="https://github.com/Quetepinto/AgeNFT" id="btn-github">Código en GitHub</a>
       </section>
 
+      <section class="card card-muted">
+        <h2>Lab legacy</h2>
+        <p class="sub">Unit-1 #115 (Sepolia VIMS) — solo archivo de laboratorio.</p>
+        <a class="btn btn-secondary" href="index.html?id=115">Ver Unit-1 lab</a>
+      </section>
+
       <footer class="footer">
-        <p>ageNFT — no es asesoramiento financiero · experimento beta</p>
+        <p>ageNFT — no es asesoramiento financiero · MVP mainnet</p>
         <p><a href="terms.html">Términos</a></p>
       </footer>
     </div>

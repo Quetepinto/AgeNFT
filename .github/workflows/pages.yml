@@ -5,6 +5,7 @@ on:
     branches: [main, master]
     paths:
       - 'dapp/**'
+      - 'docs/manifest/examples/unit-mainnet.json'
       - 'docs/manifest/examples/unit-1-lab.json'
       - 'scripts/dapp/**'
       - '.github/workflows/pages.yml'

@@ -1,0 +1,13 @@
+{
+  "defaultAgentId": "1",
+  "agents": [
+    {
+      "tokenId": "1",
+      "name": "Unit-Mainnet",
+      "status": "mvp-mainnet",
+      "chain": "Base mainnet",
+      "path": "/agent/1/"
+    }
+  ],
+  "updatedAt": "2026-07-15T22:02:38.637Z"
+}
