@@ -28,10 +28,27 @@ Un ageNFT demostrable donde:
 | 6 | Página transfer | ✅ `dapp/transfer.html` |
 | 7 | Hermes skill + scripts | ✅ `npm run hermes:install` |
 | 8 | Doctor mira TBA | ✅ |
-| 9 | Memoria IPFS/toju primary | ⏸ |
+| 9 | Memoria toju + IPFS (primary) | ⏸ kubo ✅ · toju API pendiente |
 | 10 | ≥5 USDC operativo en TBA | ✅ ~5.02 USDC |
 | 11 | Vídeo demo 2 min | ⏸ |
 | 12 | Avatar Gespenster URUIRU (dApp + manifiesto) | ✅ |
+| 13 | Sentidos: STT, OCR, visión, traducción | ⏸ Bloque 5 |
+| 14 | Presencia opcional (avatar / movimiento) | ⏸ Bloque 4 |
+| 15 | Dashboard owner (⚙️ en todos los hábitats) | ⏸ |
+| 16 | Autofinanciación TBA (Bloque 7) | ⏸ |
+| 17 | Tiers G/D/E por órgano + gastos Dashboard | ⏸ |
+| 18 | Doctor dual (Vitality + Hygiene) | ⏸ |
+
+---
+
+## Siguiente después del MVP
+
+**Orden acordado (Bloque 3):** 1 → 2 → 6 → 3 → 7. **Presencia (Bloque 4):** 4 → 5 → 7. Dashboard transversal desde 1.
+
+- **Bloque 4** Presencia (avatar opcional): [`presence-optional.md`](../presence-optional.md)
+- **Bloque 5** Sentidos: [`senses-organ.md`](../senses-organ.md)
+- **Dashboard:** [`owner-dashboard.md`](../owner-dashboard.md)
+- Detalle: [`next-steps.md`](next-steps.md)
 
 ---
 
@@ -43,12 +60,3 @@ cd runtime && npm run once:pay
 node scripts/onchain/tba-x402-pay.mjs
 cd runtime && npm run dapp:export
 ```
-
----
-
-## Siguiente después del MVP
-
-- Fondear TBA a ≥5 USDC
-- Publicar dApp (GitHub Pages push)
-- Activar gateway Telegram en Hermes (si no está corriendo)
-- Session key post-transfer (runtime sin clave owner)

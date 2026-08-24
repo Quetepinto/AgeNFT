@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="agenft-base" content="." />
+    <meta name="agenft-api-url" content="" />
     <meta name="description" content="Unit-Mainnet — ageNFT en Base mainnet. Un Gespenster onchain." />
     <title>Unit-Mainnet — ageNFT</title>
     <link rel="stylesheet" href="css/style.css" />
@@ -17,14 +18,43 @@
       <header class="hero">
         <img id="avatar" class="avatar" alt="" hidden />
         <div id="avatar-fallback" class="avatar avatar-fallback" aria-hidden="true">U</div>
-        <div>
+        <div style="flex: 1">
           <h1><span id="agent-name">Unit-Mainnet</span> <span id="agent-id">#1</span></h1>
           <p class="sub" id="agent-desc">Cargando…</p>
           <p class="sub mono" style="margin-top: 0.35rem">
             <span id="chain-name">Base mainnet</span> · pagos <span id="payer-mode">TBA</span>
           </p>
         </div>
+        <a class="btn btn-secondary btn-compact" href="lab.html" title="Lab Studio">🎛️</a>
+        <a class="btn btn-secondary btn-compact" href="settings.html" title="Ajustes">⚙️</a>
       </header>
+
+      <section class="card card-presence" id="presence-section">
+        <h2>Presencia · <span id="visual-name">URUIRU</span></h2>
+        <div class="presence-wrap">
+          <img id="presence-img" class="avatar avatar-lg presence-img" alt="" hidden />
+          <div id="presence-fallback" class="avatar avatar-lg avatar-fallback presence-img" aria-hidden="true">U</div>
+          <div class="presence-copy">
+            <p class="sub">
+              Rostro del ageNFT — serie <strong id="visual-series">Gespenster</strong>.
+              Obra de
+              <a href="https://gespenster.eth.link/" target="_blank" rel="noopener">Ety Fefer</a>
+              (uso autorizado).
+            </p>
+            <p class="sub mono" style="font-size: 0.78rem; margin-top: 0.5rem">
+              Imagen: <code>assets/unit-mainnet.svg</code> (PNG opcional si lo añades)
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="body-section">
+        <h2>Cuerpo digital — muñeco</h2>
+        <p class="sub" style="margin-bottom: 0.75rem">
+          Órganos cableados hoy y los que vienen. Verde = vivo · ámbar = parcial · gris = apagado o previsto.
+        </p>
+        <div id="body-map" class="body-map" aria-live="polite"></div>
+      </section>
 
       <section class="card">
         <h2>Wallet (opcional)</h2>
@@ -55,28 +85,31 @@
         <div id="budget-rows" style="margin-top: 0.35rem"></div>
       </section>
 
-      <section class="card">
-        <h2>Chat</h2>
-        <p class="sub">Misma identidad, varias puertas. Telegram vía gateway Hermes.</p>
-        <a
-          id="btn-telegram"
-          class="btn disabled"
-          href="#"
-          aria-disabled="true"
-          title="Bot Telegram"
-          >Telegram</a
-        >
-        <a class="btn btn-secondary" href="transfer.html">Qué viaja al transferir</a>
-        <a class="btn btn-secondary" href="https://github.com/Quetepinto/AgeNFT" id="btn-github">Código en GitHub</a>
+      <section class="card" id="chat-section">
+        <h2>Chat web</h2>
+        <p class="sub">
+          Conecta al runtime del operador (<code>npm run chat:api</code>). GitHub Pages es estática — el cerebro corre en el servidor.
+        </p>
+        <p class="mono" id="chat-status" style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.5rem"></p>
+        <div class="chat-api-row">
+          <input type="url" id="chat-api-url" class="chat-input" placeholder="http://127.0.0.1:8787" aria-label="URL API runtime" />
+          <button type="button" class="btn btn-secondary" id="chat-api-save">Guardar</button>
+        </div>
+        <div id="chat-log" class="chat-log" aria-live="polite"></div>
+        <form id="chat-form" class="chat-form">
+          <input type="text" id="chat-input" class="chat-input" placeholder="Escribe a URUIRU…" autocomplete="off" />
+          <button type="submit" class="btn">Enviar</button>
+        </form>
+        <p style="margin-top: 0.75rem">
+          <a id="btn-telegram" class="btn btn-secondary" href="#">Telegram</a>
+          <a class="btn btn-secondary" href="settings.html">⚙️ Ajustes</a>
+        </p>
       </section>
 
       <section class="card card-muted">
-        <h2>Identidad visual</h2>
-        <p class="sub">
-          Rostro: <strong>URUIRU</strong> (Gespenster) — obra de
-          <a href="https://gespenster.eth.link/" target="_blank" rel="noopener">Ety Fefer</a>
-          (uso autorizado).
-        </p>
+        <h2>Enlaces</h2>
+        <a class="btn btn-secondary" href="transfer.html">Qué viaja al transferir</a>
+        <a class="btn btn-secondary" href="https://github.com/Quetepinto/AgeNFT" id="btn-github">Código en GitHub</a>
       </section>
 
       <section class="card card-muted">

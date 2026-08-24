@@ -73,6 +73,7 @@
 | Scout | O-N | ⏳ | `enabled: false` |
 | Voz (cobrar) | O-N | ⚙️ | x402 service registrado; endpoints vacíos |
 | Presencia | O-N | ⏳ | P0 estático; TTS/lip-sync pendiente |
+| **Sentidos** (oídos + ojos) | E2 | ⏳ | STT, OCR, visión, traducción — ver [`senses-organ.md`](senses-organ.md) |
 | Manos (DeFi) | O-N | ⏳ | `enabled: []` |
 | Gas | E1* | ✅ | Implícito en cada TX onchain |
 | Manguera (hose) | O-N | ⏳ | Owner aporta LLM key (no cuenta TBA) |
@@ -163,15 +164,19 @@ node scripts/validation/organ-assembly-audit.mjs 115
 
 **Qué hace:** recuerda conversaciones, personalidad, skills. El **hash** vive onchain; el blob offchain.
 
+> **Dos capas:** protocolo (**IPFS** / Arweave) + pin/upload (**toju**, W3Stor, kubo, lab-local).  
+> Ver [`memory-storage-layers.md`](memory-storage-layers.md).
+
 | Servicio | Precio est. | Registro | Código | Topología | Soberanía | Post-transfer | Self-host | Lab |
 |----------|-------------|----------|--------|-----------|-----------|---------------|-----------|-----|
-| **IPFS público** (sin pin) | Gratis | Ninguno | Protocolo abierto | Descentralizado | ✅ lectura | ✅ | Parcial | ⚙️ |
-| **[W3Stor](https://github.com/aikarap/w3stor)** | x402 ~$0.001/MB/mes | Wallet | OSS | Federado | ✅ | ✅ | No | ⏳ |
-| **[toju.network](https://toju.network)** | x402 USDC Base | Wallet | OSS SDK | Federado | ✅ | ⚠️ roto lab | No | ⏳ |
+| **toju + IPFS** (pin x402) | x402 USDC Base | Wallet | OSS SDK | Federado | ✅ | ✅ | No | ⏳ API roto |
+| **kubo + IPFS** (self-host) | Gratis (tu nodo) | Ninguno | OSS | Descentralizado | ✅ | ✅ | Sí | ✅ jul-2026 |
+| **W3Stor + IPFS** (fallback) | x402 ~$0.001/MB/mes | Wallet | OSS | Federado | ✅ | ✅ | No | ⏳ |
+| **IPFS sin pin** | Gratis lectura | Ninguno | Protocolo abierto | Descentralizado | ✅ lectura | ⚠️ GC | Parcial | ⚙️ |
 | **Arweave** (archivo) | ~$0.005/MB once | Wallet AR | Protocolo abierto | Descentralizado | ✅ | ✅ | No | ⏳ |
 | **Ceramic / ComposeDB** | Gas L2 | DID/wallet | OSS | Descentralizado | ✅ | ✅ | Parcial | ⏳ |
 | **Pinata / Filebase** | $0–20/mes | Email + API key | Propietario | Centralizado | ❌ | ❌ | No | ❌ |
-| **lab-remote / PIXE** (VIMS) | Gratis lab | Ninguno | OSS interno | Centralizado lab | ⚠️ | ⚠️ | Sí | ✅ |
+| **lab-local** (disco dev) | Gratis lab | Ninguno | OSS interno | Centralizado lab | ⚠️ | ⚠️ | Sí | ✅ |
 | **PostgreSQL del dev** | Hosting | — | OSS | Centralizado | ❌ | ❌ | Sí | ❌ |
 
 **Capas:** operativa (sync frecuente) + archivo (Arweave, opcional).
@@ -296,15 +301,18 @@ node scripts/validation/organ-assembly-audit.mjs 115
 
 ---
 
-## O-N — Scout (olfato — buscar ofertas baratas)
+## O-N — Scout (olfato — costes baratos **y oportunidades**)
 
-**Qué hace:** descubre gateways LLM/storage más baratos (x402 directory).
+**Qué hace:** (1) gateways LLM/storage más baratos; (2) opcional — leads sociales estilo [ConvoHunter](https://convohunter.com/) para ofrecer servicios x402 del agente.
 
 | Servicio | Precio | Registro | Código | Topología | Soberanía | Post-transfer | Lab |
 |----------|--------|----------|--------|-----------|-----------|---------------|-----|
 | **x402.org directory** | Gratis lectura | Ninguno | OSS | Federado | ✅ | ✅ | ⏳ |
 | **tx402.ai /models** | Gratis lectura | Ninguno | Propietario | Centralizado | ✅ | ✅ | ⏳ |
+| **ConvoHunter** (evaluar) | Suscripción / API | Cuenta | Propietario | Centralizado | ⚠️ | ⚠️ | ⏳ |
 | **Custom scraper** | Compute | Ninguno | OSS | Local | ✅ | ✅ | ⏳ |
+
+**Ingreso indirecto:** scout social → conversaciones → órgano `voice` cobra x402. Ver [`self-funding.md`](self-funding.md).
 
 ---
 

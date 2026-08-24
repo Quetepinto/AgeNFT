@@ -20,3 +20,7 @@ typechain-types/
 target/
 .idea/
 .vscode/
+.cursor/lab-inbox/
+contracts/lib/
+contracts/out/
+contracts/cache/

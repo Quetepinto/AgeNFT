@@ -1,6 +1,7 @@
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
 import { loadManifest, REPO_ROOT } from './manifest-loader.mjs';
+import { loadWiring } from './wiring-loader.mjs';
 
 const MANIFEST_BY_TOKEN = {
   1: 'docs/manifest/examples/unit-mainnet.json',
@@ -28,5 +29,6 @@ export function resolveAgentEnv() {
   }
 
   const loaded = loadManifest(absManifest);
-  return { tokenId, manifestPath: absManifest, ...loaded };
+  const wiringState = loadWiring(loaded.packId);
+  return { tokenId, manifestPath: absManifest, ...loaded, wiring: wiringState.wiring, wiringPath: wiringState.path, wiringMissing: wiringState.missing };
 }

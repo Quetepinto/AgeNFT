@@ -1,0 +1,34 @@
+{
+  "type": "agenft-wiring/v1",
+  "packId": "unit-mainnet",
+  "layoutVersion": 2,
+  "updatedAt": "2026-07-20T12:35:00.000Z",
+  "notes": "Fuente de verdad operativa — Lab Studio / Cursor. Sin secretos.",
+  "nodes": [
+    { "id": "senses", "label": "Sentidos", "group": "head", "category": "idea", "option": "stt-ocr", "x": 188, "y": 12 },
+    { "id": "brain", "label": "Cerebro", "group": "head", "category": "alive", "option": "tx402", "x": 386, "y": 4 },
+    { "id": "memory", "label": "Memoria", "group": "head", "category": "partial", "option": "kubo-ipfs", "x": 584, "y": 20 },
+    { "id": "presence", "label": "Presencia", "group": "head", "category": "partial", "option": "uruiru-svg", "x": 386, "y": 84 },
+    { "id": "nft", "label": "NFT · TBA", "group": "torso", "category": "alive", "option": "base-mainnet", "x": 386, "y": 152 },
+    { "id": "runtime", "label": "Motor", "group": "torso", "category": "alive", "option": "hermes", "x": 386, "y": 232 },
+    { "id": "doctor", "label": "Doctor Qi", "group": "torso", "category": "alive", "option": "probe", "x": 568, "y": 214 },
+    { "id": "gateway", "label": "Gateway chat", "group": "limb", "category": "partial", "option": "telegram", "x": 36, "y": 232 },
+    { "id": "chatweb", "label": "Chat web", "group": "limb", "category": "test", "option": "chat-api-local", "x": 12, "y": 328 },
+    { "id": "matrix", "label": "Matrix", "group": "limb", "category": "test", "option": "matrix-bot", "x": 128, "y": 348 },
+    { "id": "studio", "label": "Lab Studio", "group": "limb", "category": "test", "option": "lab-mvp", "x": 736, "y": 232 },
+    { "id": "mas", "label": "MAS / Element X", "group": "limb", "category": "idea", "option": "syn2mas", "x": 760, "y": 328 }
+  ],
+  "edges": [
+    { "id": "e1", "from": "nft", "to": "runtime", "category": "alive" },
+    { "id": "e2", "from": "runtime", "to": "brain", "category": "alive" },
+    { "id": "e3", "from": "brain", "to": "memory", "category": "partial" },
+    { "id": "e4", "from": "brain", "to": "senses", "category": "idea" },
+    { "id": "e5", "from": "runtime", "to": "doctor", "category": "alive" },
+    { "id": "e6", "from": "runtime", "to": "gateway", "category": "partial" },
+    { "id": "e7", "from": "runtime", "to": "chatweb", "category": "test" },
+    { "id": "e8", "from": "runtime", "to": "matrix", "category": "test" },
+    { "id": "e9", "from": "runtime", "to": "presence", "category": "partial" },
+    { "id": "e10", "from": "runtime", "to": "studio", "category": "test" },
+    { "id": "e11", "from": "matrix", "to": "mas", "category": "idea" }
+  ]
+}

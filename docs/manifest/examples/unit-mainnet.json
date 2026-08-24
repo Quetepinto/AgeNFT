@@ -3,6 +3,7 @@
   "name": "Unit-Mainnet",
   "description": "Primer ageNFT nativo Base mainnet — URUIRU, un Gespenster como presencia onchain.",
   "image": "assets/unit-mainnet.png",
+  "imageFallback": "assets/unit-mainnet.svg",
   "createdAt": "2026-07-15T21:45:00.000Z",
   "updatedAt": "2026-07-16T01:20:00.000Z",
 
@@ -50,6 +51,7 @@
 
   "runtime": {
     "engine": "hermes-agent",
+    "adapter": "agenft-run-turn/v1",
     "hosting": { "primary": "local", "fallbacks": ["akash", "vps"] }
   },
 
@@ -66,10 +68,12 @@
     },
     "memory": {
       "format": "agenft-memory-capsule/v1",
+      "transferPolicy": "owner-choice-at-transfer",
+      "vault0NeverOnChain": true,
       "operational": {
         "provider": "toju",
         "primary": null,
-        "fallbacks": ["w3stor", "ipfs"]
+        "fallbacks": ["lab-remote", "w3stor", "ipfs"]
       },
       "archive": { "provider": "arweave", "primary": null }
     },

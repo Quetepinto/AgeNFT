@@ -11,7 +11,12 @@ import {
 } from './budget-tracker.mjs';
 import { loadPayerKey, loadPayerAccount } from './payer-key.mjs';
 import { resolvePayerSigner } from './tba-payer-signer.mjs';
-import { syncMemoryRemote } from './memory-toju.mjs';
+import { ensureLocalMemory, syncMemoryRemote } from './memory-toju.mjs';
+import {
+  canRunTurn,
+  shouldSyncMemoryFromWiring,
+  memoryProviderFromWiring,
+} from './wiring-loader.mjs';
 
 /**
  * @param {object} opts
@@ -21,6 +26,7 @@ import { syncMemoryRemote } from './memory-toju.mjs';
  * @param {boolean} [opts.force]
  * @param {boolean} [opts.syncMemory]
  * @param {boolean} [opts.quiet]
+ * @param {object|null} [opts.wiring]
  */
 export async function runTurn({
   manifest,
@@ -32,17 +38,40 @@ export async function runTurn({
   force = false,
   syncMemory = false,
   quiet = false,
+  wiring = null,
 }) {
   if (syncMemory && !pay) {
     throw new Error('syncMemory requiere pay=true');
   }
 
+  const turnGate = canRunTurn(wiring);
+  if (!turnGate.ok && !force) {
+    return {
+      ok: false,
+      dormant: true,
+      reason: turnGate.reason,
+      wiringBlocked: true,
+      exitCode: 2,
+    };
+  }
+
+  const autoSync = shouldSyncMemoryFromWiring(wiring, { pay });
+  const effectiveSync = syncMemory || autoSync;
+  const memoryProvider = memoryProviderFromWiring(wiring) ?? 'auto';
+
   const brain = resolveBrain(manifest);
-  const ctx = preloadContext({ packDir, dataDir });
 
   const log = (...a) => {
     if (!quiet) console.log(...a);
   };
+
+  try {
+    await ensureLocalMemory({ manifest, dataDir, log });
+  } catch (e) {
+    log('⚠️  memory hydrate failed:', e.message);
+  }
+
+  const ctx = preloadContext({ packDir, dataDir });
 
   log('=== ageNFT turn ===');
   log('agent:', manifest.name, `#${manifest.identity.agentId}`);
@@ -50,6 +79,9 @@ export async function runTurn({
   log('pack:', packId);
   log('brain:', brain.primary.provider, brain.primary.model);
   log('mode:', pay ? 'paid (x402)' : 'probe (sin USDC)');
+  if (wiring) {
+    log('wiring:', 'active', effectiveSync ? `memory sync (${memoryProvider})` : 'memory sync off');
+  }
 
   const budget = checkBrainBudget(manifest, dataDir, { pay });
   log('budget:', budget.status);
@@ -164,12 +196,12 @@ export async function runTurn({
   });
 
   let sync = null;
-  if (syncMemory && pay) {
+  if (effectiveSync && pay) {
     sync = await syncMemoryRemote({
       manifest,
       dataDir,
       privateKey: loadPayerKey(),
-      provider: 'auto',
+      provider: memoryProvider,
     });
   }
 

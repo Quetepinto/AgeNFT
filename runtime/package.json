@@ -11,6 +11,7 @@
     "budget:dormant-test": "node src/budget-dormant-test.mjs",
     "budget:runway": "node src/budget-runway.mjs",
     "memory:sync": "node src/memory-sync.mjs",
+    "memory:hydrate": "node src/memory-sync.mjs --hydrate",
     "memory:restart-test": "node src/memory-restart-test.mjs",
     "hermes:turn": "node src/hermes-turn.mjs",
     "hermes:turn:pay": "node src/hermes-turn.mjs --pay",
@@ -21,6 +22,10 @@
     "hermes:verify:mainnet": "node ../scripts/hermes/verify-unit-mainnet.mjs",
     "hermes:verify:lab": "node ../scripts/hermes/verify-unit-1.mjs",
     "dapp:export": "node ../scripts/dapp/export-public-data.mjs",
+    "chat:api": "node src/chat-api.mjs",
+    "lab:bridge": "node src/lab-bridge.mjs",
+    "wiring:show": "node src/wiring-apply.mjs --show",
+    "wiring:apply": "node src/wiring-apply.mjs",
     "telegram:mainnet:pay": "node src/telegram-unit-mainnet-bot.mjs --pay",
     "telegram:unit1:pay": "AGENFT_TOKEN_ID=115 node src/telegram-unit-mainnet-bot.mjs --pay"
   },

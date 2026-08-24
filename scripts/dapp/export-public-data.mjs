@@ -75,9 +75,13 @@ if (isMainnet && existsSync(mintMainnet)) {
   agent.mintTx = mint.txHash;
 }
 
-if (manifest.visual) {
-  agent.visual = manifest.visual;
-}
+  if (manifest.visual) {
+    agent.visual = manifest.visual;
+  }
+
+  agent.imageFallback =
+    manifest.imageFallback ?? manifest.image?.replace(/\.png$/i, '.svg') ?? 'assets/unit-mainnet.svg';
+  agent.organs = buildOrganSnapshot(manifest, telegramHandle);
 
 writeFileSync(join(DAPP_ASSETS, `agents/${tokenId}.json`), `${JSON.stringify(agent, null, 2)}\n`);
 
@@ -140,6 +144,80 @@ if (tokenId !== '1' && existsSync(join(DAPP_ASSETS, 'agents/1.json'))) {
 }
 
 writeFileSync(join(DAPP_ASSETS, 'index.json'), `${JSON.stringify(index, null, 2)}\n`);
+
+function buildOrganSnapshot(manifest, telegramHandle) {
+  const brain = manifest.organs?.brain?.primary;
+  const memory = manifest.organs?.memory?.operational;
+  const doctorOn = manifest.organs?.doctor?.enabled !== false;
+  const hasBudget = Boolean(manifest.budget?.global?.perDayUsdHardCap);
+  const imageOk = manifest.image && !String(manifest.image).includes('placeholder');
+
+  return [
+    {
+      id: 'brain',
+      label: 'Cerebro',
+      detail: brain?.provider ? `${brain.provider}` : 'x402',
+      status: brain?.endpoint ? 'alive' : 'partial',
+      wire: 'core',
+    },
+    {
+      id: 'runtime',
+      label: 'Motor',
+      detail: manifest.runtime?.engine || 'hermes-agent',
+      status: 'alive',
+      wire: 'core',
+    },
+    {
+      id: 'memory',
+      label: 'Memoria',
+      detail: memory?.provider || 'local',
+      status: memory?.primary ? 'alive' : 'partial',
+      wire: 'core',
+    },
+    {
+      id: 'doctor',
+      label: 'Doctor Qi',
+      detail: doctorOn ? `probe ${manifest.organs?.doctor?.probeIntervalSec ?? 900}s` : 'off',
+      status: doctorOn ? 'alive' : 'off',
+      wire: 'core',
+    },
+    {
+      id: 'reflexes',
+      label: 'Reflejos',
+      detail: hasBudget ? `$${manifest.budget.global.perDayUsdHardCap}/día` : 'budget',
+      status: hasBudget ? 'alive' : 'partial',
+      wire: 'core',
+    },
+    {
+      id: 'gateway',
+      label: 'Chat',
+      detail: telegramHandle ? `@${telegramHandle.replace('@', '')}` : 'web API',
+      status: telegramHandle || manifest.gateways?.chat?.length ? 'alive' : 'partial',
+      wire: 'edge',
+    },
+    {
+      id: 'presence',
+      label: 'Presencia',
+      detail: manifest.visual?.name ? `${manifest.visual.name} · rostro` : 'visual',
+      status: imageOk ? 'partial' : 'off',
+      wire: 'edge',
+    },
+    {
+      id: 'senses',
+      label: 'Sentidos',
+      detail: 'STT · OCR · visión',
+      status: 'planned',
+      wire: 'edge',
+    },
+    {
+      id: 'hygiene',
+      label: 'Hygiene',
+      detail: 'CVE · fugas',
+      status: 'planned',
+      wire: 'edge',
+    },
+  ];
+}
 
 console.log('✓', join(DAPP_ASSETS, `agents/${tokenId}.json`));
 console.log('✓', join(DAPP_ASSETS, `budget-${tokenId}.json`));

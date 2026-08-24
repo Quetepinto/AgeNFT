@@ -83,4 +83,17 @@ open https://quetepinto.github.io/AgeNFT/
 
 ---
 
+## 7. Pendiente anotado — Sentidos (2026-07-16)
+
+ageNFT **escucha y ve**. Doc: [`senses-organ.md`](../../research/senses-organ.md)
+
+- STT (voz humana → texto)
+- Traductor
+- Visión (analizar imagen)
+- OCR (texto en imagen)
+
+Simétrico a Presencia (TTS + URUIRU habla).
+
+---
+
 *Generado automáticamente — 2026-07-16 ~01:28 CET*

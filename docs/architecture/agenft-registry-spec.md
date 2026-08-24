@@ -71,6 +71,9 @@ El manifiesto `ageNFT/v1` sigue siendo fuente de verdad offchain:
 
 Onchain solo: `agentURI` hash o URI + eventos mint/transfer.
 
+**Estándares y vocabulario ERC:** [`erc-standards-primer.md`](erc-standards-primer.md)  
+**Tabla fijo vs editable:** [`onchain-immutable-vs-editable.md`](onchain-immutable-vs-editable.md)
+
 ---
 
 ## Licencia / fork

@@ -1,33 +1,28 @@
 #!/usr/bin/env node
-/** GET /budget/status equivalent — CLI. */
-import { loadManifest } from './manifest-loader.mjs';
+/** Estado de presupuesto + tesoro TBA — default Unit-Mainnet. */
+import { resolveAgentEnv } from './agenft-env.mjs';
 import { getBudgetStatus, checkPayerBalanceUsdc, loadLedger } from './budget-tracker.mjs';
-import { homedir } from 'node:os';
-import { join } from 'node:path';
-import { readFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 
-const manifestPath = process.argv[2] ?? '../docs/manifest/examples/unit-1-lab.json';
-const { manifest, dataDir } = loadManifest(manifestPath);
+const args = process.argv.slice(2);
+const manifestArg = args.find((a) => !a.startsWith('--'));
+if (manifestArg) process.env.AGENFT_MANIFEST_PATH = resolve(manifestArg);
 
+const { manifest, dataDir, tokenId } = resolveAgentEnv();
 const status = getBudgetStatus(manifest, dataDir);
 const ledger = loadLedger(dataDir);
-
-let payer = null;
-const cred = join(homedir(), '.credentials/agenft-base-sepolia.json');
-if (existsSync(cred)) {
-  payer = JSON.parse(readFileSync(cred, 'utf8')).address;
-}
-
-const balance = payer ? await checkPayerBalanceUsdc(payer) : null;
+const tba = manifest.treasury.address;
+const tbaBal = await checkPayerBalanceUsdc(tba);
 
 console.log(
   JSON.stringify(
     {
       agent: manifest.name,
+      tokenId,
       agentId: manifest.identity.agentId,
-      tba: manifest.treasury.address,
+      tba,
+      tbaUsdc: tbaBal.usdc,
       budget: status,
-      payer: payer ? { address: payer, usdcMainnet: balance?.usdc ?? null } : null,
       recentEvents: (ledger.events ?? []).slice(0, 5),
       manifestCaps: {
         brain: manifest.budget?.organs?.brain?.limits,

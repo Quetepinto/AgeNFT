@@ -20,6 +20,19 @@ npm run dapp:export
 
 Genera `assets/agents/1.json`, `assets/budget-1.json`, `assets/index.json`.
 
+## Imagen URUIRU (Presencia)
+
+| Archivo | Uso |
+|---------|-----|
+| `assets/unit-mainnet.png` | Imagen principal (Gespenster — copia aquí el PNG original si lo tienes) |
+| `assets/unit-mainnet.svg` | Fallback incluido en repo |
+
+Visible en: **hero** (mini), sección **Presencia** (grande), **Ajustes**.
+
+## Muñeco — cuerpo digital
+
+Sección en `index.html` con órganos (`organs[]` en `agents/1.json`), exportados desde el manifiesto.
+
 Legacy Sepolia:
 
 ```bash

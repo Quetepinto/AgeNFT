@@ -7,7 +7,8 @@ import { resolveAgentEnv } from './agenft-env.mjs';
 import { resolveBrain } from './manifest-loader.mjs';
 import { inferBrain } from './brain-tx402.mjs';
 import { checkBrainBudget, checkPayerBalanceUsdc } from './budget-tracker.mjs';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { loadPointer, resolveRemotePointer } from './memory-toju.mjs';
+import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ctx = resolveAgentEnv();
@@ -45,6 +46,13 @@ if (!probe.ok) {
   // 402 esperado en probe — cerebro alcanzable
 }
 
+const pointer = loadPointer(dataDir) ?? resolveRemotePointer(manifest, dataDir);
+const hasLocal = existsSync(join(dataDir, 'memory/latest.json'));
+let memoryStatus = 'empty';
+if (hasLocal && pointer?.uri) memoryStatus = pointer.provider ?? 'local+pointer';
+else if (hasLocal) memoryStatus = 'local-only';
+else if (pointer?.uri) memoryStatus = `pointer-only (${pointer.provider})`;
+
 const report = {
   at: new Date().toISOString(),
   agent: manifest.name,
@@ -56,6 +64,11 @@ const report = {
   budget: budget.status,
   treasury: { address: treasury, usdcMainnet: treasuryBal.usdc },
   brainProbe: { ok: probe.ok, status: probe.status },
+  memory: {
+    status: memoryStatus,
+    uri: pointer?.uri ?? null,
+    experientialHash: pointer?.experientialHash ?? null,
+  },
 };
 
 mkdirSync(join(dataDir, 'doctor'), { recursive: true });

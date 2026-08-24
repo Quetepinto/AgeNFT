@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="agenft-base" content="." />
+    <meta name="description" content="Lab Studio — esquema editable + asistente para cablear ageNFT" />
+    <title>Lab Studio — ageNFT</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="lab-body">
+    <div class="wrap wrap-lab">
+      <header class="lab-header">
+        <div>
+          <span class="badge badge-lab">Lab · experimentación</span>
+          <h1>Lab Studio</h1>
+          <p class="sub">
+            Esquema editable a la izquierda · asistente e intención para el chat a la derecha.
+            Colores = madurez del cable · emojis = tipo de servicio (pasa el ratón).
+          </p>
+        </div>
+        <nav class="lab-nav">
+          <a class="btn btn-secondary btn-compact" href="index.html">← dApp</a>
+          <a class="btn btn-secondary btn-compact" href="settings.html">⚙️ Ajustes</a>
+        </nav>
+      </header>
+
+      <div class="lab-layout">
+        <section class="card lab-pane lab-pane-schematic" aria-label="Esquema de cableado">
+          <div id="lab-legend" class="lab-legend" aria-label="Leyenda de categorías"></div>
+          <div id="lab-tag-legend" class="lab-tag-legend" aria-label="Leyenda de etiquetas"></div>
+          <div class="lab-schematic-wrap">
+            <svg
+              id="lab-schematic"
+              class="lab-schematic"
+              viewBox="0 0 960 480"
+              role="img"
+              aria-label="Diagrama de módulos y cables"
+            ></svg>
+            <div
+              id="lab-node-editor"
+              class="lab-node-popover lab-node-popover-hidden"
+              role="dialog"
+              aria-label="Editar módulo"
+              aria-hidden="true"
+            ></div>
+          </div>
+          <div class="lab-schematic-actions">
+            <button type="button" class="btn btn-primary btn-compact" id="lab-apply-wiring">
+              Aplicar al runtime
+            </button>
+            <span id="lab-bridge-status" class="sub lab-bridge-status" aria-live="polite"></span>
+            <p id="lab-status-schematic" class="lab-status-schematic" aria-live="polite"></p>
+          </div>
+          <p class="sub lab-foot">
+            Clic en un módulo — el editor se abre encima del gráfico. <strong>Aplicar al runtime</strong> escribe
+            <code>runtime/wiring/</code> (requiere <code>npm run lab:bridge</code> en el VPS). Cables: salida →
+            entrada · zonas cognición / motor / extremidades.
+          </p>
+        </section>
+
+        <aside class="lab-pane lab-pane-side">
+          <section class="card lab-card-compact">
+            <h2>Asistente</h2>
+            <div id="lab-assistant" class="lab-assistant sub"></div>
+            <p class="sub lab-edit-hint">Edita módulos haciendo clic en el esquema — los desplegables aparecen sobre el gráfico.</p>
+          </section>
+
+          <section class="card lab-card-compact">
+            <h2>Runtime</h2>
+            <p class="sub lab-send-hint">
+              El esquema manda sobre Hermes, Telegram y chat-api vía
+              <code>runtime/wiring/*.json</code>. Opcional: también puedes usar Cursor/Inbox.
+            </p>
+            <div class="lab-toolbar">
+              <button type="button" class="btn btn-primary" id="lab-apply-wiring-side">
+                Aplicar wiring ahora
+              </button>
+            </div>
+          </section>
+
+          <section class="card lab-card-compact">
+            <h2>Enviar a Cursor</h2>
+            <label class="lab-field">
+              <span>Destino</span>
+              <select id="lab-send-target" aria-describedby="lab-send-target-hint">
+                <option value="current">Chat actual (pegar aquí)</option>
+                <option value="inbox">Inbox proyecto (@archivo)</option>
+                <option value="new">Chat nuevo (deeplink)</option>
+                <option value="both">Nuevo + copia</option>
+              </select>
+            </label>
+            <p id="lab-send-target-hint" class="sub lab-send-hint">
+              Cursor no permite elegir un hilo por ID. Para seguir en <strong>este</strong> chat usa
+              «Chat actual» o «Inbox».
+            </p>
+            <label class="lab-field">
+              <span>Mensaje corto (opcional)</span>
+              <input type="text" id="lab-user-message" placeholder="ej. probamos Matrix antes que memoria?" />
+            </label>
+            <div class="lab-toolbar">
+              <button type="button" class="btn btn-primary" id="lab-send-cursor">Enviar</button>
+              <button type="button" class="btn btn-secondary" id="lab-copy-chat">Solo copiar</button>
+            </div>
+          </section>
+
+          <section class="card lab-card-compact">
+            <h2>Notas (van dentro de la intención)</h2>
+            <textarea id="lab-notes" class="lab-notes" rows="3" placeholder="Contexto extra: prioridades, dudas, restricciones…"></textarea>
+          </section>
+
+          <section class="card lab-card-compact">
+            <h2>Vista previa</h2>
+            <textarea id="lab-intent-preview" class="lab-intent" rows="10" readonly aria-label="Vista previa markdown"></textarea>
+            <div class="lab-toolbar">
+              <button type="button" class="btn btn-secondary" id="lab-reset">Reset borrador</button>
+            </div>
+            <p id="lab-status" class="lab-status sub" aria-live="polite"></p>
+          </section>
+        </aside>
+      </div>
+    </div>
+
+    <div id="lab-toast" class="lab-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <script type="module">
+      import { initLabStudio } from './js/lab-studio.js';
+      initLabStudio();
+    </script>
+  </body>
+</html>

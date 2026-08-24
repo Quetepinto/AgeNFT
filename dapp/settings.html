@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="agenft-base" content="." />
+    <title>Ajustes — Unit-Mainnet</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero" style="margin-bottom: 1rem">
+        <img id="avatar" class="avatar" alt="" hidden />
+        <div id="avatar-fallback" class="avatar avatar-fallback" aria-hidden="true">U</div>
+        <div style="flex: 1">
+          <h1>⚙️ Ajustes</h1>
+          <p class="sub">Panel owner — esbozo. Conecta wallet para ver controles sensibles.</p>
+        </div>
+        <a class="btn btn-secondary btn-compact" href="lab.html" title="Lab Studio">🎛️ Lab</a>
+        <a class="btn btn-secondary btn-compact" href="index.html">← Ficha</a>
+      </header>
+
+      <section class="card">
+        <h2>Wallet</h2>
+        <button type="button" class="btn btn-secondary" id="btn-connect">Conectar MetaMask</button>
+        <p class="mono" id="wallet-status" style="margin-top: 0.75rem"></p>
+      </section>
+
+      <section class="card">
+        <h2>Cuerpo (resumen)</h2>
+        <div id="body-map" class="body-map"></div>
+      </section>
+
+      <section class="card">
+        <h2>Economía (esbozo)</h2>
+        <p class="sub">Desglose por órgano · tier G/D/E · hoy / mes — ver <code>organ-service-tiers.md</code>.</p>
+        <div class="row"><span>Cerebro</span><span class="mono">tx402 · D · —</span></div>
+        <div class="row"><span>Memoria</span><span class="mono">local · G · —</span></div>
+        <div class="row"><span>Doctor</span><span class="mono">probe · G · —</span></div>
+        <div class="row"><span>Runway</span><span class="mono">— días</span></div>
+      </section>
+
+      <section class="card">
+        <h2>Lab Studio — visualización</h2>
+        <p class="sub">Tamaño de módulos, textos y emojis en el esquema de cableado.</p>
+        <label class="lab-field" style="margin-top: 0.75rem">
+          <span>Tamaño de órganos</span>
+          <div class="lab-inline" style="align-items: center">
+            <input
+              type="range"
+              id="lab-organ-scale"
+              min="0.65"
+              max="1.15"
+              step="0.05"
+              style="flex: 1"
+              aria-describedby="lab-organ-scale-settings-hint"
+            />
+            <output id="lab-organ-scale-val" class="mono" style="min-width: 3rem">82%</output>
+          </div>
+        </label>
+        <p id="lab-organ-scale-settings-hint" class="sub">
+          Guardado en este navegador. Abre
+          <a href="lab.html">Lab Studio</a>
+          para ver el cambio (recarga si ya estaba abierto).
+        </p>
+        <label class="lab-field" style="margin-top: 1rem">
+          <span>Fondo URUIRU en Lab (marca de agua)</span>
+          <label class="lab-check-inline" style="margin-top: 0.35rem">
+            <input type="checkbox" id="lab-watermark-enabled" checked />
+            Mostrar imagen del NFT al final del canvas
+          </label>
+        </label>
+        <label class="lab-field" style="margin-top: 0.65rem">
+          <span>Transparencia del fondo</span>
+          <div class="lab-inline" style="align-items: center">
+            <input
+              type="range"
+              id="lab-watermark-opacity"
+              min="0.02"
+              max="0.28"
+              step="0.02"
+              style="flex: 1"
+              aria-describedby="lab-watermark-settings-hint"
+            />
+            <output id="lab-watermark-opacity-val" class="mono" style="min-width: 3rem">10%</output>
+          </div>
+        </label>
+        <p id="lab-watermark-settings-hint" class="sub">
+          Valores bajos (8–12%) suelen ser suficientes. Desmarca «Mostrar» para ocultar por completo.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Órganos opcionales</h2>
+        <p class="sub">Presencia, Sentidos, autofinanciación — toggles futuros.</p>
+      </section>
+
+      <section class="card card-muted">
+        <h2>Post-transfer</h2>
+        <p class="sub">Wizard mudanza local → default: <a href="transfer.html">transfer.html</a></p>
+      </section>
+
+      <footer class="footer">
+        <p>ageNFT — MVP dashboard esbozo</p>
+      </footer>
+    </div>
+    <script type="module">
+      import { assetUrl, fetchJson, defaultTokenId, applyAvatar, shortAddr } from './js/shared.js';
+      import { renderBodyMap } from './js/body-map.js';
+      import { bindOrganScaleControl, bindWatermarkControls } from './js/lab-display.js';
+
+      const btn = document.getElementById('btn-connect');
+      const st = document.getElementById('wallet-status');
+
+      bindOrganScaleControl(
+        document.getElementById('lab-organ-scale'),
+        document.getElementById('lab-organ-scale-val')
+      );
+
+      bindWatermarkControls({
+        enabledInput: document.getElementById('lab-watermark-enabled'),
+        opacityInput: document.getElementById('lab-watermark-opacity'),
+        valueEl: document.getElementById('lab-watermark-opacity-val'),
+      });
+
+      async function load() {
+        const tokenId = await defaultTokenId();
+        const agent = await fetchJson(assetUrl(`assets/agents/${tokenId}.json`));
+        applyAvatar(agent);
+        renderBodyMap(agent);
+      }
+
+      load().catch((e) => {
+        st.textContent = e.message;
+      });
+
+      if (window.ethereum) {
+        btn.addEventListener('click', async () => {
+          try {
+            const [a] = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            st.textContent = `Conectado: ${shortAddr(a)}`;
+          } catch (e) {
+            st.textContent = e.message;
+          }
+        });
+      } else {
+        st.textContent = 'MetaMask no detectado.';
+      }
+    </script>
+  </body>
+</html>

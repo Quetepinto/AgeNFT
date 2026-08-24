@@ -1,44 +1,14 @@
+import { initChat } from './chat.js';
+import {
+  assetUrl,
+  fetchJson,
+  tokenFromPath,
+  applyAvatar,
+  shortAddr,
+} from './shared.js';
+import { renderBodyMap } from './body-map.js';
+
 const USDC_DECIMALS = 6;
-
-function basePath() {
-  const meta = document.querySelector('meta[name="agenft-base"]');
-  if (meta?.content && meta.content !== '.') {
-    return meta.content.replace(/\/$/, '');
-  }
-  const parts = location.pathname.split('/').filter(Boolean);
-  const last = parts[parts.length - 1] || '';
-  if (last.endsWith('.html')) parts.pop();
-  if (parts[parts.length - 1] && /^\d+$/.test(parts[parts.length - 1])) parts.pop();
-  if (parts[parts.length - 1] === 'agent') parts.pop();
-  return parts.length ? `/${parts.join('/')}` : '';
-}
-
-function assetUrl(path) {
-  return `${basePath()}/${path.replace(/^\//, '')}`;
-}
-
-async function defaultTokenId() {
-  try {
-    const idx = await fetchJson(assetUrl('assets/index.json'));
-    return idx.defaultAgentId || '1';
-  } catch {
-    return '1';
-  }
-}
-
-async function tokenFromPath() {
-  const m = location.pathname.match(/\/agent\/(\d+)\/?$/);
-  if (m) return m[1];
-  const params = new URLSearchParams(location.search);
-  if (params.get('id')) return params.get('id');
-  return defaultTokenId();
-}
-
-async function fetchJson(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`${url} → ${res.status}`);
-  return res.json();
-}
 
 async function rpc(chainRpc, method, params) {
   const res = await fetch(chainRpc, {
@@ -62,19 +32,9 @@ async function usdcBalance(rpcUrl, usdcAddress, address) {
   return Number(BigInt(hex)) / 10 ** USDC_DECIMALS;
 }
 
-function shortAddr(a) {
-  if (!a || a.length < 12) return a || '—';
-  return `${a.slice(0, 6)}…${a.slice(-4)}`;
-}
-
 function setText(id, text) {
   const el = document.getElementById(id);
   if (el) el.textContent = text;
-}
-
-function setHtml(id, html) {
-  const el = document.getElementById(id);
-  if (el) el.innerHTML = html;
 }
 
 function statusLabel(status) {
@@ -104,7 +64,6 @@ async function main() {
     setText('agent-name', agent.name);
     setText('agent-id', `#${agent.tokenId}`);
     setText('agent-desc', agent.description || '');
-    setText('agent-status', statusLabel(agent.status));
     setText('chain-name', chainName);
     setText('payer-mode', agent.payerMode === 'tba-sovereign' ? 'TBA soberana' : 'EOA lab');
     setText('tba-full', agent.tba);
@@ -112,6 +71,11 @@ async function main() {
     setText('nft-contract', shortAddr(agent.nft?.contract));
     setText('budget-profile', agent.budgetProfile || '—');
     setText('global-cap', agent.globalCapPerDayUsd ? `$${agent.globalCapPerDayUsd}/día` : '—');
+
+    if (agent.visual?.name) {
+      setText('visual-name', agent.visual.name);
+      setText('visual-series', agent.visual.series || 'Gespenster');
+    }
 
     const badge = document.getElementById('status-badge');
     if (badge) {
@@ -131,23 +95,10 @@ async function main() {
       nftLink.textContent = 'Ver NFT en explorer';
     }
 
-    const img = document.getElementById('avatar');
-    const fallback = document.getElementById('avatar-fallback');
-    if (agent.image && !agent.image.includes('placeholder')) {
-      const src = agent.image.startsWith('http') || agent.image.startsWith('ipfs')
-        ? agent.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
-        : assetUrl(agent.image);
-      img.src = src;
-      img.alt = agent.visual?.name
-        ? `${agent.visual.name} — Gespenster`
-        : agent.name || 'Agente';
-      img.hidden = false;
-      fallback.hidden = true;
-    } else {
-      img.hidden = true;
-      fallback.hidden = false;
-      fallback.textContent = agent.name?.slice(0, 1) || '?';
-    }
+    applyAvatar(agent, { imgId: 'avatar', fallbackId: 'avatar-fallback' });
+    applyAvatar(agent, { imgId: 'presence-img', fallbackId: 'presence-fallback', large: true });
+
+    renderBodyMap(agent);
 
     const balRows = document.getElementById('balances');
     balRows.innerHTML = '<div class="row"><span>Consultando onchain…</span><span>…</span></div>';
@@ -198,6 +149,8 @@ async function main() {
       setText('wallet-status', 'Instala MetaMask para conectar (opcional).');
       connectBtn.classList.add('disabled');
     }
+
+    initChat();
   } catch (e) {
     errEl.hidden = false;
     errEl.textContent = `No se pudo cargar el agente: ${e.message}`;

@@ -29,19 +29,66 @@
           <li><strong>Identidad</strong> — NFT + nombre + metadata onchain</li>
           <li><strong>Tesoro (TBA)</strong> — USDC, ETH y otros activos en la cuenta del token</li>
           <li><strong>Manifiesto</strong> — cerebro, memoria, chat, presupuesto (ageNFT/v1)</li>
-          <li><strong>Memoria operativa</strong> — cápsulas locales / punteros offchain ligados al agente</li>
+          <li><strong>Memoria operativa</strong> — <strong>capa experiencial</strong> (según política de venta: full o reset); ver abajo</li>
+          <li><strong>Personaje / canon</strong> — soul, URUIRU, skills (siempre)</li>
           <li><strong>Reflejos</strong> — límites de gasto definidos en manifiesto</li>
         </ul>
       </section>
 
       <section class="card">
+        <h2>Nunca viaja ❌</h2>
+        <ul>
+          <li><strong>Vault 0</strong> — passwords, API keys, manguera, tokens Telegram, credenciales runtime</li>
+          <li><strong>PII del owner</strong> — notas privadas no exportadas; nunca en manifiesto onchain</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Memoria experiencial — elección al vender</h2>
+        <p class="sub">
+          Conversaciones y hechos acumulados pueden transferirse <em>completos</em> o con <em>reset</em>. El comprador
+          debe saberlo antes. URUIRU (personaje) siempre viaja; las vivencias, no necesariamente.
+        </p>
+        <ul>
+          <li><strong>Con memoria</strong> — historial personal incluido (coleccionismo)</li>
+          <li><strong>Solo capacidades</strong> — sin diario; puedes <strong>excluir</strong> skills concretas (ej. temas sensibles)</li>
+          <li><strong>Cuerpo limpio</strong> — reset total experiencial; URUIRU sigue siendo URUIRU</li>
+        </ul>
+        <p class="sub">
+          Alquiler / prueba: terceros no ven datos personales (PII) ni Vault 0. Detalle:
+          <code>docs/research/memory-layers-access.md</code>
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Biblioteca — documentos de consulta</h2>
+        <p class="sub">
+          PDFs, corpus, plantillas y archivos que el agente abre para trabajar (RAG, OCR, etc.) son la
+          <strong>Biblioteca</strong> — capa aparte del diario (M2) y las skills (M3).
+        </p>
+        <ul>
+          <li><strong>Con el NFT (IPFS/toju)</strong> — solo si el vendedor los incluye en la oferta</li>
+          <li><strong>Local o nube del owner</strong> — no viajan; en alquiler y trial el agente <em>no</em> puede leerlos</li>
+          <li><strong>Prueba (trial)</strong> — lista explícita de docs incluidos; lo probado = lo comprado</li>
+        </ul>
+        <p class="sub">
+          Detalle: <code>docs/research/library-storage-policy.md</code>
+        </p>
+      </section>
+
+      <section class="card">
         <h2>No viaja automáticamente ⚠️</h2>
         <ul>
-          <li><strong>Runtime / servidor</strong> — quien ejecuta el agente (Hermes, VPS) es infra del operador</li>
-          <li><strong>Claves del owner anterior</strong> — el nuevo dueño usa su wallet; la TBA paga con su saldo</li>
-          <li><strong>Telegram / gateways</strong> — hay que reconfigurar credenciales con el nuevo operador</li>
-          <li><strong>Unit-1 Sepolia</strong> — token lab legacy; no se migra a mainnet</li>
+          <li><strong>Runtime / servidor</strong> — motor intercambiable (Hermes, OpenClaw, API mínima); infra del operador, no otro NFT</li>
+          <li><strong>Memoria en disco local</strong> — hay que exportar a IPFS/toju antes del transfer</li>
+          <li><strong>Claves del owner anterior</strong> — el nuevo dueño usa su wallet; re-firma x402</li>
+          <li><strong>Telegram / gateways</strong> — reconfigurar credenciales; wizard post-transfer</li>
+          <li><strong>Tier E (SaaS)</strong> — cuentas del vendedor; se desactivan → G/D por defecto</li>
         </ul>
+        <p class="sub">
+          Mudanza fluida local → servicios default:
+          <a href="https://github.com/Quetepinto/AgeNFT/blob/main/docs/research/transfer-local-hosting.md">transfer-local-hosting.md</a>
+        </p>
       </section>
 
       <section class="card">

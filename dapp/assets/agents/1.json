@@ -37,7 +37,7 @@
     "nft": "https://basescan.org/token/0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839?a=1",
     "tba": "https://basescan.org/address/0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB"
   },
-  "updatedAt": "2026-07-15T23:27:48.682Z",
+  "updatedAt": "2026-07-16T22:03:14.944Z",
   "mintTx": "0x15c195568dbeaebdc43ed774746cdb6a5bc5dac95c2837b6b43d45c2043eae9c",
   "visual": {
     "name": "URUIRU",
@@ -45,5 +45,71 @@
     "artist": "Ety Fefer",
     "project": "https://gespenster.eth.link/",
     "note": "Uso autorizado — colaboración Gespenster × ageNFT"
-  }
+  },
+  "imageFallback": "assets/unit-mainnet.svg",
+  "organs": [
+    {
+      "id": "brain",
+      "label": "Cerebro",
+      "detail": "tx402.ai",
+      "status": "alive",
+      "wire": "core"
+    },
+    {
+      "id": "runtime",
+      "label": "Motor",
+      "detail": "hermes-agent",
+      "status": "alive",
+      "wire": "core"
+    },
+    {
+      "id": "memory",
+      "label": "Memoria",
+      "detail": "toju + IPFS",
+      "status": "partial",
+      "wire": "core"
+    },
+    {
+      "id": "doctor",
+      "label": "Doctor Qi",
+      "detail": "probe 900s",
+      "status": "alive",
+      "wire": "core"
+    },
+    {
+      "id": "reflexes",
+      "label": "Reflejos",
+      "detail": "$2.00/día",
+      "status": "alive",
+      "wire": "core"
+    },
+    {
+      "id": "gateway",
+      "label": "Chat",
+      "detail": "@Unit1_agent_bot",
+      "status": "alive",
+      "wire": "edge"
+    },
+    {
+      "id": "presence",
+      "label": "Presencia",
+      "detail": "URUIRU · rostro",
+      "status": "partial",
+      "wire": "edge"
+    },
+    {
+      "id": "senses",
+      "label": "Sentidos",
+      "detail": "STT · OCR · visión",
+      "status": "planned",
+      "wire": "edge"
+    },
+    {
+      "id": "hygiene",
+      "label": "Hygiene",
+      "detail": "CVE · fugas",
+      "status": "planned",
+      "wire": "edge"
+    }
+  ]
 }

@@ -56,7 +56,7 @@
 | Hermes / Telegram (skill + scripts) | ✅ instalar con `npm run hermes:install` |
 | Checklist E2E | ✅ 8/8 |
 
-Pendiente MVP+: memoria IPFS/toju, vídeo demo. TBA fondeada (~5 USDC). Rostro: **URUIRU** (Gespenster).
+Pendiente MVP+: memoria toju + IPFS (kubo lab ✅), vídeo demo. TBA fondeada (~5 USDC). Rostro: **URUIRU** (Gespenster).
 
 ---
 

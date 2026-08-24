@@ -1,0 +1,9 @@
+{
+  "provider": "lab-remote",
+  "uri": "lab-remote://memory-remote/capsule.json",
+  "capsulePath": "memory-remote/capsule.json",
+  "experientialHash": "0xa5880a9a25833efd458aaedd8401c498efb58ac4778d2ebb645f7ef48b6fd9b3",
+  "deltaCount": 9,
+  "costUsd": 0,
+  "updatedAt": "2026-07-20T11:43:54.677Z"
+}

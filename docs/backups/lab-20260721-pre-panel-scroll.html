@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="agenft-base" content="." />
+    <meta name="description" content="Lab Studio — esquema editable + asistente para cablear ageNFT" />
+    <title>Lab Studio — ageNFT</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="lab-body lab-body-full">
+    <div class="lab-stage" aria-label="Lab Studio — canvas de cableado">
+      <div class="lab-schematic-wrap">
+        <svg
+          id="lab-schematic"
+          class="lab-schematic"
+          viewBox="0 0 960 480"
+          preserveAspectRatio="xMidYMid meet"
+          role="img"
+          aria-label="Diagrama de módulos y cables"
+        ></svg>
+
+        <div id="lab-watermark" class="lab-watermark" aria-hidden="true">
+          <img id="lab-watermark-img" class="lab-watermark-img" alt="" decoding="async" />
+        </div>
+
+        <div
+          id="lab-node-editor"
+          class="lab-node-popover lab-node-popover-hidden"
+          role="dialog"
+          aria-label="Editar módulo"
+          aria-hidden="true"
+        ></div>
+
+        <header class="lab-float lab-float-top">
+          <a class="lab-identity" id="lab-identity" href="index.html">
+            <img id="lab-avatar" class="lab-avatar" alt="" hidden />
+            <div id="lab-avatar-fallback" class="lab-avatar lab-avatar-fallback" aria-hidden="true">U</div>
+            <div class="lab-identity-text">
+              <span class="badge badge-lab lab-identity-badge">Lab Studio</span>
+              <strong id="lab-identity-name" class="lab-identity-name">ageNFT</strong>
+              <span id="lab-identity-meta" class="lab-identity-meta">Cargando agente…</span>
+            </div>
+          </a>
+          <button type="button" class="btn btn-primary btn-compact" id="lab-apply-wiring">
+            Aplicar al runtime
+          </button>
+          <span id="lab-bridge-status" class="sub lab-bridge-status" aria-live="polite"></span>
+          <p id="lab-status-schematic" class="lab-status-schematic" aria-live="polite"></p>
+          <div class="lab-float-spacer"></div>
+          <a class="btn btn-secondary btn-compact" href="index.html">← dApp</a>
+          <a class="btn btn-secondary btn-compact" href="settings.html" title="Ajustes">⚙️</a>
+          <div id="lab-feasibility-wrap" class="lab-feasibility-wrap">
+            <div id="lab-feasibility-toolbar" class="lab-feasibility-toolbar" hidden>
+              <span class="lab-feasibility-toolbar-label">Advertencias</span>
+              <button type="button" class="btn btn-secondary btn-compact" id="lab-dismiss-all-alerts">
+                Cerrar todas
+              </button>
+            </div>
+            <div
+              id="lab-feasibility-alerts"
+              class="lab-feasibility-alerts"
+              aria-live="polite"
+              aria-label="Advertencias de cableado"
+            ></div>
+          </div>
+        </header>
+
+        <details class="lab-float lab-float-help">
+          <summary>¿Qué funciona hoy?</summary>
+          <div id="lab-bridge-help" class="lab-bridge-help sub"></div>
+        </details>
+
+        <details class="lab-float lab-float-legend">
+          <summary>Leyenda · tags · tamaño</summary>
+          <label class="lab-scale-field">
+            <span>Tamaño órganos</span>
+            <input
+              type="range"
+              id="lab-organ-scale"
+              min="0.65"
+              max="1.15"
+              step="0.05"
+              aria-describedby="lab-organ-scale-hint"
+            />
+            <output id="lab-organ-scale-val" class="lab-scale-val">82%</output>
+          </label>
+          <p id="lab-organ-scale-hint" class="sub lab-scale-hint">También en ⚙️ Ajustes · solo este navegador</p>
+          <label class="lab-scale-field lab-watermark-field">
+            <span>Fondo URUIRU (marca de agua)</span>
+            <label class="lab-check-inline">
+              <input type="checkbox" id="lab-watermark-enabled" checked />
+              Mostrar
+            </label>
+          </label>
+          <label class="lab-scale-field">
+            <span>Transparencia fondo</span>
+            <input
+              type="range"
+              id="lab-watermark-opacity"
+              min="0.02"
+              max="0.28"
+              step="0.02"
+              aria-describedby="lab-watermark-hint"
+            />
+            <output id="lab-watermark-opacity-val" class="lab-scale-val">10%</output>
+          </label>
+          <p id="lab-watermark-hint" class="sub lab-scale-hint">Imagen del NFT al final del canvas · también en ⚙️ Ajustes</p>
+          <div id="lab-legend" class="lab-legend" aria-label="Leyenda de categorías"></div>
+          <div id="lab-tag-legend" class="lab-tag-legend" aria-label="Leyenda de etiquetas"></div>
+        </details>
+
+        <nav class="lab-dock" aria-label="Paneles flotantes">
+          <button type="button" class="lab-dock-btn" data-lab-panel="assistant" title="Asistente">💬</button>
+          <button type="button" class="lab-dock-btn" data-lab-panel="cursor" title="Enviar a Cursor">📤</button>
+          <button type="button" class="lab-dock-btn" data-lab-panel="notes" title="Notas">📝</button>
+          <button type="button" class="lab-dock-btn" data-lab-panel="preview" title="Vista previa">📋</button>
+        </nav>
+
+        <aside
+          id="lab-panel-assistant"
+          class="lab-panel lab-panel-assistant lab-panel-hidden"
+          aria-label="Asistente"
+        >
+          <div class="lab-panel-head">
+            <h2>Asistente</h2>
+            <button type="button" class="lab-panel-close" data-close-panel aria-label="Cerrar">×</button>
+          </div>
+          <div id="lab-assistant" class="lab-assistant sub"></div>
+          <p class="sub lab-edit-hint">Clic en un módulo — editor y desplegables sobre el gráfico.</p>
+        </aside>
+
+        <aside id="lab-panel-cursor" class="lab-panel lab-panel-cursor lab-panel-hidden" aria-label="Enviar a Cursor">
+          <div class="lab-panel-head">
+            <h2>Enviar a Cursor</h2>
+            <button type="button" class="lab-panel-close" data-close-panel aria-label="Cerrar">×</button>
+          </div>
+          <label class="lab-field">
+            <span>Destino</span>
+            <select id="lab-send-target" aria-describedby="lab-send-target-hint">
+              <option value="current">Chat actual (pegar aquí)</option>
+              <option value="inbox">Inbox proyecto (@archivo)</option>
+              <option value="new">Chat nuevo (deeplink)</option>
+              <option value="both">Nuevo + copia</option>
+            </select>
+          </label>
+          <p id="lab-send-target-hint" class="sub lab-send-hint">
+            Para seguir en <strong>este</strong> chat: «Chat actual» o «Inbox».
+          </p>
+          <label class="lab-field">
+            <span>Mensaje corto (opcional)</span>
+            <input type="text" id="lab-user-message" placeholder="ej. probamos Matrix?" />
+          </label>
+          <div class="lab-toolbar">
+            <button type="button" class="btn btn-primary" id="lab-send-cursor">Enviar</button>
+            <button type="button" class="btn btn-secondary" id="lab-copy-chat">Solo copiar</button>
+          </div>
+        </aside>
+
+        <aside id="lab-panel-notes" class="lab-panel lab-panel-notes lab-panel-hidden" aria-label="Notas">
+          <div class="lab-panel-head">
+            <h2>Notas</h2>
+            <button type="button" class="lab-panel-close" data-close-panel aria-label="Cerrar">×</button>
+          </div>
+          <textarea
+            id="lab-notes"
+            class="lab-notes"
+            rows="6"
+            placeholder="Contexto extra: prioridades, dudas, restricciones…"
+          ></textarea>
+        </aside>
+
+        <aside id="lab-panel-preview" class="lab-panel lab-panel-preview lab-panel-hidden" aria-label="Vista previa">
+          <div class="lab-panel-head">
+            <h2>Vista previa</h2>
+            <button type="button" class="lab-panel-close" data-close-panel aria-label="Cerrar">×</button>
+          </div>
+          <textarea id="lab-intent-preview" class="lab-intent" rows="12" readonly aria-label="Vista previa markdown"></textarea>
+          <div class="lab-toolbar">
+            <button type="button" class="btn btn-secondary" id="lab-reset">Reset borrador</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <p id="lab-status" class="lab-status-sr" aria-live="polite"></p>
+    <div id="lab-toast" class="lab-toast" role="status" aria-live="polite" aria-atomic="true" hidden>
+      <span id="lab-toast-msg" class="lab-toast-msg"></span>
+      <button type="button" class="lab-toast-close" id="lab-toast-close" aria-label="Cerrar notificación">×</button>
+    </div>
+
+    <script type="module">
+      import { initLabStudio } from './js/lab-studio.js';
+      initLabStudio();
+    </script>
+  </body>
+</html>

@@ -3,10 +3,10 @@
  * Restart test: sync offchain → borrar local → restaurar → verificar preload.
  */
 import { mkdirSync, rmSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { loadManifest } from './manifest-loader.mjs';
-import { loadPayerKey, loadPayerAccount } from './payer-key.mjs';
+import { join, resolve } from 'node:path';
+import { resolveAgentEnv } from './agenft-env.mjs';
 import { preloadContext } from './memory-local.mjs';
+import { loadPayerKey, loadPayerAccount } from './payer-key.mjs';
 import {
   syncMemoryRemote,
   hydrateLocalFromPointer,
@@ -17,11 +17,12 @@ import {
 const args = process.argv.slice(2);
 const skipUpload = args.includes('--skip-upload');
 const provider = args.find((a) => a.startsWith('--provider='))?.split('=')[1] ?? 'auto';
-const manifestPath =
-  args.find((a) => !a.startsWith('--')) ??
-  '../docs/manifest/examples/unit-1-lab.json';
+const manifestArg = args.find((a) => !a.startsWith('--'));
+if (manifestArg) {
+  process.env.AGENFT_MANIFEST_PATH = resolve(manifestArg);
+}
 
-const { manifest, packDir, dataDir, packId } = loadManifest(manifestPath);
+const { manifest, packDir, dataDir, packId } = resolveAgentEnv();
 const memDir = join(dataDir, 'memory');
 const POINTER_REL = 'memory/remote-pointer.json';
 

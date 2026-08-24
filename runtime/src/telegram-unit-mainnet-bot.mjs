@@ -10,6 +10,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveAgentEnv } from './agenft-env.mjs';
+import { gatewayEnabled } from './wiring-loader.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const RUNTIME = join(__dirname, '..');
@@ -41,6 +43,19 @@ const allowed = (process.env.AGENFT_TELEGRAM_ALLOWED_USERS ?? '')
 if (!TOKEN) {
   console.error('Falta AGENFT_TELEGRAM_BOT_TOKEN en env o ~/.credentials/agenft-telegram.env');
   process.exit(1);
+}
+
+try {
+  const ctx = resolveAgentEnv();
+  if (!gatewayEnabled(ctx.wiring)) {
+    console.error(
+      'Gateway Telegram no cableado al Motor — revisa runtime/wiring/' + ctx.packId + '.json',
+    );
+    console.error('(Desconecta el servicio o restaura edge runtime → gateway)');
+    process.exit(2);
+  }
+} catch (e) {
+  console.warn('wiring check skip:', e.message ?? e);
 }
 
 const API = `https://api.telegram.org/bot${TOKEN}`;

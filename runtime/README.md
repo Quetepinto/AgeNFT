@@ -35,17 +35,28 @@ Ledger: `runtime/data/unit-1/budget/ledger.json`
 
 Tras cada turno la memoria vive en `data/unit-1/memory/`. Sync offchain:
 
+> **Protocolo vs pin:** [`docs/research/memory-storage-layers.md`](../docs/research/memory-storage-layers.md)  
+> **Wiring operativo:** [`docs/research/lab/runtime-wiring.md`](../docs/research/lab/runtime-wiring.md)
+
 ```bash
-npm run memory:sync                    # auto: toju → lab-remote si falla
-npm run memory:sync -- --provider=lab-remote
-npm run memory:restart-test            # simula restart (wipe + hydrate)
-npm run once:pay:sync                  # turno + sync memoria
+npm run wiring:show
+npm run wiring:apply    # desde .cursor/lab-inbox/wiring-draft.json
+npm run lab:bridge      # Lab Studio → inbox (8799)
+npm run memory:sync
+npm run memory:restart-test
+npm run once:pay:sync
 ```
 
-Cápsula: `agenft-memory-capsule/v1` en toju/IPFS o `memory-remote/capsule.json` (lab).  
+| Provider Lab Studio | Runtime | Qué hace |
+|---------------------|---------|----------|
+| `toju-ipfs` | `toju` / `auto` | Upload x402 → CID → gateways IPFS |
+| `kubo-ipfs` | kubo local + pointer `ipfs://` | Self-host — probado jul-2026 |
+| `lab-local` | `lab-local` | `memory-remote/capsule.json` (sin IPFS) |
+
+Cápsula: `agenft-memory-capsule/v1` en IPFS o `memory-remote/capsule.json` (lab).  
 Pointer: `data/unit-1/memory/remote-pointer.json`
 
-> **Nota jul-2026:** toju `/upload/agent` devuelve 402 incluso con `PAYMENT-SIGNATURE` válido (tx402.ai sí funciona). El runtime usa fallback lab-remote hasta que toju corrija el API.
+> **Nota jul-2026:** toju `/upload/agent` devuelve 402 incluso con `PAYMENT-SIGNATURE` válido (tx402.ai sí funciona). El runtime usa fallback lab-local hasta que toju corrija el API. **kubo + IPFS** funciona como alternativa de lab.
 
 ## Uso
 

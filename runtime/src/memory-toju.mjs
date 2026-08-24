@@ -69,6 +69,15 @@ export function buildCapsule({ manifest, dataDir }) {
     agent: manifest.name,
     agentId: manifest.identity?.agentId ?? null,
     packagedAt: new Date().toISOString(),
+    vault0Excluded: true,
+    transferPolicy:
+      manifest.organs?.memory?.transferPolicy ?? 'owner-choice-at-transfer',
+    layers: {
+      v0: 'excluded — keys, .env, tokens de gateway nunca van en la cápsula',
+      m1: 'canon en runtime/pack — no se duplica aquí',
+      m2: 'latest + recentDeltas (vivencias)',
+      m3: 'aún no separado de m2',
+    },
     latest,
     recentDeltas,
   };
@@ -257,7 +266,33 @@ function writeLatestFromCapsule(dataDir, capsule) {
   const latestPath = join(dataDir, 'memory/latest.json');
   mkdirSync(join(dataDir, 'memory'), { recursive: true });
   writeFileSync(latestPath, `${JSON.stringify(capsule.latest, null, 2)}\n`);
+  const deltas = Array.isArray(capsule.recentDeltas) ? capsule.recentDeltas : [];
+  if (deltas.length) {
+    const deltasDir = join(dataDir, 'memory/deltas');
+    mkdirSync(deltasDir, { recursive: true });
+    for (const delta of deltas) {
+      const stamp = String(delta.ts ?? 'imported').replace(/[:.]/g, '-');
+      writeFileSync(join(deltasDir, `${stamp}.json`), `${JSON.stringify(delta, null, 2)}\n`);
+    }
+  }
   return latestPath;
+}
+
+/**
+ * Si no hay latest.json local, restaura desde pointer (disco, manifiesto o IPFS).
+ */
+export async function ensureLocalMemory({ manifest, dataDir, log = () => {} }) {
+  const latestPath = join(dataDir, 'memory/latest.json');
+  if (existsSync(latestPath)) {
+    return { hydrated: false, reason: 'local-present' };
+  }
+  const pointer = resolveRemotePointer(manifest, dataDir);
+  if (!pointer) {
+    return { hydrated: false, reason: 'no-pointer' };
+  }
+  const result = await hydrateLocalFromPointer({ dataDir, pointer });
+  log('memory hydrate:', result.fetchedFrom, result.experientialHash ?? '');
+  return { hydrated: true, reason: 'restored', ...result };
 }
 
 export async function hydrateLocalFromPointer({ dataDir, pointer }) {
