@@ -5,6 +5,16 @@ Bitácora de decisiones. Docs temáticos en `docs/research/` y `docs/decisions/`
 
 ---
 
+## 2026-08-31
+
+### Dashboard guía usuario no técnico
+
+- `dapp/settings.html` reescrito: pasos Telegram, glosario, FAQ, hucha en castellano.
+- `dapp/js/settings-guide.js` — datos dinámicos del agente.
+- Protocolo de prueba: [`research/lab/onboarding-usuario-normal.md`](research/lab/onboarding-usuario-normal.md).
+
+---
+
 ## 2026-07-16
 
 ### Sentidos — ageNFT escucha y ve
