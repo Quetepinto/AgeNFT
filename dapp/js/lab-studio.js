@@ -2731,6 +2731,145 @@ function buildWiringExport(packId = 'unit-mainnet') {
   };
 }
 
+/** @type {object|null} */
+let wiringOptionMapCache = null;
+
+async function loadWiringOptionMap() {
+  if (wiringOptionMapCache) return wiringOptionMapCache;
+  const url = assetUrl('assets/wiring-option-map.json');
+  wiringOptionMapCache = await fetchJson(url);
+  return wiringOptionMapCache;
+}
+
+async function loadManifestPreset(name = 'uruiru-prototype') {
+  return fetchJson(assetUrl(`assets/presets/${name}.json`));
+}
+
+function nodeByIdFromState(id) {
+  return state.nodes.find((n) => n.id === id) ?? null;
+}
+
+function enabledGatewayFromMap(map, option) {
+  const g = map.gateway?.[option];
+  if (!g) return null;
+  return {
+    platform: g.platform,
+    enabled: true,
+    credentials: 'runtime-only',
+    sovereign: g.sovereign ?? false,
+  };
+}
+
+/** Borrador manifiesto ageNFT/v1 desde cableado actual (pre-mint). */
+async function buildManifestDraft(presetName = 'uruiru-prototype') {
+  const map = await loadWiringOptionMap();
+  const preset = await loadManifestPreset(presetName);
+  const wiring = buildWiringExport(await resolvePackIdForWiring());
+  const manifest = structuredClone(preset);
+  const now = new Date().toISOString();
+  manifest.updatedAt = now;
+  if (!manifest.createdAt) manifest.createdAt = now;
+
+  const runtimeNode = nodeByIdFromState('runtime');
+  if (runtimeNode?.option && map.runtime?.[runtimeNode.option]) {
+    Object.assign(manifest.runtime, map.runtime[runtimeNode.option]);
+  }
+
+  const brainNode = nodeByIdFromState('brain');
+  if (brainNode?.option && map.brain?.[brainNode.option]) {
+    manifest.organs.brain.primary = { ...map.brain[brainNode.option] };
+  }
+
+  const memoryNode = nodeByIdFromState('memory');
+  if (memoryNode?.option && map.memory?.[memoryNode.option]) {
+    const mem = map.memory[memoryNode.option];
+    manifest.organs.memory.operational = {
+      provider: mem.provider,
+      primary: null,
+      fallbacks: mem.fallbacks ?? [],
+    };
+  }
+
+  const nftNode = nodeByIdFromState('nft');
+  if (nftNode?.option && map.nft?.[nftNode.option]) {
+    const chainInfo = map.nft[nftNode.option];
+    if (chainInfo.chain) manifest.identity.chain = chainInfo.chain;
+    if (chainInfo.registry) {
+      manifest.identity.registry = chainInfo.registry;
+      manifest.identity.nft.contract = chainInfo.registry;
+    }
+  }
+
+  const presenceNode = nodeByIdFromState('presence');
+  if (presenceNode?.option && map.presence?.[presenceNode.option]) {
+    const p = map.presence[presenceNode.option];
+    if (p.asset) {
+      if (p.format === 'svg') manifest.imageFallback = p.asset;
+      else manifest.image = p.asset;
+    }
+  }
+
+  const chat = [];
+  const gatewayNode = nodeByIdFromState('gateway');
+  if (gatewayNode?.option && gatewayNode.option !== 'off') {
+    const g = enabledGatewayFromMap(map, gatewayNode.option);
+    if (g) chat.push(g);
+  }
+  const matrixNode = nodeByIdFromState('matrix');
+  if (matrixNode?.option && map.matrixNode?.[matrixNode.option]) {
+    const m = map.matrixNode[matrixNode.option];
+    if (m && !chat.some((c) => c.platform === m.platform)) {
+      chat.push({
+        platform: m.platform,
+        enabled: true,
+        credentials: 'runtime-only',
+        sovereign: m.sovereign ?? true,
+      });
+    }
+  }
+  if (chat.length) manifest.gateways.chat = chat;
+
+  manifest._wiringSource = {
+    packId: wiring.packId,
+    updatedAt: wiring.updatedAt,
+    exportedAt: now,
+  };
+
+  return manifest;
+}
+
+function downloadJson(filename, obj) {
+  const blob = new Blob([`${JSON.stringify(obj, null, 2)}\n`], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function handleExportManifest() {
+  const btn = document.getElementById('lab-export-manifest');
+  if (btn) setButtonState(btn, 'busy', 'Generando…');
+  try {
+    const manifest = await buildManifestDraft();
+    downloadJson('uruiru-prototype-manifest.json', manifest);
+    if (btn) setButtonState(btn, 'ok', '✓ Descargado');
+    flashStatus(
+      'Manifiesto descargado. Mint: node scripts/onchain/mint-mainnet.mjs --manifest <archivo> --dry-run',
+      'ok',
+      10000
+    );
+    if (btn) resetButtonState(btn, 2800);
+  } catch (e) {
+    if (btn) setButtonState(btn, 'err', '✗ Error');
+    flashStatus(`No se pudo exportar manifiesto: ${e.message ?? e}`, 'err', 10000);
+    if (btn) resetButtonState(btn, 3500);
+  }
+}
+
 function buildChatMarkdown() {
   const lines = [
     '## Lab Studio — intención de cableado',
@@ -3130,6 +3269,12 @@ function bindGlobalActions() {
   rememberButtonLabel(applyBtn);
   applyBtn?.addEventListener('click', () => {
     handleApplyWiring();
+  });
+
+  const exportManifestBtn = document.getElementById('lab-export-manifest');
+  rememberButtonLabel(exportManifestBtn);
+  exportManifestBtn?.addEventListener('click', () => {
+    handleExportManifest();
   });
 
   const sendBtn = document.getElementById('lab-send-cursor');
