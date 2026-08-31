@@ -128,5 +128,27 @@
   },
 
   "x402Support": true,
-  "supportedTrust": ["reputation"]
+  "supportedTrust": ["reputation"],
+
+  "body": {
+    "model": "compact-core",
+    "core": ["identity", "treasury", "soul", "reflexes", "budget", "visual"],
+    "cables": ["brain", "memory", "gateways", "runtime", "presence", "doctor"]
+  },
+
+  "transfer": {
+    "vault0NeverTravels": true,
+    "gateways": {
+      "telegram": {
+        "binding": "owner-vault0",
+        "onOwnerChange": "invalidate-and-rebind",
+        "defaultPath": "new-bot",
+        "optionalPath": "botfather-transfer-same-handle"
+      }
+    },
+    "runtimeGate": {
+      "requireOwnerOfMatch": true,
+      "onMismatch": "dormant_refuse_turns"
+    }
+  }
 }

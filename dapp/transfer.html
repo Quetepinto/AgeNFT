@@ -77,6 +77,23 @@
       </section>
 
       <section class="card">
+        <h2>Telegram al cambiar de owner</h2>
+        <p class="sub">
+          El bot (<code>@Unit1_agent_bot</code>) <strong>no viaja</strong> con el NFT. Es un cable en Vault 0
+          (token en el servidor), no parte del núcleo compacto del cuerpo.
+        </p>
+        <ul>
+          <li><strong>Default:</strong> el comprador crea <em>su</em> bot en BotFather; el vendedor revoca el token y apaga su servicio.</li>
+          <li><strong>Opcional:</strong> transferencia del mismo @handle vía BotFather — solo si ambos acuerdan.</li>
+          <li><strong>Runtime:</strong> el motor debe comprobar <code>ownerOf(tokenId)</code> — si no coincide con la wallet del host, no contesta.</li>
+        </ul>
+        <p class="sub">
+          Decisión completa:
+          <code>docs/decisions/transfer-telegram-gateway.md</code>
+        </p>
+      </section>
+
+      <section class="card">
         <h2>No viaja automáticamente ⚠️</h2>
         <ul>
           <li><strong>Runtime / servidor</strong> — motor intercambiable (Hermes, OpenClaw, API mínima); infra del operador, no otro NFT</li>
