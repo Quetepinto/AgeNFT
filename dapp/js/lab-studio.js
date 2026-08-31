@@ -3073,7 +3073,8 @@ function renderBridgeHelp(bridgeOnline = false) {
   root.innerHTML = [
     '<p><strong>¿Puedo cablear desde aquí?</strong> Sí, en borrador. Lo que guardas son los cables del esquema.</p>',
     `<p>${applyLine}</p>`,
-    '<p><strong>Enviar a Cursor</strong> — ✅ exporta markdown + <code>wiring-draft.json</code> (modo Inbox). Pega o @ en Cursor; allí o en el VPS: <code>npm run wiring:apply</code>.</p>',
+    '<p><strong>Exportar manifiesto</strong> — genera <code>ageNFT/v1</code> JSON para mint onchain (pre-mint). Después: <code>node scripts/onchain/mint-mainnet.mjs --manifest … --dry-run</code>.</p>',
+    '<p><strong>Enviar a Cursor</strong> — ✅ exporta markdown + wiring (modo Inbox). Pega o @ en Cursor; allí o en el VPS: <code>npm run wiring:apply</code>.</p>',
     '<p><strong>¿El agente obedece al instante?</strong> Tras aplicar, el runtime lee <code>runtime/wiring/*.json</code>. Algunos servicios hay que reiniciarlos.</p>',
     '<p><strong>Cable de vuelta</strong> — por ahora es visual (ida y vuelta en el dibujo); el motor no lo interpreta aparte aún.</p>',
     '<p><strong>Advertencias</strong> — barra bajo el header: scroll si hay muchas; <strong>×</strong> en cada una o <em>Cerrar todas</em>. Vuelven al recargar la página.</p>',

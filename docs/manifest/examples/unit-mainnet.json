@@ -71,7 +71,7 @@
       "transferPolicy": "owner-choice-at-transfer",
       "vault0NeverOnChain": true,
       "operational": {
-        "provider": "toju",
+        "provider": "kubo",
         "primary": null,
         "fallbacks": ["lab-remote", "w3stor", "ipfs"]
       },
