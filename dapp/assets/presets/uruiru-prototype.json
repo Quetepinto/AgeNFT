@@ -1,0 +1,138 @@
+{
+  "type": "ageNFT/v1",
+  "name": "URUIRU",
+  "description": "Prototipo ageNFT — URUIRU, un Gespenster como presencia onchain en Base mainnet.",
+  "image": "assets/unit-mainnet.png",
+  "imageFallback": "assets/unit-mainnet.svg",
+  "createdAt": "2026-08-31T00:00:00.000Z",
+  "updatedAt": "2026-08-31T00:00:00.000Z",
+
+  "visual": {
+    "name": "URUIRU",
+    "series": "Gespenster",
+    "artist": "Ety Fefer",
+    "project": "https://gespenster.eth.link/",
+    "note": "Uso autorizado — colaboración Gespenster × ageNFT"
+  },
+
+  "identity": {
+    "chain": "eip155:8453",
+    "registry": "0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839",
+    "agentId": null,
+    "nft": {
+      "standard": "erc721",
+      "contract": "0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839",
+      "tokenId": "PENDING"
+    },
+    "lab": {
+      "stack": "ageNFT-Registry/v1",
+      "preset": "uruiru-prototype",
+      "legacy": "Unit-1 #115 Sepolia VIMS — no migrar token"
+    }
+  },
+
+  "treasury": {
+    "type": "erc6551",
+    "address": "PENDING_TBA",
+    "chain": "base",
+    "preferredAssets": [
+      {
+        "symbol": "USDC",
+        "network": "eip155:8453",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+      },
+      {
+        "symbol": "ETH",
+        "network": "eip155:8453",
+        "address": "native"
+      }
+    ]
+  },
+
+  "runtime": {
+    "engine": "hermes-agent",
+    "adapter": "agenft-run-turn/v1",
+    "hosting": { "primary": "local", "fallbacks": ["akash", "vps"] }
+  },
+
+  "organs": {
+    "brain": {
+      "primary": {
+        "provider": "tx402.ai",
+        "endpoint": "https://tx402.ai/v1/chat/completions",
+        "model": "minimax/minimax-m3",
+        "network": "eip155:8453"
+      },
+      "fallbacks": [],
+      "routing": { "priority": ["sovereign", "opportunistic", "hose", "dormant"] }
+    },
+    "memory": {
+      "format": "agenft-memory-capsule/v1",
+      "transferPolicy": "owner-choice-at-transfer",
+      "vault0NeverOnChain": true,
+      "operational": {
+        "provider": "kubo",
+        "primary": null,
+        "fallbacks": ["lab-remote", "w3stor", "ipfs"]
+      },
+      "archive": { "provider": "arweave", "primary": null }
+    },
+    "doctor": {
+      "enabled": true,
+      "probeIntervalSec": 900,
+      "autoFailover": true,
+      "autoTransplant": ["brain", "memory"],
+      "requireOwnerApproval": ["runtime", "treasury"],
+      "maxTransplantsPerDay": 3
+    },
+    "reflexes": {
+      "circuitBreaker": { "maxRequestsPerMinute": 10, "maxTxPerMinute": 3 },
+      "allowedContracts": []
+    },
+    "hands": { "enabled": [], "dex": "aerodrome" }
+  },
+
+  "budget": {
+    "currency": "USD",
+    "profile": "conversational",
+    "minOperatingBalanceUsdc": "5.00",
+    "organs": {
+      "brain": {
+        "limits": {
+          "perDay": { "requests": 200, "usd": "1.00" },
+          "perMonth": { "usd": "25.00" }
+        },
+        "onCapExceeded": "degrade_to_cheapest_then_dormant",
+        "assumptions": { "avgCostPerRequestUsd": 0.002 }
+      },
+      "gas": {
+        "limits": { "perDay": { "usd": "0.50" } },
+        "onCapExceeded": "pause_non_vital_tx"
+      }
+    },
+    "global": {
+      "perDayUsdHardCap": "2.00",
+      "onGlobalCapExceeded": "dormant_except_doctor_probes"
+    }
+  },
+
+  "gateways": {
+    "policy": {
+      "priority": "sovereign-first",
+      "recommended": ["telegram", "matrix", "nostr"],
+      "sovereignDefault": ["matrix", "nostr"]
+    },
+    "chat": [
+      {
+        "platform": "telegram",
+        "enabled": true,
+        "handle": "Unit1_agent_bot",
+        "credentials": "runtime-only",
+        "sovereign": false
+      }
+    ]
+  },
+
+  "x402Support": true,
+  "supportedTrust": ["reputation"]
+}
