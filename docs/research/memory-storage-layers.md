@@ -122,7 +122,7 @@ Implementación: [`runtime/src/memory-toju.mjs`](../../runtime/src/memory-toju.m
 |-------|--------|
 | Cápsula `agenft-memory-capsule/v1` | ✅ |
 | `lab-local` + restart test | ✅ |
-| `kubo-ipfs` + gateways | ✅ CID `QmZDEgUs458XNHgLBs1hGJfPa8hdVQjQeRL1dGidEhc34w` |
+| `kubo-ipfs` + gateways | ✅ CID en VPS ago-2026 (`memory:sync --provider=kubo`) |
 | `toju-ipfs` upload x402 | ❌ API devuelve 402 tras pago — pendiente fix toju |
 | Sync post-turno Hermes | ⏳ |
 | `primary` en manifiesto mainnet | ⏳ |

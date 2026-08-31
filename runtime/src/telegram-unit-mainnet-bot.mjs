@@ -58,9 +58,22 @@ try {
   console.warn('wiring check skip:', e.message ?? e);
 }
 
+const BOT_DISPLAY_NAME = process.env.AGENFT_TELEGRAM_DISPLAY_NAME ?? 'URUIRU';
 const API = `https://api.telegram.org/bot${TOKEN}`;
 
-async function tg(method, body) {
+async function ensureBotProfile() {
+  if (process.env.AGENFT_TELEGRAM_SKIP_PROFILE === '1') return;
+  try {
+    await tg('setMyName', { name: BOT_DISPLAY_NAME });
+    await tg('setMyDescription', {
+      description: `${BOT_DISPLAY_NAME} · Gespenster (Ety Fefer) · Unit-Mainnet #1 ageNFT en Base.`,
+    });
+  } catch (e) {
+    console.warn('telegram profile skip:', e.message ?? e);
+  }
+}
+
+async function tg(method, body = {}) {
   const res = await fetch(`${API}/${method}`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -100,7 +113,7 @@ async function handleMessage(msg) {
   if (!text || text.startsWith('/start')) {
     await tg('sendMessage', {
       chat_id: chatId,
-      text: 'Hola — soy Unit-Mainnet (ageNFT en Base mainnet). Mi rostro es URUIRU, un Gespenster. Escribe tu mensaje.',
+      text: `Hola — soy **${BOT_DISPLAY_NAME}** (Unit-Mainnet #1, ageNFT en Base mainnet). Gespenster de Ety Fefer. Escribe tu mensaje.`,
     });
     return;
   }
@@ -133,8 +146,9 @@ async function poll(offset = 0) {
 }
 
 console.log(
-  `ageNFT Telegram bot — token #${process.env.AGENFT_TOKEN_ID ?? '1'} — pay=${pay} — allowlist=${allowed.length || 'open'}`,
+  `ageNFT Telegram bot — ${BOT_DISPLAY_NAME} — token #${process.env.AGENFT_TOKEN_ID ?? '1'} — pay=${pay} — allowlist=${allowed.length || 'open'}`,
 );
+await ensureBotProfile();
 poll(0).catch((e) => {
   console.error('poll fatal:', e.message ?? e);
   process.exit(1);

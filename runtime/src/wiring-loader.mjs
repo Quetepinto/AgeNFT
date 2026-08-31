@@ -8,7 +8,7 @@ const WIRING_DIR = join(REPO_ROOT, 'runtime/wiring');
 const MEMORY_OPTION_TO_PROVIDER = {
   'lab-local': 'lab-remote',
   'toju-ipfs': 'toju',
-  'kubo-ipfs': 'auto',
+  'kubo-ipfs': 'kubo',
   'w3stor-ipfs': 'w3stor',
   'export-only': 'lab-remote',
   arweave: 'lab-remote',

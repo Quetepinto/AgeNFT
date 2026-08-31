@@ -17,6 +17,7 @@ const positional = args.filter((a) => !a.startsWith('--'));
 const pay = flags.includes('--pay');
 const force = flags.includes('--force');
 const syncMemory = flags.includes('--sync-memory');
+const hose = flags.includes('--hose') || process.env.AGENFT_BRAIN_MODE === 'hose';
 const plain = flags.includes('--plain');
 const quiet = flags.includes('--quiet') || plain;
 
@@ -37,6 +38,7 @@ const out = await runTurn({
   pay,
   force,
   syncMemory,
+  hose,
   quiet,
 });
 

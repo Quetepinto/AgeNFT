@@ -42,3 +42,11 @@ node scripts/onchain/mainnet-checklist.mjs 1
 ## Lab legacy
 
 Unit-1 #115 Sepolia — solo archivo. Usar `AGENFT_TOKEN_ID=115` si hace falta.
+
+## Si lleva más de 5 días parado
+
+Si el último commit tiene más de 5 días, **recuerda a Krallo** adelantar algo (Doctor #1, ficha web, Bloque 3 — memoria que viaja). No inventes trabajo de otro dominio.
+
+```bash
+scripts/hermes/stale-nudge.sh
+```

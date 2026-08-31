@@ -12,10 +12,14 @@ import {
   gatewayEnabled,
   hasEdge,
   isConnectedToRuntime,
+  memoryProviderFromWiring,
 } from './wiring-loader.mjs';
+import { fetchCapsuleFromCid, loadPointer, resolveRemotePointer } from './memory-toju.mjs';
 
 const CHAT_API_PORT = Number(process.env.AGENFT_CHAT_API_PORT ?? 8787);
 const CHAT_API_HOST = process.env.AGENFT_CHAT_API_HOST ?? '127.0.0.1';
+const CHAT_API_LIVE_OPTIONS = new Set(['chat-api-local', 'chat-api-caddy']);
+const CHAT_API_PUBLIC_URL = (process.env.AGENFT_CHAT_API_PUBLIC_URL ?? '').replace(/\/$/, '');
 
 function check(id, ok, label, detail = '') {
   return { id, ok: Boolean(ok), label, detail: detail || undefined };
@@ -174,28 +178,53 @@ async function chatWebStatus(wiring) {
   const wired = chatWebEnabled(wiring);
   const node = wiring?.nodes?.find((n) => n.id === 'chatweb');
   const option = node?.option ?? 'chat-api-local';
-  if (option !== 'chat-api-local') {
+  if (!CHAT_API_LIVE_OPTIONS.has(option)) {
     return {
       nodeId: 'chatweb',
       option,
       state: 'unsupported',
       label: 'Opción no operativa',
-      checks: [check('adapter', false, `Adaptador «${option}»`, 'Solo chat-api-local hoy')],
-      steps: ['Usa chat-api-local o pide adaptador en Cursor.', 'cd runtime && npm run chat:api'],
+      checks: [check('adapter', false, `Adaptador «${option}»`, 'Usa chat-api-local o chat-api-caddy')],
+      steps: ['Elige chat-api-local (lab) o chat-api-caddy (HTTPS público).', 'cd runtime && npm run chat:api'],
     };
   }
   const health = wired ? await probeHttpOk(`http://${CHAT_API_HOST}:${CHAT_API_PORT}/health`) : { ok: false };
   const serviceRunning = health.ok;
+  const wantPublic = option === 'chat-api-caddy';
+  const publicHealth =
+    wired && wantPublic && CHAT_API_PUBLIC_URL
+      ? await probeHttpOk(`${CHAT_API_PUBLIC_URL}/health`)
+      : { ok: false };
   const checks = [
     check('wire', wired, 'Cableado al Motor'),
     check('service', !wired || serviceRunning, 'Servicio chat-api', health.detail ?? `:${CHAT_API_PORT}`),
   ];
+  if (wantPublic) {
+    checks.push(
+      check(
+        'public',
+        !wired || Boolean(CHAT_API_PUBLIC_URL && publicHealth.ok),
+        'HTTPS Caddy /agenft-api/',
+        CHAT_API_PUBLIC_URL
+          ? publicHealth.detail ?? CHAT_API_PUBLIC_URL
+          : 'Falta AGENFT_CHAT_API_PUBLIC_URL',
+      ),
+    );
+  }
   const steps = [
     'Cablear Chat web al Motor y aplicar wiring.',
-    'cd ageNFT/runtime && npm run chat:api',
-    'Probar: curl http://127.0.0.1:8787/health',
-    'En dApp chat: URL API http://127.0.0.1:8787 (o Caddy /agenft-api/ en producción).',
+    'systemd: agenft-chat-api.service (o npm run chat:api).',
+    'Probar local: curl http://127.0.0.1:8787/health',
   ];
+  if (wantPublic) {
+    steps.push(
+      'Caddy: handle_path /agenft-api/* → 127.0.0.1:8787',
+      `Probar público: curl ${CHAT_API_PUBLIC_URL || 'https://HOST/agenft-api'}/health`,
+      'dApp: meta agenft-api-url apuntando a esa URL.',
+    );
+  } else {
+    steps.push('En dApp chat: URL API http://127.0.0.1:8787');
+  }
   return {
     nodeId: 'chatweb',
     option,
@@ -204,6 +233,7 @@ async function chatWebStatus(wiring) {
     steps,
     live: {
       serviceRunning,
+      publicOk: wantPublic ? publicHealth.ok : undefined,
       wiredOnDisk: wired,
       edgeLocked: serviceRunning,
     },
@@ -289,6 +319,134 @@ function matrixOrganStatus(wiring) {
   };
 }
 
+function isIpfsDaemonRunning() {
+  try {
+    execSync('pgrep -x ipfs 2>/dev/null || pgrep -f "ipfs daemon" 2>/dev/null', {
+      encoding: 'utf8',
+      timeout: 1500,
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function readLocalMemoryHash(dataDir) {
+  const latestPath = join(dataDir, 'memory/latest.json');
+  if (!existsSync(latestPath)) return null;
+  try {
+    const latest = JSON.parse(readFileSync(latestPath, 'utf8'));
+    return latest.experientialHash ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function memoryOrganStatus(wiring, ctx) {
+  const node = wiring?.nodes?.find((n) => n.id === 'memory');
+  const option = node?.option ?? 'lab-local';
+  const wired = hasEdge(wiring, 'brain', 'memory') && node && node.category !== 'off';
+  const latestHash = readLocalMemoryHash(ctx.dataDir);
+  const pointer = loadPointer(ctx.dataDir) ?? resolveRemotePointer(ctx.manifest, ctx.dataDir);
+  const pointerHash = pointer?.experientialHash ?? null;
+  const hashSynced = Boolean(latestHash && pointerHash && latestHash === pointerHash);
+  const capsulePath = join(ctx.dataDir, pointer?.capsulePath ?? 'memory-remote/capsule.json');
+  const labCapsuleOk =
+    pointer?.provider === 'lab-remote' ? existsSync(capsulePath) : Boolean(pointer?.cid);
+
+  const checks = [
+    check('wire', wired, 'Cerebro → Memoria cableado'),
+    check('local', !wired || Boolean(latestHash), 'Memoria local (latest.json)', latestHash ?? 'Falta — npm run once'),
+    check(
+      'pointer',
+      !wired || Boolean(pointer?.uri || pointer?.cid),
+      'Pointer offchain',
+      pointer?.uri ?? pointer?.cid ?? 'npm run memory:sync',
+    ),
+    check(
+      'sync',
+      !wired || !latestHash || !pointerHash || hashSynced,
+      'Hash local = pointer',
+      hashSynced
+        ? latestHash?.slice(0, 18) + '…'
+        : 'Desincronizado — npm run memory:sync',
+    ),
+  ];
+
+  if (option === 'kubo-ipfs') {
+    const kuboUp = isIpfsDaemonRunning();
+    checks.push(
+      check('kubo', !wired || kuboUp, 'Daemon kubo (ipfs)', kuboUp ? 'En marcha' : 'ipfs daemon no detectado'),
+    );
+    if (wired && pointer?.cid) {
+      let fetchOk = false;
+      try {
+        await fetchCapsuleFromCid(pointer.cid, { timeoutMs: 8000 });
+        fetchOk = true;
+      } catch (e) {
+        checks.push(
+          check('ipfs_fetch', false, 'Cápsula en gateways IPFS', e.message?.slice(0, 80) ?? 'fetch failed'),
+        );
+      }
+      if (fetchOk) {
+        checks.push(check('ipfs_fetch', true, 'Cápsula en gateways IPFS', pointer.cid.slice(0, 20) + '…'));
+      }
+    }
+  }
+
+  if (option === 'lab-local') {
+    checks.push(
+      check(
+        'capsule',
+        !wired || labCapsuleOk,
+        'Cápsula lab-remote',
+        existsSync(capsulePath) ? capsulePath.split('/').slice(-2).join('/') : 'Falta sync',
+      ),
+    );
+  }
+
+  if (option === 'toju-ipfs') {
+    checks.push(
+      check(
+        'toju_api',
+        pointer?.provider === 'toju' || pointer?.provider === 'ipfs',
+        'Upload toju (x402)',
+        pointer?.provider === 'toju'
+          ? pointer.cid?.slice(0, 20) + '…'
+          : 'API toju pendiente — fallback kubo/lab',
+      ),
+    );
+  }
+
+  const steps = [
+    'Cadena: brain → memory en wiring.',
+    'Turno local: npm run once (escribe latest.json).',
+    'Sync offchain: npm run memory:sync (o --provider=kubo|lab-remote).',
+    'Prueba viaje: npm run memory:restart-test -- --skip-upload',
+  ];
+  if (option === 'kubo-ipfs') {
+    steps.push('kubo: ipfs daemon + npm run memory:sync -- --provider=kubo');
+  }
+  if (option === 'toju-ipfs') {
+    steps.push('Producto: toju + IPFS (x402 TBA) — ver memory-storage-layers.md');
+  }
+
+  return {
+    nodeId: 'memory',
+    option,
+    provider: memoryProviderFromWiring(wiring),
+    ...statusFromChecks(checks, { notWired: !wired }),
+    checks: checks.filter((c) => wired || c.id === 'wire'),
+    steps,
+    live: {
+      wiredOnDisk: wired,
+      pointerProvider: pointer?.provider ?? null,
+      hashSynced,
+      cid: pointer?.cid ?? null,
+    },
+  };
+}
+
 function runtimeStatus(wiring) {
   const turn = canRunTurn(wiring);
   const checks = [
@@ -333,6 +491,8 @@ async function buildOrganEntry(wiring, ctx, nodeId) {
       return brainStatus(wiring, ctx);
     case 'doctor':
       return doctorOrganStatus(wiring, ctx);
+    case 'memory':
+      return memoryOrganStatus(wiring, ctx);
     case 'matrix':
       return matrixOrganStatus(wiring);
     case 'runtime':

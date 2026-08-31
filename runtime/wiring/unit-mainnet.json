@@ -2,7 +2,7 @@
   "type": "agenft-wiring/v1",
   "packId": "unit-mainnet",
   "layoutVersion": 3,
-  "updatedAt": "2026-07-21T12:26:41.715Z",
+  "updatedAt": "2026-08-31T14:45:00.000Z",
   "notes": "Fuente de verdad operativa — Lab Studio / Cursor. Sin secretos.",
   "nodes": [
     {
@@ -27,7 +27,7 @@
       "id": "memory",
       "label": "Memoria",
       "group": "head",
-      "category": "partial",
+      "category": "alive",
       "option": "kubo-ipfs",
       "x": 584,
       "y": 20
@@ -81,8 +81,8 @@
       "id": "chatweb",
       "label": "Chat web",
       "group": "limb",
-      "category": "test",
-      "option": "chat-api-local",
+      "category": "alive",
+      "option": "chat-api-caddy",
       "x": 12,
       "y": 328
     },
@@ -131,7 +131,7 @@
       "id": "e3",
       "from": "brain",
       "to": "memory",
-      "category": "partial"
+      "category": "alive"
     },
     {
       "id": "e4",
@@ -149,7 +149,7 @@
       "id": "e7",
       "from": "runtime",
       "to": "chatweb",
-      "category": "test"
+      "category": "alive"
     },
     {
       "id": "e9",

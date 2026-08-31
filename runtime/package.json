@@ -15,6 +15,8 @@
     "memory:restart-test": "node src/memory-restart-test.mjs",
     "hermes:turn": "node src/hermes-turn.mjs",
     "hermes:turn:pay": "node src/hermes-turn.mjs --pay",
+    "once:hose": "AGENFT_BRAIN_MODE=hose node src/run-once.mjs",
+    "hermes:turn:hose": "AGENFT_BRAIN_MODE=hose node src/hermes-turn.mjs",
     "hermes:doctor": "node src/doctor-probe.mjs",
     "hermes:install": "node ../scripts/hermes/install-unit-mainnet.mjs",
     "hermes:install:lab": "node ../scripts/hermes/install-unit-1.mjs",

@@ -1,7 +1,35 @@
 # Notas de diseño — log cronológico
 
 Bitácora de decisiones. Docs temáticos en `docs/research/` y `docs/decisions/`.  
-**Mapa de piezas:** [`research/pieces-taxonomy.md`](research/pieces-taxonomy.md) · índice: [`research/design-index-20260716.md`](research/design-index-20260716.md).
+**Mapa de piezas:** [`research/pieces-taxonomy.md`](research/pieces-taxonomy.md) · índice: [`research/design-index-20260716.md`](research/design-index-20260716.md).  
+**Inbox Krallo (preguntas en chat):** [`inbox-krallo.md`](inbox-krallo.md).
+
+---
+
+## 2026-08-31
+
+### Bloque 3.1–3.2 cableado + hose lab (VPS)
+
+**URUIRU (ageNFT #1)** — distinto de **Hermesclaw** (asistente Matrix en `~/.hermes/`):
+
+| Agente | Canal | Cerebro |
+|--------|-------|---------|
+| **URUIRU** | Telegram `@Unit1_agent_bot`, dApp chat-api | tx402 + TBA → minimax (producto) |
+| **Hermesclaw** | Matrix `@hermesclaw:…` | OmniRoute lab (`auto/best-free`) — perfil Hermes, no ageNFT |
+
+**En vivo (VPS):**
+
+- Chat web: Caddy `https://bo5bvc.duckdns.org/agenft-api` → `agenft-chat-api.service` · wiring `chatweb=alive`
+- Memoria: `kubo-ipfs` · `memory:sync --provider=kubo` + `memory:restart-test` PASSED · doc [`lab/memory-wiring.md`](research/lab/memory-wiring.md)
+- **Hose:** `brain-hose.mjs` + `once:hose` / `hermes:turn:hose` · OmniRoute Docker `:20128` · doc [`lab/omniroute-hose.md`](research/lab/omniroute-hose.md)
+- Telegram URUIRU: `AGENFT_TELEGRAM_DISPLAY_NAME`, `setMyName` al arrancar bot
+- Pendientes: Matrix `@uruiru:…` (bot ageNFT, no Hermesclaw) · arreglar respuesta Hermesclaw Matrix — [`inbox-krallo.md`](inbox-krallo.md)
+
+**Backup Caddy:** [`backups/caddyfile-20260831-pre-agenft-api.txt`](backups/caddyfile-20260831-pre-agenft-api.txt)
+
+---
+
+- Inbox: qué se edita on-chain post-mint (casi nada; transfer + TBA sí). Tester/auditor Cursor estilo arnés **no** está; Hygiene es diseño ⏸. Detalle: [`inbox-krallo.md`](inbox-krallo.md).
 
 ---
 

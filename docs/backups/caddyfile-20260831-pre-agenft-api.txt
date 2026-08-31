@@ -1,0 +1,18 @@
+bo5bvc.duckdns.org {
+    handle /agenft/* {
+        uri strip_prefix /agenft
+        root * /home/openclaw/projects/ageNFT/dapp
+        file_server
+    }
+    handle /agenft-lab-inbox/* {
+        uri strip_prefix /agenft-lab-inbox
+        reverse_proxy 127.0.0.1:8799
+    }
+    handle {
+        reverse_proxy 127.0.0.1:8008
+    }
+}
+
+bo5bvc.duckdns.org:8448 {
+    reverse_proxy 127.0.0.1:8008
+}

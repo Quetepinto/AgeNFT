@@ -4,6 +4,7 @@
 import { resolveBrain } from './manifest-loader.mjs';
 import { preloadContext, autowriteDelta } from './memory-local.mjs';
 import { inferBrain } from './brain-tx402.mjs';
+import { inferHoseBrain, hoseConfigFromEnv } from './brain-hose.mjs';
 import {
   checkBrainBudget,
   recordBrainSpend,
@@ -25,6 +26,7 @@ import {
  * @param {boolean} [opts.pay]
  * @param {boolean} [opts.force]
  * @param {boolean} [opts.syncMemory]
+ * @param {boolean} [opts.hose]
  * @param {boolean} [opts.quiet]
  * @param {object|null} [opts.wiring]
  */
@@ -37,10 +39,15 @@ export async function runTurn({
   pay = false,
   force = false,
   syncMemory = false,
+  hose = false,
   quiet = false,
   wiring = null,
 }) {
-  if (syncMemory && !pay) {
+  const hoseMode = hose || process.env.AGENFT_BRAIN_MODE === 'hose';
+  if (hoseMode && pay) {
+    throw new Error('hose mode incompatible con pay=true (no usa TBA/x402)');
+  }
+  if (syncMemory && !pay && !hoseMode) {
     throw new Error('syncMemory requiere pay=true');
   }
 
@@ -78,12 +85,12 @@ export async function runTurn({
   log('TBA:', manifest.treasury.address);
   log('pack:', packId);
   log('brain:', brain.primary.provider, brain.primary.model);
-  log('mode:', pay ? 'paid (x402)' : 'probe (sin USDC)');
+  log('mode:', hoseMode ? `hose (${hoseConfigFromEnv().model})` : pay ? 'paid (x402)' : 'probe (sin USDC)');
   if (wiring) {
     log('wiring:', 'active', effectiveSync ? `memory sync (${memoryProvider})` : 'memory sync off');
   }
 
-  const budget = checkBrainBudget(manifest, dataDir, { pay });
+  const budget = checkBrainBudget(manifest, dataDir, { pay: pay && !hoseMode });
   log('budget:', budget.status);
 
   if (!budget.allowed && !force) {
@@ -103,7 +110,7 @@ export async function runTurn({
   let payerAddress = null;
   let payerSigner = null;
   let payerKind = null;
-  if (pay) {
+  if (pay && !hoseMode) {
     const resolved = await resolvePayerSigner(manifest);
     if (resolved.kind === 'missing_key') {
       return {
@@ -159,13 +166,19 @@ export async function runTurn({
     }
   }
 
-  const result = await inferBrain({
-    brain,
-    systemPrompt: ctx.systemPrompt,
-    userMessage,
-    pay,
-    signer: pay ? payerSigner : null,
-  });
+  const result = hoseMode
+    ? await inferHoseBrain({
+        systemPrompt: ctx.systemPrompt,
+        userMessage,
+        ...hoseConfigFromEnv(),
+      })
+    : await inferBrain({
+        brain,
+        systemPrompt: ctx.systemPrompt,
+        userMessage,
+        pay,
+        signer: pay ? payerSigner : null,
+      });
 
   let assistantText;
   if (result.content) {
@@ -183,7 +196,7 @@ export async function runTurn({
   }
 
   const spend = recordBrainSpend(dataDir, manifest, {
-    pay,
+    pay: pay && !hoseMode,
     usdMicro: result.costUsdMicro ?? 0,
     success: result.ok,
   });

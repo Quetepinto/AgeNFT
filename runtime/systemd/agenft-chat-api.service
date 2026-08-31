@@ -1,0 +1,21 @@
+[Unit]
+Description=ageNFT Unit-Mainnet chat-api (dApp → Motor)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/openclaw/projects/ageNFT/runtime
+Environment=AGENFT_TOKEN_ID=1
+Environment=AGENFT_PAYER=auto
+Environment=AGENFT_CHAT_API_HOST=127.0.0.1
+Environment=AGENFT_CHAT_API_PORT=8787
+Environment=AGENFT_CHAT_API_PAY=1
+Environment=AGENFT_CHAT_API_CORS=*
+Environment=AGENFT_CHAT_API_PUBLIC_URL=https://bo5bvc.duckdns.org/agenft-api
+ExecStart=/usr/bin/npm run chat:api
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

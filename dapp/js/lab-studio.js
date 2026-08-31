@@ -858,7 +858,7 @@ const RUNTIME_LIVE_OPTIONS = {
   memory: new Set(['lab-local', 'toju-ipfs', 'kubo-ipfs', 'w3stor-ipfs', 'export-only', 'arweave']),
   doctor: new Set(['probe', 'probe-900s']),
   gateway: new Set(['telegram']),
-  chatweb: new Set(['chat-api-local']),
+  chatweb: new Set(['chat-api-local', 'chat-api-caddy']),
   matrix: new Set([]),
   mas: new Set([]),
   senses: new Set([]),
@@ -1143,6 +1143,59 @@ const ORGAN_STATUS_STATIC = {
         'curl http://127.0.0.1:8787/health',
       ],
     },
+    'chat-api-caddy': {
+      state: 'partial',
+      label: 'Revisar Caddy + chat-api',
+      checks: [
+        { ok: null, label: 'Cableado al Motor', detail: 'Comprueba en el esquema' },
+        { ok: null, label: 'chat-api :8787', detail: 'agenft-chat-api.service' },
+        { ok: null, label: 'HTTPS /agenft-api/', detail: 'Caddy → 127.0.0.1:8787' },
+      ],
+      steps: [
+        'Cablear Chat web al Motor (opción chat-api-caddy).',
+        'Caddy: handle_path /agenft-api/* → 127.0.0.1:8787',
+        'systemctl --user enable --now agenft-chat-api.service',
+        'curl https://HOST/agenft-api/health',
+      ],
+    },
+  },
+  memory: {
+    'lab-local': {
+      state: 'partial',
+      label: 'Lab local (disco)',
+      checks: [
+        { ok: null, label: 'Cerebro → Memoria', detail: 'Comprueba wiring' },
+        { ok: null, label: 'latest.json', detail: 'npm run once' },
+        { ok: null, label: 'Cápsula lab-remote', detail: 'npm run memory:sync -- --provider=lab-remote' },
+      ],
+      steps: [
+        'Cablear Cerebro → Memoria.',
+        'npm run memory:sync -- --provider=lab-remote',
+        'npm run memory:restart-test -- --skip-upload',
+      ],
+    },
+    'kubo-ipfs': {
+      state: 'partial',
+      label: 'kubo + IPFS',
+      checks: [
+        { ok: null, label: 'Cerebro → Memoria', detail: 'Comprueba wiring' },
+        { ok: null, label: 'ipfs daemon', detail: 'pgrep ipfs' },
+        { ok: null, label: 'Pointer ipfs://', detail: 'npm run memory:sync -- --provider=kubo' },
+      ],
+      steps: [
+        'ipfs daemon en marcha en el VPS.',
+        'npm run memory:sync -- --provider=kubo',
+        'npm run memory:restart-test -- --skip-upload (hidrata vía gateways)',
+      ],
+    },
+    'toju-ipfs': {
+      state: 'partial',
+      label: 'toju + IPFS (producto)',
+      checks: [
+        { ok: null, label: 'Upload x402', detail: 'Pendiente fix API toju — fallback kubo/lab' },
+      ],
+      steps: ['Objetivo producto: TBA paga pin toju.', 'Hoy: kubo-ipfs o lab-local en lab.'],
+    },
   },
 };
 
@@ -1177,7 +1230,9 @@ function computeLiveEdgeLocks() {
     });
   }
 
-  const cw = getOrganLiveRecord('chatweb', 'chat-api-local');
+  const cw =
+    getOrganLiveRecord('chatweb', 'chat-api-caddy') ??
+    getOrganLiveRecord('chatweb', 'chat-api-local');
   if (cw?.live?.edgeLocked) {
     locks.push({
       id: 'live-runtime-chatweb',
@@ -1186,7 +1241,7 @@ function computeLiveEdgeLocks() {
       organId: 'chatweb',
       label: 'Chat web activo',
       hint:
-        'El servicio chat-api (:8787) sigue en marcha. Para quitar el cable: detén npm run chat:api, luego desconecta y aplica wiring.',
+        'El servicio chat-api (:8787) sigue en marcha. Para quitar el cable: detén el unit systemd (o npm run chat:api), luego desconecta y aplica wiring.',
     });
   }
 
@@ -1394,13 +1449,13 @@ function renderOrganStatusPanel(node) {
 const DEFAULT_NODES = [
   { id: 'senses', label: 'Sentidos', group: 'head', x: 200, y: 8, category: 'idea', option: 'stt-ocr' },
   { id: 'brain', label: 'Cerebro', group: 'head', x: 416, y: 0, category: 'alive', option: 'tx402' },
-  { id: 'memory', label: 'Memoria', group: 'head', x: 632, y: 12, category: 'partial', option: 'toju-ipfs' },
+  { id: 'memory', label: 'Memoria', group: 'head', x: 632, y: 12, category: 'alive', option: 'kubo-ipfs' },
   { id: 'presence', label: 'Presencia', group: 'head', x: 416, y: 96, category: 'partial', option: 'uruiru-svg' },
   { id: 'nft', label: 'NFT · TBA', group: 'torso', x: 416, y: 178, category: 'alive', option: 'base-mainnet' },
   { id: 'runtime', label: 'Motor', group: 'torso', x: 416, y: 268, category: 'alive', option: 'hermes' },
   { id: 'doctor', label: 'Doctor Qi', group: 'torso', x: 608, y: 248, category: 'alive', option: 'probe' },
   { id: 'gateway', label: 'Gateway chat', group: 'limb', x: 48, y: 268, category: 'partial', option: 'telegram' },
-  { id: 'chatweb', label: 'Chat web', group: 'limb', x: 24, y: 368, category: 'test', option: 'chat-api-local' },
+  { id: 'chatweb', label: 'Chat web', group: 'limb', x: 24, y: 368, category: 'alive', option: 'chat-api-caddy' },
   { id: 'matrix', label: 'Matrix', group: 'limb', x: 152, y: 388, category: 'test', option: 'matrix-bot' },
   { id: 'studio', label: 'Lab Studio', group: 'limb', x: 784, y: 268, category: 'test', option: 'lab-mvp' },
   { id: 'mas', label: 'MAS / Element X', group: 'limb', x: 808, y: 368, category: 'idea', option: 'syn2mas' },
@@ -1409,11 +1464,11 @@ const DEFAULT_NODES = [
 const DEFAULT_EDGES = [
   { id: 'e1', from: 'nft', to: 'runtime', category: 'alive' },
   { id: 'e2', from: 'runtime', to: 'brain', category: 'alive' },
-  { id: 'e3', from: 'brain', to: 'memory', category: 'partial' },
+  { id: 'e3', from: 'brain', to: 'memory', category: 'alive' },
   { id: 'e4', from: 'brain', to: 'senses', category: 'idea' },
   { id: 'e5', from: 'runtime', to: 'doctor', category: 'alive' },
   { id: 'e6', from: 'runtime', to: 'gateway', category: 'partial' },
-  { id: 'e7', from: 'runtime', to: 'chatweb', category: 'test' },
+  { id: 'e7', from: 'runtime', to: 'chatweb', category: 'alive' },
   { id: 'e8', from: 'runtime', to: 'matrix', category: 'test' },
   { id: 'e9', from: 'runtime', to: 'presence', category: 'partial' },
   { id: 'e10', from: 'runtime', to: 'studio', category: 'test' },
@@ -2678,12 +2733,12 @@ function contextualTip(node) {
   const q = `¿Qué te parece cablear <code>${escapeHtml(node.label)}</code> con <code>${escapeHtml(optionLabel(node.option))}</code> (${CATEGORIES[node.category].label})?`;
   const map = {
     matrix: 'Requiere bot + token en V0. Element Classic hasta desplegar MAS.',
-    chatweb: 'Siguiente paso: Caddy /agenft-api/ → :8787 + CORS.',
+    chatweb: 'Cable público: Caddy /agenft-api/ → :8787. La dApp usa meta agenft-api-url.',
     mas: 'Migración syn2mas con downtime — planificar ventana aparte.',
     studio: 'Este Lab es el MVP del Organ Studio — evoluciona con el proyecto.',
     senses: 'Bloque 5 — después de estabilizar chat y memoria.',
     memory:
-      'Bloque 3.2 — Memoria offchain = protocolo (IPFS) + pin (toju / kubo / W3Stor). Primary producto: toju + IPFS.',
+      'Bloque 3.2 — kubo pinnea en IPFS; toju + IPFS es capa producto cuando el API responda.',
   };
   const extra = map[node.id] ? `<br /><em>${escapeHtml(map[node.id])}</em>` : '';
   return `<br /><strong>Pregunta sugerida:</strong> ${q}${extra}`;

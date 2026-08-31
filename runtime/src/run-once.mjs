@@ -12,23 +12,30 @@ import { runTurn } from './run-turn.mjs';
 const args = process.argv.slice(2);
 const pay = args.includes('--pay');
 const force = args.includes('--force');
+const hose = args.includes('--hose') || process.env.AGENFT_BRAIN_MODE === 'hose';
 const syncToju = args.includes('--sync-toju');
-const manifestArg = args.find((a) => !a.startsWith('--'));
+const positional = args.filter((a) => !a.startsWith('--'));
+const manifestArg = positional.find((a) => a.endsWith('.json'));
+
+if (manifestArg) {
+  process.env.AGENFT_MANIFEST_PATH = manifestArg.startsWith('/')
+    ? manifestArg
+    : manifestArg;
+}
+
+const userMessage =
+  process.env.AGENFT_USER_MESSAGE?.trim() ||
+  positional.filter((a) => a !== manifestArg).join(' ').trim() ||
+  'Di en una frase quién eres y qué proyecto representas.';
 
 if (syncToju && !pay) {
   console.error('--sync-toju requiere --pay (toju usa x402 mainnet)');
   process.exit(1);
 }
-
-if (manifestArg) {
-  process.env.AGENFT_MANIFEST_PATH = manifestArg.startsWith('/')
-    ? manifestArg
-    : undefined;
+if (hose && pay) {
+  console.error('--hose incompatible con --pay');
+  process.exit(1);
 }
-
-const userMessage =
-  process.env.AGENFT_USER_MESSAGE ??
-  'Di en una frase quién eres y qué proyecto representas.';
 
 const ctx = resolveAgentEnv();
 const out = await runTurn({
@@ -37,6 +44,7 @@ const out = await runTurn({
   pay,
   force,
   syncMemory: syncToju,
+  hose,
   quiet: false,
 });
 

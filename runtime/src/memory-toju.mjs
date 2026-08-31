@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { execSync } from 'node:child_process';
 import { privateKeyToAccount } from 'viem/accounts';
 import { checkPayerBalanceUsdc } from './budget-tracker.mjs';
 
@@ -175,6 +176,53 @@ export function syncCapsuleToLabRemote({ manifest, dataDir, capsule }) {
   return { pointer, path, costUsdMicro: 0, capsule: cap, fallback: true };
 }
 
+function resolveIpfsBin() {
+  for (const bin of ['ipfs', '/usr/local/bin/ipfs']) {
+    try {
+      execSync(`"${bin}" --version`, { encoding: 'utf8', stdio: 'pipe', timeout: 3000 });
+      return bin;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+/** Pin cápsula en kubo local → pointer ipfs:// (memoria que viaja por gateways). */
+export function syncCapsuleToKubo({ manifest, dataDir, capsule }) {
+  const cap = capsule ?? buildCapsule({ manifest, dataDir });
+  const capsulePath = join(dataDir, LAB_CAPSULE);
+  mkdirSync(join(dataDir, 'memory-remote'), { recursive: true });
+  writeFileSync(capsulePath, `${JSON.stringify(cap, null, 2)}\n`);
+
+  const ipfsBin = resolveIpfsBin();
+  if (!ipfsBin) throw new Error('kubo ipfs CLI not found — install kubo or set PATH');
+
+  let cid;
+  try {
+    cid = execSync(`${ipfsBin} add -Q "${capsulePath}"`, {
+      encoding: 'utf8',
+      timeout: 120_000,
+    }).trim();
+  } catch (e) {
+    throw new Error(`ipfs add failed: ${e.message ?? e}`);
+  }
+  if (!cid) throw new Error('ipfs add returned empty CID');
+
+  const pointer = {
+    provider: 'ipfs',
+    network: 'mainnet',
+    cid,
+    uri: `ipfs://${cid}`,
+    ipfsUri: `ipfs://${cid}`,
+    experientialHash: cap.latest.experientialHash ?? null,
+    deltaCount: cap.latest.deltaCount ?? 0,
+    costUsd: 0,
+  };
+  const path = savePointer(dataDir, pointer);
+  return { pointer, path, costUsdMicro: 0, capsule: cap, fallback: false };
+}
+
 export async function uploadCapsuleToToju({ manifest, dataDir, privateKey, durationDays = 7 }) {
   const capsule = buildCapsule({ manifest, dataDir });
   const body = JSON.stringify(capsule, null, 2);
@@ -225,18 +273,33 @@ export async function syncMemoryRemote({
     return syncCapsuleToLabRemote({ manifest, dataDir });
   }
 
+  if (provider === 'kubo') {
+    return syncCapsuleToKubo({ manifest, dataDir });
+  }
+
   if (provider === 'toju') {
     if (!privateKey) throw new Error('toju sync requires payer private key');
     return uploadCapsuleToToju({ manifest, dataDir, privateKey, durationDays });
   }
 
-  // auto
-  if (!privateKey) return syncCapsuleToLabRemote({ manifest, dataDir });
+  // auto: toju → kubo (si hay daemon) → lab-remote
+  if (!privateKey) {
+    try {
+      return syncCapsuleToKubo({ manifest, dataDir });
+    } catch {
+      return syncCapsuleToLabRemote({ manifest, dataDir });
+    }
+  }
   try {
     return await uploadCapsuleToToju({ manifest, dataDir, privateKey, durationDays });
   } catch (e) {
-    console.warn('⚠️  toju upload failed — lab-remote fallback:', e.message);
-    return syncCapsuleToLabRemote({ manifest, dataDir });
+    console.warn('⚠️  toju upload failed — trying kubo:', e.message);
+    try {
+      return syncCapsuleToKubo({ manifest, dataDir });
+    } catch (kuboErr) {
+      console.warn('⚠️  kubo pin failed — lab-remote fallback:', kuboErr.message);
+      return syncCapsuleToLabRemote({ manifest, dataDir });
+    }
   }
 }
 
