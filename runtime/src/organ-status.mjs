@@ -13,6 +13,7 @@ import {
   hasEdge,
   isConnectedToRuntime,
 } from './wiring-loader.mjs';
+import { checkOwnerGate } from './owner-gate.mjs';
 
 const CHAT_API_PORT = Number(process.env.AGENFT_CHAT_API_PORT ?? 8787);
 const CHAT_API_HOST = process.env.AGENFT_CHAT_API_HOST ?? '127.0.0.1';
@@ -78,14 +79,31 @@ function isTelegramBotRunning() {
   }
 }
 
-function gatewayTelegramStatus(wiring) {
+async function gatewayTelegramStatus(wiring, ctx) {
   const wired = gatewayEnabled(wiring);
   const tokenOk = telegramTokenPresent();
   const botRunning = isTelegramBotRunning();
-  const sessionActive = wired && tokenOk && botRunning;
+  let ownerGateOk = true;
+  let ownerGateDetail = 'Sin gate (manifiesto)';
+  if (ctx?.manifest && wired) {
+    const gate = await checkOwnerGate({ manifest: ctx.manifest, tokenId: ctx.tokenId });
+    ownerGateOk = gate.ok;
+    ownerGateDetail = gate.ok
+      ? gate.skipped
+        ? 'Gate desactivado en manifiesto'
+        : `ownerOf OK (${gate.onchainOwner ?? '?'})`
+      : gate.reason ?? 'owner mismatch';
+  }
+  const sessionActive = wired && tokenOk && botRunning && ownerGateOk;
   const checks = [
     check('wire', wired, 'Cableado al Motor (runtime → gateway)'),
     check('token', !wired || tokenOk, 'Token bot Telegram', wired ? undefined : 'Opcional si no cableado'),
+    check(
+      'owner_gate',
+      !wired || ownerGateOk,
+      'Wallet operadora = ownerOf (transfer = fin acceso bot)',
+      ownerGateDetail,
+    ),
     check(
       'bot_process',
       !wired || botRunning,
@@ -105,13 +123,21 @@ function gatewayTelegramStatus(wiring) {
   }
   const steps = [
     'Cablear Gateway chat al Motor en Lab y aplicar wiring.',
-    'Crear bot en @BotFather → copiar token.',
+    'Crear bot en @BotFather → copiar token (cada owner su bot — ver transfer.html).',
     'Guardar token en ~/.credentials/agenft-telegram.env (sin commitear).',
-    'En VPS: cd ageNFT/runtime && npm run telegram:mainnet:pay',
+    'AGENFT_OPERATOR_ADDRESS = wallet que es ownerOf del NFT.',
+    'En VPS: cd ageNFT/runtime && npm run owner:gate && npm run telegram:mainnet:pay',
     '(Opcional) AGENFT_TELEGRAM_ALLOWED_USERS=id1,id2 para restringir acceso.',
   ];
   if (botRunning) {
-    steps.push('Para quitar el cable: para el bot en el VPS (Ctrl+C o detén el servicio), luego desconecta y aplica wiring.');
+    steps.push(
+      'Tras transferir el NFT: parar bot + revocar token (ex-owner). Nuevo owner: bot nuevo.',
+    );
+  }
+  if (wired && !ownerGateOk) {
+    steps.unshift(
+      'OWNER GATE: esta wallet ya no es owner del NFT — pare el bot y revoque el token Telegram.',
+    );
   }
   let label = statusFromChecks(checks, { notWired: !wired }).label;
   let state = statusFromChecks(checks, { notWired: !wired }).state;
@@ -325,7 +351,7 @@ async function buildOrganEntry(wiring, ctx, nodeId) {
   switch (nodeId) {
     case 'gateway':
       return node.option === 'telegram'
-        ? gatewayTelegramStatus(wiring)
+        ? gatewayTelegramStatus(wiring, ctx)
         : gatewayGenericStatus(wiring, node.option);
     case 'chatweb':
       return chatWebStatus(wiring);

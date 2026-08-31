@@ -138,12 +138,12 @@
 
   "transfer": {
     "vault0NeverTravels": true,
+    "transferEndsBotAccess": true,
     "gateways": {
       "telegram": {
         "binding": "owner-vault0",
         "onOwnerChange": "invalidate-and-rebind",
-        "defaultPath": "new-bot",
-        "optionalPath": "botfather-transfer-same-handle"
+        "policy": "new-bot-only"
       }
     },
     "runtimeGate": {

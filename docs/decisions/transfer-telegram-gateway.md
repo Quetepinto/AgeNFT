@@ -1,108 +1,126 @@
-# Decisión — Telegram y cambio de owner del ageNFT
+# Decisión — Transferir ageNFT = finalizar acceso al bot
 
 > **Estado:** Aprobado · **Fecha:** 2026-08-31  
-> Bloquea replanteos de transferencia antes del prototipo público.
+> **Regla:** `TRANSFERIR EL AgeNFT = FINALIZAR ACCESO AL BOT` — sin excepciones de producto.
 
 ---
 
-## Problema
+## Principio
 
-Transferir el NFT (1 tx onchain) **no** transfiere el bot de Telegram:
+Un ageNFT es un **cuerpo compacto onchain** (NFT + TBA + manifiesto + soul). Los **cables** (cerebro, memoria, Telegram…) se configuran en runtime, pero **Telegram no es parte del núcleo** — vive en Vault 0.
 
-- El **token** del bot vive en Vault 0 (`~/.credentials`), no en el manifiesto ni en chain.
-- Quien conserve token + VPS puede seguir respondiendo en `@…_bot` aunque ya no sea `ownerOf(tokenId)`.
-- BotFather ligó el bot a una **cuenta Telegram humana**, no a una wallet.
+Al cambiar `ownerOf`:
 
-Hay que definir el corte por defecto entre ex-owner y nuevo owner.
+1. El **ex-owner pierde derecho a operar** el cuerpo (gate runtime).
+2. El **ex-owner pierde el bot** (revocar token + parar servicio).
+3. El **nuevo owner** crea **bot nuevo** — nunca reutiliza el del vendedor.
 
 ---
 
-## Decisión (default de producto)
-
-### 1. El handle Telegram **no** es parte del núcleo inseparable
-
-| Núcleo compacto (viaja con el NFT) | Cable desmontable (Vault 0) |
-|--------------------------------------|-----------------------------|
-| NFT, TBA, soul, URUIRU, Reflejos, presupuesto | Token Telegram, runtime host, `.env` |
-
-El comprador hereda **URUIRU** (personaje), no `@Unit1_agent_bot` (enchufe técnico).
-
-### 2. Camino default al transferir: **bot nuevo del comprador**
+## Política Telegram (única vía)
 
 ```
 Transfer NFT onchain
-  → gateway Telegram pasa a estado unbound (sin token válido)
-  → ex-owner: checklist obligatorio (revocar + apagar)
-  → nuevo owner: crea SU bot en BotFather → nuevo token → su runtime
+    ↓
+Gateway Telegram → unbound (sin token válido del ex-owner)
+    ↓
+EX-OWNER (obligatorio):
+  • parar servicio bot en su host
+  • revocar/regenerar token en @BotFather
+    ↓
+NUEVO OWNER:
+  • crear SU bot en BotFather (nuevo @handle)
+  • token en SU Vault 0
+  • runtime con SU wallet = ownerOf(tokenId)
 ```
 
-**Por qué es el default:**
+| Pieza | ¿Viaja con el NFT? |
+|-------|-------------------|
+| URUIRU, soul, TBA, Reflejos | ✅ Sí (núcleo compacto) |
+| `@Unit1_agent_bot` / token API | ❌ No (Vault 0) |
+| VPS / Hermes del vendedor | ❌ No |
 
-- Venta **sin confianza**: el comprador no depende del Telegram del vendedor.
-- Corte claro: token viejo revocado = API de Telegram deja de aceptar al ex-owner.
-- Coherente con Vault 0: credenciales nunca viajan en el NFT.
-- El nombre `@Unit1_agent_bot` es legado lab; en producto el owner elige handle (o lo genera el wizard).
+---
 
-### 3. Camino opcional (cooperativo): **misma cuenta @handle**
+## Opción descartada: «modo cooperativo» (mismo @handle)
 
-Solo si vendedor y comprador acuerdan explícitamente:
+**Descartada por diseño** — no se implementa ni se documenta como camino de producto.
 
-1. Vendedor transfiere **propiedad del bot** en BotFather a la cuenta Telegram del comprador (función nativa de Telegram).
-2. Comprador **regenera token** (el anterior queda invalidado).
-3. Comprador configura su runtime con el token nuevo.
+Idea rechazada: transferir propiedad del bot en BotFather al comprador y conservar el mismo `@handle`.
 
-No es default: requiere cooperación post-venta y cuenta Telegram del comprador.
+| Riesgo | Por qué descartamos |
+|--------|---------------------|
+| Ex-owner con copia del token | Sigue respondiendo hasta revocar — ventana peligrosa |
+| Dependencia post-venta | Comprador necesita cooperación del vendedor (no trustless) |
+| Dos operadores, un handle | Confusión de identidad; parece un solo URUIRU cuando no lo es |
+| Puerta a abuso | Antiguo owner como “extraño” con acceso al mismo bot |
 
-### 4. Corte técnico en runtime (obligatorio implementar)
+**Alternativa si se conocen:** hablar por Telegram **humano** o que cada uno tenga **su ageNFT** — no mezclar propiedad del bot.
 
-Independiente del camino Telegram, el **runtime ageNFT** debe:
+---
+
+## Candado técnico (implementado)
+
+### 1. `ownerOf` gate (runtime)
+
+En cada turno y al arrancar el bot Telegram:
 
 ```
-Al arrancar y antes de cada turno:
-  ownerOnChain = ownerOf(AGENFT_TOKEN_ID)
-  operatorWallet = wallet configurada en el host (AGENFT_OPERATOR_ADDRESS o signer)
-  si ownerOnChain ≠ operatorWallet → DORMANT + no procesar Telegram/chat
+ownerOnChain = ownerOf(tokenId)
+operatorWallet = AGENFT_OPERATOR_ADDRESS || wallet en ~/.credentials
+si ownerOnChain ≠ operatorWallet → DORMANT / exit(3)
 ```
 
-Efecto:
+Archivo: `runtime/src/owner-gate.mjs`  
+Integrado en: `run-turn.mjs`, `telegram-unit-mainnet-bot.mjs`
 
-- VPS del ex-owner con wallet vieja **deja de operar** el cuerpo aunque conserve un token robado/copiado.
-- El token Telegram solo sirve si quien lo usa **también** es owner onchain en ese host — o si el host no implementa el check (por eso hace falta revocar token).
+Solo `--force` en CLI de lab salta el gate (nunca en producción).
 
-**Doble candado:** revocación token (Telegram) + gate `ownerOf` (ageNFT).
+### 2. Revocación token (ex-owner, manual obligatorio)
 
-### 5. Checklist ex-owner (obligatorio en transferencia)
+Telegram no lee blockchain. El ex-owner **debe** revocar el token en BotFather. Sin eso la API sigue activa aunque el gate bloquee el cerebro ageNFT.
 
-| Paso | Quién | Acción |
-|------|-------|--------|
-| 1 | Vendedor | `safeTransferFrom` — NFT + TBA |
-| 2 | Vendedor | Parar servicio bot (`systemctl stop …`) |
-| 3 | Vendedor | Revocar/regenerar token en BotFather (invalida API) |
-| 4 | Vendedor | (Opcional) Exportar memoria IPFS si política `full` |
-| 5 | Comprador | Verificar `ownerOf` en BaseScan |
-| 6 | Comprador | Crear bot nuevo **o** recibir transfer BotFather |
-| 7 | Comprador | Configurar runtime + token en **su** Vault 0 |
-| 8 | Comprador | Probar turno `--pay` desde TBA + mensaje Telegram |
+**Doble candado:** gate ownerOf + revocación token.
 
-Sin pasos 2–3 el ex-owner **puede** seguir respondiendo — es incumplimiento de protocolo, no bug del NFT.
+---
 
-### 6. Manifiesto — campos objetivo
+## Checklists
+
+### Ex-owner (inmediatamente tras `safeTransferFrom`)
+
+1. Parar servicio: `systemctl stop agenft-telegram-mainnet` (o equivalente)
+2. Revocar token en @BotFather
+3. No mantener runtime apuntando a ese tokenId con wallet ajena
+
+### Nuevo owner (antes de chat público)
+
+1. Verificar `ownerOf` en BaseScan
+2. Crear **bot nuevo** en BotFather
+3. `AGENFT_OPERATOR_ADDRESS` = su wallet owner
+4. `npm run owner:gate` → OK
+5. `npm run telegram:mainnet:pay`
+
+Script: `scripts/onchain/transfer-mainnet.mjs <tokenId> <to>`
+
+---
+
+## Manifiesto (`ageNFT/v1`)
 
 ```json
 {
   "body": {
     "model": "compact-core",
-    "core": ["identity", "treasury", "soul", "reflexes", "budget"],
-    "cables": ["brain", "memory", "gateways", "runtime", "presence"]
+    "core": ["identity", "treasury", "soul", "reflexes", "budget", "visual"],
+    "cables": ["brain", "memory", "gateways", "runtime", "presence", "doctor"]
   },
   "transfer": {
     "vault0NeverTravels": true,
+    "transferEndsBotAccess": true,
     "gateways": {
       "telegram": {
         "binding": "owner-vault0",
         "onOwnerChange": "invalidate-and-rebind",
-        "defaultPath": "new-bot",
-        "optionalPath": "botfather-transfer-same-handle"
+        "policy": "new-bot-only"
       }
     },
     "runtimeGate": {
@@ -117,26 +135,29 @@ Sin pasos 2–3 el ex-owner **puede** seguir respondiendo — es incumplimiento 
 
 ## Qué NO hacer
 
-| Idea | Por qué no |
-|------|------------|
-| Meter token Telegram en manifiesto / IPFS | Filtración; contradice Vault 0 |
-| Asumir que transfer NFT apaga el bot solo | Telegram no lee `ownerOf` |
-| Mismo token compartido entre dos hosts | Dos operadores = dos cerebros; confuso y inseguro |
-| Default = transferir bot BotFather | Bloquea ventas trustless |
+| Idea | Estado |
+|------|--------|
+| Modo cooperativo mismo @handle | ❌ Descartado |
+| Token Telegram en manifiesto / IPFS | ❌ Prohibido |
+| Asumir que transfer NFT apaga Telegram solo | ❌ Falso |
+| Ex-owner sigue operando con `--force` en producción | ❌ Solo lab explícito |
 
 ---
 
-## Implementación (orden)
+## Implementación
 
-1. **Documentación** — esta decisión + `transfer.html` + manifiesto ejemplo ✅
-2. **`ownerOf` gate** — `run-turn.mjs`, `telegram-unit-mainnet-bot.mjs`, Doctor alerta
-3. **Wizard post-transfer** — Dashboard (fase posterior)
-4. **Script transfer mainnet** — incluye checklist pasos 2–3 en output
+| Componente | Estado |
+|------------|--------|
+| `owner-gate.mjs` | ✅ |
+| `run-turn.mjs` | ✅ |
+| `telegram-unit-mainnet-bot.mjs` | ✅ |
+| `transfer-mainnet.mjs` + checklist | ✅ |
+| Wizard Dashboard post-transfer | ⏳ Fase posterior |
 
 ---
 
 ## Docs relacionados
 
-- [`memory-transfer-policy.md`](../research/memory-transfer-policy.md) — Vault 0
-- [`transfer-local-hosting.md`](../research/transfer-local-hosting.md) — wizard hosting
-- [`dapp/transfer.html`](../../dapp/transfer.html) — UX comprador
+- [`memory-transfer-policy.md`](../research/memory-transfer-policy.md)
+- [`transfer-local-hosting.md`](../research/transfer-local-hosting.md)
+- [`dapp/transfer.html`](../../dapp/transfer.html)

@@ -25,6 +25,18 @@ node mint-vims-agent.mjs Unit-1       # mint nuevo agente
 
 npm scripts: `npm run transfer-checklist`, `npm run recover`, `npm run probe`
 
+## Base mainnet (Unit-Mainnet #1)
+
+```bash
+node transfer-mainnet.mjs 1 0xNUEVO_OWNER [--dry-run]
+node mint-mainnet.mjs --manifest ../../docs/manifest/examples/uruiru-prototype-draft.json --dry-run
+node mainnet-checklist.mjs 1
+```
+
+Política transfer: **transferir el ageNFT = finalizar acceso al bot** — ver [`docs/decisions/transfer-telegram-gateway.md`](../../docs/decisions/transfer-telegram-gateway.md).
+
+Runtime: `cd ../../runtime && npm run owner:gate`
+
 ## Lab canónico
 
 - **Unit-1 #115** — agente activo, owner lab wallet

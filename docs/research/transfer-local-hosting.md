@@ -68,7 +68,7 @@ Nuevo owner conecta wallet
 | 1 | Verificar NFT + TBA + saldo | — |
 | 2 | **Elegir hosting runtime** | `default-cloud` (plantilla D) |
 | 3 | **Memoria** — importar cápsula IPFS/toju o empezar vacío | último URI del manifiesto |
-| 4 | **Gateways** — nuevo bot Telegram o solo web | web only |
+| 4 | **Gateways** — **bot Telegram nuevo** (obligatorio; no reutilizar @handle del vendedor) | web only |
 | 5 | **Órganos locales → default** | ver tabla abajo |
 | 6 | Prueba turno `--pay` desde TBA | checklist 8/8 |
 
