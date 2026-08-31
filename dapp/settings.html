@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="agenft-base" content="." />
-    <title>Ajustes — Unit-Mainnet</title>
+    <title>Guía y ajustes — URUIRU</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
@@ -13,139 +13,315 @@
         <img id="avatar" class="avatar" alt="" hidden />
         <div id="avatar-fallback" class="avatar avatar-fallback" aria-hidden="true">U</div>
         <div style="flex: 1">
-          <h1>⚙️ Ajustes</h1>
-          <p class="sub">Panel owner — esbozo. Conecta wallet para ver controles sensibles.</p>
+          <h1>⚙️ Guía y ajustes</h1>
+          <p class="sub">
+            <span id="guide-agent-name">URUIRU</span> — panel para usar el agente sin ser experto en cripto.
+          </p>
         </div>
-        <a class="btn btn-secondary btn-compact" href="lab.html" title="Lab Studio">🎛️ Lab</a>
         <a class="btn btn-secondary btn-compact" href="index.html">← Ficha</a>
+        <a class="btn btn-secondary btn-compact" href="lab.html" title="Técnico">🎛️</a>
       </header>
 
-      <section class="card">
-        <h2>Wallet</h2>
-        <button type="button" class="btn btn-secondary" id="btn-connect">Conectar MetaMask</button>
-        <p class="mono" id="wallet-status" style="margin-top: 0.75rem"></p>
+      <div class="help-box help-box-ok">
+        <strong>Lo importante:</strong> para <em>hablar</em> con URUIRU no hace falta wallet ni entender
+        criptomonedas. Solo abre Telegram (abajo) y escribe como a cualquier chat de IA.
+        La wallet y la «hucha» solo importan si eres <strong>dueño</strong> del NFT y quieres pagar el
+        cerebro del agente.
+      </div>
+
+      <!-- 1. Empezar -->
+      <section class="card" id="section-start">
+        <h2>1 · Empezar en tres pasos</h2>
+        <p class="help-lead" id="guide-agent-sub">Cargando…</p>
+        <ol class="step-list">
+          <li>
+            <h3>Instala Telegram</h3>
+            <p class="help-note">
+              Es una app de mensajes gratuita (como WhatsApp). Si ya la tienes, salta al paso 2.
+            </p>
+            <p class="help-note">
+              <a href="https://telegram.org/apps" target="_blank" rel="noopener">Descargar Telegram</a>
+            </p>
+          </li>
+          <li>
+            <h3>Busca al bot de URUIRU</h3>
+            <p class="help-note">
+              En la lupa de Telegram escribe el nombre del bot (sin espacios):
+            </p>
+            <div class="copy-row">
+              <code id="channel-telegram-handle">@Unit1_agent_bot</code>
+              <button type="button" class="btn btn-secondary btn-compact" data-copy-target="channel-telegram-handle">
+                Copiar
+              </button>
+            </div>
+            <p class="help-note" style="margin-top: 0.65rem">
+              O abre directo:
+              <a id="channel-telegram-link" href="https://t.me/Unit1_agent_bot" target="_blank" rel="noopener"
+                >@Unit1_agent_bot</a
+              >
+            </p>
+          </li>
+          <li>
+            <h3>Escribe un mensaje</h3>
+            <p class="help-note">
+              Pulsa <strong>Iniciar</strong> si Telegram lo pide. Escribe por ejemplo:
+              <em>«Hola, ¿quién eres?»</em>. URUIRU tarda unos segundos en pensar — es normal.
+            </p>
+          </li>
+        </ol>
+        <div class="help-box help-box-warn" style="margin-top: 1rem">
+          <strong>Prueba de usuario:</strong> si le envías este enlace a alguien, dale solo los tres pasos de
+          arriba. No le pidas MetaMask el primer día.
+        </div>
       </section>
 
-      <section class="card">
-        <h2>Cuerpo (resumen)</h2>
+      <!-- 2. Canales -->
+      <section class="card" id="section-channels">
+        <h2>2 · Dónde puedes hablar con URUIRU</h2>
+        <p class="help-note">
+          Un <strong>canal</strong> es solo la app por la que chateas. El mismo «cerebro» puede estar en
+          varias; tú eliges la que te resulte más fácil.
+        </p>
+
+        <article class="channel-card">
+          <h3>
+            Telegram
+            <span class="status-pill status-pill-ok">Recomendado · activo</span>
+          </h3>
+          <p class="help-note">
+            La forma más simple para alguien que usa IA en el móvil. El agente se llama
+            <strong>URUIRU</strong> en los mensajes (es la cara del NFT).
+          </p>
+          <p class="help-note">
+            <strong>Nota:</strong> el nombre del bot en Telegram puede seguir siendo técnico
+            (<code>Unit1_agent_bot</code>); eso es normal — lo que importa es que dentro del chat se
+            presente como URUIRU.
+          </p>
+        </article>
+
+        <article class="channel-card">
+          <h3>
+            Matrix (Element)
+            <span class="status-pill status-pill-soon">En preparación · URUIRU</span>
+          </h3>
+          <p class="help-note">
+            Chat federado (como email pero para mensajes). Pensado para quien ya usa
+            <strong>Element</strong> o Matrix. Todavía no está el bot oficial de URUIRU aquí — no confundir
+            con otros asistentes en el mismo servidor.
+          </p>
+          <p class="help-note">
+            Cuando esté listo, el usuario será <code>@uruiru:bo5bvc.duckdns.org</code>. Por ahora usa
+            Telegram.
+          </p>
+        </article>
+
+        <article class="channel-card">
+          <h3>
+            Chat en esta web
+            <span class="status-pill status-pill-soon">Según despliegue</span>
+          </h3>
+          <p class="help-note">
+            Desde la ficha del agente (botón chat). Requiere que quien aloja el agente tenga el servidor
+            encendido — en una demo te lo daremos ya enlazado; en casa tendrías que montarlo o usar
+            Telegram.
+          </p>
+          <p class="help-note"><a href="index.html">Volver a la ficha →</a></p>
+        </article>
+      </section>
+
+      <!-- 3. Glosario -->
+      <section class="card" id="section-glossary">
+        <h2>3 · Palabras raras (en castellano)</h2>
+        <dl class="glossary">
+          <dt>URUIRU</dt>
+          <dd>
+            Nombre del personaje / cara del agente (obra Gespenster). Es quien te habla en Telegram. No es lo
+            mismo que otros bots técnicos del servidor.
+          </dd>
+          <dt>NFT</dt>
+          <dd>
+            Un «certificado digital» de propiedad en internet. Aquí demuestra que eres dueño de este agente
+            concreto (#1). <strong>No hace falta</strong> para chatear; solo para poseer o vender el agente.
+          </dd>
+          <dt>Wallet (MetaMask)</dt>
+          <dd>
+            App que guarda identidad cripto. Como un DNI + cuenta bancaria muy simplificada. Solo la necesitas
+            si compras, vendes o recargas la hucha del agente.
+          </dd>
+          <dt>TBA / hucha del agente</dt>
+          <dd>
+            Una «cartera» que viaja con el NFT. De ahí paga el agente las respuestas de IA (unos céntimos por
+            mensaje). Si se queda sin saldo, deja de contestar hasta que el dueño recargue.
+          </dd>
+          <dt>USDC</dt>
+          <dd>
+            Dólares digitales estables (1 USDC ≈ 1 $). Es lo que usa la hucha para pagar el cerebro. No es
+            Bitcoin.
+          </dd>
+          <dt>Cerebro</dt>
+          <dd>
+            El modelo de IA que piensa las respuestas. URUIRU usa un servicio de pago automático desde la hucha
+            (no hace falta que tú pagues ChatGPT aparte).
+          </dd>
+          <dt>Memoria</dt>
+          <dd>
+            Lo que el agente recuerda de conversaciones pasadas. Puede guardarse en archivos en internet
+            (IPFS) para que no se pierda al reiniciar.
+          </dd>
+        </dl>
+      </section>
+
+      <!-- 4. Dueño -->
+      <section class="card" id="section-owner">
+        <h2>4 · ¿Eres el dueño del NFT?</h2>
+        <p class="help-note">
+          Si alguien te <strong>regaló o vendió</strong> el agente, o lo minteaste tú, eres owner. Si solo
+          quieres probar el chat, ignora esta sección.
+        </p>
+        <button type="button" class="btn btn-secondary" id="btn-connect">Conectar MetaMask (opcional)</button>
+        <p class="help-note" id="wallet-status" style="margin-top: 0.75rem"></p>
+        <div class="help-box" style="margin-top: 1rem">
+          <strong>Recargar la hucha (resumen):</strong> hace falta USDC en la red Base. Es un proceso manual
+          hoy — envías USDC a la dirección de la hucha. Si no te suena, pide ayuda a quien te pasó el agente
+          o mira <a href="transfer.html">qué viaja al transferir</a>.
+        </div>
+      </section>
+
+      <!-- 5. Tesoro -->
+      <section class="card" id="section-treasury">
+        <h2>5 · Hucha del agente (saldo)</h2>
+        <p class="help-note">
+          Dirección de la hucha — solo para recargas o consulta en el explorador:
+        </p>
+        <div class="copy-row">
+          <code id="treasury-tba-full">—</code>
+          <button type="button" class="btn btn-secondary btn-compact" data-copy-target="treasury-tba-full">
+            Copiar
+          </button>
+        </div>
+        <p class="help-note" style="margin-top: 0.65rem">
+          Resumen corto: <span class="mono" id="treasury-tba-short">—</span>
+          ·
+          <a id="treasury-tba-link" href="#" target="_blank" rel="noopener">Ver en explorador</a>
+        </p>
+        <div class="row" style="margin-top: 0.75rem">
+          <span>Gastado hoy (aprox.)</span>
+          <span class="mono" id="budget-spent-today">—</span>
+        </div>
+        <div class="row">
+          <span>Tope diario configurado</span>
+          <span class="mono" id="budget-cap-day">—</span>
+        </div>
+        <p class="help-note" id="budget-status-hint"></p>
+        <p class="help-note">
+          Si el gasto llega al tope, el agente entra en modo <strong>DORMANT</strong> (descanso): no contesta
+          hasta nuevo día o hasta recargar. Es una protección para que no se gaste de más.
+        </p>
+      </section>
+
+      <!-- 6. Cuerpo -->
+      <section class="card" id="section-body">
+        <h2>6 · Estado del cuerpo digital</h2>
+        <p class="help-note">
+          Cada pieza es una función del agente. <strong>Verde = funciona</strong> · ámbar = a medias · gris =
+          aún no disponible.
+        </p>
         <div id="body-map" class="body-map"></div>
       </section>
 
-      <section class="card">
-        <h2>Economía (esbozo)</h2>
-        <p class="sub">Desglose por órgano · tier G/D/E · hoy / mes — ver <code>organ-service-tiers.md</code>.</p>
-        <div class="row"><span>Cerebro</span><span class="mono">tx402 · D · —</span></div>
-        <div class="row"><span>Memoria</span><span class="mono">local · G · —</span></div>
-        <div class="row"><span>Doctor</span><span class="mono">probe · G · —</span></div>
-        <div class="row"><span>Runway</span><span class="mono">— días</span></div>
+      <!-- 7. FAQ -->
+      <section class="card" id="section-faq">
+        <h2>7 · Problemas frecuentes</h2>
+        <div class="faq-item">
+          <h3>No me responde en Telegram</h3>
+          <p class="help-note">
+            Espera 15–30 s. Si nada: puede estar en DORMANT (hucha vacía o tope diario). El dueño debe
+            recargar USDC o esperar al día siguiente.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Me pide MetaMask y no quiero</h3>
+          <p class="help-note">Cierra esa pantalla. Para chatear usa Telegram — no necesitas wallet.</p>
+        </div>
+        <div class="faq-item">
+          <h3>¿Es lo mismo URUIRU y Hermesclaw?</h3>
+          <p class="help-note">
+            <strong>No.</strong> URUIRU es el ageNFT (Telegram, hucha, producto). Hermesclaw es otro
+            asistente técnico en Matrix del mismo servidor — solo para quien administra el VPS.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>¿Puedo usar mi propia IA (ChatGPT, etc.)?</h3>
+          <p class="help-note">
+            En versión avanzada sí («manguera» / hose): el dueño conecta su cuenta. Eso es opcional y no hace
+            falta para la prueba básica.
+          </p>
+        </div>
       </section>
 
-      <section class="card">
-        <h2>Lab Studio — visualización</h2>
-        <p class="sub">Tamaño de módulos, textos y emojis en el esquema de cableado.</p>
-        <label class="lab-field" style="margin-top: 0.75rem">
-          <span>Tamaño de órganos</span>
-          <div class="lab-inline" style="align-items: center">
-            <input
-              type="range"
-              id="lab-organ-scale"
-              min="0.65"
-              max="1.15"
-              step="0.05"
-              style="flex: 1"
-              aria-describedby="lab-organ-scale-settings-hint"
-            />
-            <output id="lab-organ-scale-val" class="mono" style="min-width: 3rem">82%</output>
+      <!-- Avanzado -->
+      <section class="card card-muted">
+        <details class="help-details">
+          <summary>Ajustes visuales del Lab (opcional · técnico)</summary>
+          <div class="help-details-body">
+            <p class="help-note">Solo cambia cómo se ve el diagrama en Lab Studio — no afecta a Telegram.</p>
+            <label class="lab-field" style="margin-top: 0.75rem">
+              <span>Tamaño de órganos</span>
+              <div class="lab-inline" style="align-items: center">
+                <input
+                  type="range"
+                  id="lab-organ-scale"
+                  min="0.65"
+                  max="1.15"
+                  step="0.05"
+                  style="flex: 1"
+                />
+                <output id="lab-organ-scale-val" class="mono" style="min-width: 3rem">82%</output>
+              </div>
+            </label>
+            <label class="lab-field" style="margin-top: 1rem">
+              <span>Fondo URUIRU en Lab</span>
+              <label class="lab-check-inline" style="margin-top: 0.35rem">
+                <input type="checkbox" id="lab-watermark-enabled" checked />
+                Mostrar imagen al fondo del canvas
+              </label>
+            </label>
+            <label class="lab-field" style="margin-top: 0.65rem">
+              <span>Transparencia del fondo</span>
+              <div class="lab-inline" style="align-items: center">
+                <input
+                  type="range"
+                  id="lab-watermark-opacity"
+                  min="0.02"
+                  max="0.28"
+                  step="0.02"
+                  style="flex: 1"
+                />
+                <output id="lab-watermark-opacity-val" class="mono" style="min-width: 3rem">10%</output>
+              </div>
+            </label>
           </div>
-        </label>
-        <p id="lab-organ-scale-settings-hint" class="sub">
-          Guardado en este navegador. Abre
-          <a href="lab.html">Lab Studio</a>
-          para ver el cambio (recarga si ya estaba abierto).
-        </p>
-        <label class="lab-field" style="margin-top: 1rem">
-          <span>Fondo URUIRU en Lab (marca de agua)</span>
-          <label class="lab-check-inline" style="margin-top: 0.35rem">
-            <input type="checkbox" id="lab-watermark-enabled" checked />
-            Mostrar imagen del NFT al final del canvas
-          </label>
-        </label>
-        <label class="lab-field" style="margin-top: 0.65rem">
-          <span>Transparencia del fondo</span>
-          <div class="lab-inline" style="align-items: center">
-            <input
-              type="range"
-              id="lab-watermark-opacity"
-              min="0.02"
-              max="0.28"
-              step="0.02"
-              style="flex: 1"
-              aria-describedby="lab-watermark-settings-hint"
-            />
-            <output id="lab-watermark-opacity-val" class="mono" style="min-width: 3rem">10%</output>
-          </div>
-        </label>
-        <p id="lab-watermark-settings-hint" class="sub">
-          Valores bajos (8–12%) suelen ser suficientes. Desmarca «Mostrar» para ocultar por completo.
-        </p>
-      </section>
-
-      <section class="card">
-        <h2>Órganos opcionales</h2>
-        <p class="sub">Presencia, Sentidos, autofinanciación — toggles futuros.</p>
+        </details>
       </section>
 
       <section class="card card-muted">
-        <h2>Post-transfer</h2>
-        <p class="sub">Wizard mudanza local → default: <a href="transfer.html">transfer.html</a></p>
+        <h2>Si te transfirieron el NFT</h2>
+        <p class="help-note">
+          Qué se queda contigo y qué debes configurar de nuevo (Telegram, claves, servidor):
+          <a href="transfer.html">guía de transferencia</a>.
+        </p>
       </section>
 
       <footer class="footer">
-        <p>ageNFT — MVP dashboard esbozo</p>
+        <p>ageNFT — guía de usuario · prototipo dashboard</p>
       </footer>
     </div>
     <script type="module">
-      import { assetUrl, fetchJson, defaultTokenId, applyAvatar, shortAddr } from './js/shared.js';
-      import { renderBodyMap } from './js/body-map.js';
-      import { bindOrganScaleControl, bindWatermarkControls } from './js/lab-display.js';
-
-      const btn = document.getElementById('btn-connect');
-      const st = document.getElementById('wallet-status');
-
-      bindOrganScaleControl(
-        document.getElementById('lab-organ-scale'),
-        document.getElementById('lab-organ-scale-val')
-      );
-
-      bindWatermarkControls({
-        enabledInput: document.getElementById('lab-watermark-enabled'),
-        opacityInput: document.getElementById('lab-watermark-opacity'),
-        valueEl: document.getElementById('lab-watermark-opacity-val'),
+      import { initSettingsPage } from './js/settings-guide.js';
+      initSettingsPage().catch((e) => {
+        const st = document.getElementById('wallet-status');
+        if (st) st.textContent = e.message;
       });
-
-      async function load() {
-        const tokenId = await defaultTokenId();
-        const agent = await fetchJson(assetUrl(`assets/agents/${tokenId}.json`));
-        applyAvatar(agent);
-        renderBodyMap(agent);
-      }
-
-      load().catch((e) => {
-        st.textContent = e.message;
-      });
-
-      if (window.ethereum) {
-        btn.addEventListener('click', async () => {
-          try {
-            const [a] = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            st.textContent = `Conectado: ${shortAddr(a)}`;
-          } catch (e) {
-            st.textContent = e.message;
-          }
-        });
-      } else {
-        st.textContent = 'MetaMask no detectado.';
-      }
     </script>
   </body>
 </html>
