@@ -50,7 +50,7 @@
 - Pasos numerados Telegram-only.
 - Caja «no necesitas cripto para chatear».
 - Glosario en castellano (NFT, hucha, USDC…).
-- FAQ (DORMANT, Hermesclaw vs URUIRU).
+- FAQ (DORMANT, URUIRU vs nombre del bot en Telegram).
 - Canales con etiquetas «recomendado» / «en preparación».
 
 ---
