@@ -2,6 +2,8 @@
 /**
  * Bot Telegram → cerebro ageNFT (sin LLM genérico de Hermes).
  *
+ * REGLA: transferir el ageNFT = finalizar acceso al bot (ownerOf gate).
+ *
  * Token: AGENFT_TELEGRAM_BOT_TOKEN o TELEGRAM_BOT_TOKEN
  * Allowlist: AGENFT_TELEGRAM_ALLOWED_USERS=123,456 (vacío = abierto)
  */
@@ -11,10 +13,13 @@ import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveAgentEnv } from './agenft-env.mjs';
+import { checkOwnerGate } from './owner-gate.mjs';
 import { gatewayEnabled } from './wiring-loader.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const RUNTIME = join(__dirname, '..');
+
+const OWNER_RECHECK_MS = Number(process.env.AGENFT_OWNER_GATE_INTERVAL_MS ?? 60_000);
 
 function loadEnvFile() {
   const path = join(homedir(), '.credentials/agenft-telegram.env');
@@ -45,17 +50,34 @@ if (!TOKEN) {
   process.exit(1);
 }
 
+let agentCtx;
 try {
-  const ctx = resolveAgentEnv();
-  if (!gatewayEnabled(ctx.wiring)) {
+  agentCtx = resolveAgentEnv();
+  if (!gatewayEnabled(agentCtx.wiring)) {
     console.error(
-      'Gateway Telegram no cableado al Motor — revisa runtime/wiring/' + ctx.packId + '.json',
+      'Gateway Telegram no cableado al Motor — revisa runtime/wiring/' + agentCtx.packId + '.json',
     );
     console.error('(Desconecta el servicio o restaura edge runtime → gateway)');
     process.exit(2);
   }
 } catch (e) {
   console.warn('wiring check skip:', e.message ?? e);
+  agentCtx = null;
+}
+
+async function assertOwnerGateOrExit() {
+  if (!agentCtx?.manifest) return;
+  const gate = await checkOwnerGate({
+    manifest: agentCtx.manifest,
+    tokenId: agentCtx.tokenId,
+  });
+  if (!gate.ok) {
+    console.error(gate.reason);
+    console.error(
+      'Bot detenido: transferir el ageNFT finaliza el acceso. Pare el servicio y revoque el token en BotFather.',
+    );
+    process.exit(3);
+  }
 }
 
 const API = `https://api.telegram.org/bot${TOKEN}`;
@@ -85,6 +107,10 @@ function runBrain(text) {
     },
   });
   if (r.status === 2) {
+    const out = (r.stderr || r.stdout || '').trim();
+    if (/OWNER_GATE/i.test(out)) {
+      return 'Este bot ya no opera este ageNFT (cambio de owner). Contacta al dueño actual del NFT.';
+    }
     return 'El agente está en modo DORMANT (presupuesto o USDC bajo). Inténtalo más tarde.';
   }
   if (r.status !== 0) {
@@ -100,7 +126,7 @@ async function handleMessage(msg) {
   if (!text || text.startsWith('/start')) {
     await tg('sendMessage', {
       chat_id: chatId,
-      text: 'Hola — soy Unit-Mainnet (ageNFT en Base mainnet). Mi rostro es URUIRU, un Gespenster. Escribe tu mensaje.',
+      text: 'Hola — soy URUIRU (ageNFT #1 en Base mainnet). Escribe tu mensaje.',
     });
     return;
   }
@@ -116,7 +142,13 @@ async function handleMessage(msg) {
   await tg('sendMessage', { chat_id: chatId, text: reply.slice(0, 4000) });
 }
 
+let lastOwnerCheck = 0;
+
 async function poll(offset = 0) {
+  if (Date.now() - lastOwnerCheck >= OWNER_RECHECK_MS) {
+    await assertOwnerGateOrExit();
+    lastOwnerCheck = Date.now();
+  }
   const updates = await tg('getUpdates', { timeout: 50, offset });
   let next = offset;
   for (const u of updates) {
@@ -132,8 +164,11 @@ async function poll(offset = 0) {
   return poll(next);
 }
 
+await assertOwnerGateOrExit();
+lastOwnerCheck = Date.now();
+
 console.log(
-  `ageNFT Telegram bot — token #${process.env.AGENFT_TOKEN_ID ?? '1'} — pay=${pay} — allowlist=${allowed.length || 'open'}`,
+  `ageNFT Telegram bot — token #${process.env.AGENFT_TOKEN_ID ?? '1'} — pay=${pay} — ownerGate=on — allowlist=${allowed.length || 'open'}`,
 );
 poll(0).catch((e) => {
   console.error('poll fatal:', e.message ?? e);

@@ -27,7 +27,10 @@
     "wiring:show": "node src/wiring-apply.mjs --show",
     "wiring:apply": "node src/wiring-apply.mjs",
     "telegram:mainnet:pay": "node src/telegram-unit-mainnet-bot.mjs --pay",
-    "telegram:unit1:pay": "AGENFT_TOKEN_ID=115 node src/telegram-unit-mainnet-bot.mjs --pay"
+    "telegram:unit1:pay": "AGENFT_TOKEN_ID=115 node src/telegram-unit-mainnet-bot.mjs --pay",
+    "owner:gate": "node src/owner-gate.mjs",
+    "gateway:verify-telegram": "node src/gateway-verify-telegram.mjs",
+    "transfer:vigilante": "node src/transfer-vigilante.mjs"
   },
   "dependencies": {
     "@x402/evm": "^2.18.0",

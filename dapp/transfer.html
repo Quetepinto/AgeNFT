@@ -77,6 +77,34 @@
       </section>
 
       <section class="card">
+        <h2>Telegram al cambiar de owner — privacidad y seguridad</h2>
+        <p class="sub">
+          <strong>Transferir el ageNFT = finalizar acceso al bot.</strong> No puede quedar un servicio abierto
+          «por si acaso»: es una superficie de ataque aunque el riesgo parezca remoto. El token de Telegram
+          <strong>nunca</strong> viaja con el NFT (Vault 0).
+        </p>
+        <p class="sub">
+          <strong>Nuevo dueño = bot nuevo obligatorio</strong> (otro @handle, otro token). El @handle del
+          vendedor <strong>no viaja</strong> con el NFT — solo puede quedar «huérfano» si no lo revoca.
+          El token del vendedor queda <strong>inservible para operar el ageNFT</strong> gracias al candado
+          <code>ownerOf</code>; revocarlo en @BotFather lo deja <strong>totalmente muerto</strong> también en
+          Telegram (probe <code>getMe</code> → 401).
+        </p>
+        <ul>
+          <li><strong>Ex-owner:</strong> parar servicio + <strong>revocar</strong> token en @BotFather (obligatorio en wizard; verificar con probe).</li>
+          <li><strong>Nuevo owner:</strong> <strong>bot nuevo</strong> en BotFather — otro @handle, otro token. No reutiliza el del vendedor.</li>
+          <li><strong>Runtime:</strong> <code>ownerOf(tokenId)</code> debe coincidir con la wallet del host.</li>
+          <li>El token viejo <strong>no controla</strong> el ageNFT transferido; revocarlo evita abuso del @handle antiguo.</li>
+        </ul>
+        <p class="sub">
+          Seguridad completa:
+          <code>docs/decisions/transfer-gateway-security.md</code>
+          · Telegram:
+          <code>docs/decisions/transfer-telegram-gateway.md</code>
+        </p>
+      </section>
+
+      <section class="card">
         <h2>No viaja automáticamente ⚠️</h2>
         <ul>
           <li><strong>Runtime / servidor</strong> — motor intercambiable (Hermes, OpenClaw, API mínima); infra del operador, no otro NFT</li>
@@ -93,12 +121,19 @@
 
       <section class="card">
         <h2>Checklist post-transfer (MVP)</h2>
+        <h3>Ex-owner (inmediato)</h3>
+        <ol>
+          <li>Parar servicio Telegram en su host</li>
+          <li>Revocar token en @BotFather</li>
+        </ol>
+        <h3>Nuevo owner</h3>
         <ol>
           <li>Verificar owner del NFT en BaseScan</li>
           <li>Comprobar saldo USDC/ETH en la TBA</li>
-          <li>Actualizar runtime con manifiesto <code>unit-mainnet.json</code></li>
-          <li>Probar un turno: <code>npm run once:pay</code> (payer TBA)</li>
-          <li>Reconfigurar Telegram/Hermes si aplica</li>
+          <li>Crear <strong>bot Telegram nuevo</strong> (no reutilizar el del vendedor)</li>
+          <li>Configurar runtime: <code>npm run owner:gate</code></li>
+          <li>Probar turno: <code>npm run hermes:turn:pay -- --plain "hola"</code></li>
+          <li>Vigilante mudanza: <code>npm run transfer:vigilante</code></li>
         </ol>
       </section>
 

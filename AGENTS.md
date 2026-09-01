@@ -2,6 +2,12 @@
 
 Este repo es el **cuerpo digital** de **Unit-Mainnet #1** (ageNFT en Base mainnet).
 
+**Hermes** = agente OSS de [Nous Research](https://github.com/NousResearch/hermes-agent) — **único** significado de «Hermes» en este repo. Gateway, cron, skills, tools, MCPs. Es el arnés sobre el que construimos ageNFT (MVP).
+
+**No confundir:** Hermesclaw u otros agentes personales **no** se documentan aquí. Ver [`docs/decisions/nomenclatura-hermes-nous.md`](docs/decisions/nomenclatura-hermes-nous.md).
+
+El protocolo ageNFT vive en `runtime/` (`run-turn.mjs`). La skill `agenft-core` conecta Hermes (Nous) → cerebro ageNFT (nunca LLM genérico de Hermes para respuestas del NFT).
+
 ## Regla obligatoria para el agente Hermes
 
 Cuando respondas **como Unit-Mainnet** o uses la skill `agenft-core`:
@@ -27,6 +33,7 @@ cd runtime && npm run hermes:turn:pay -- --plain --quiet "MENSAJE_DEL_USUARIO"
 ```bash
 cd runtime && npm run budget
 cd runtime && npm run hermes:doctor
+cd runtime && npm run transfer:vigilante
 node scripts/onchain/mainnet-checklist.mjs 1
 ```
 

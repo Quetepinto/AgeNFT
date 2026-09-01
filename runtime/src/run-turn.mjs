@@ -2,6 +2,7 @@
  * Un turno ageNFT — API reutilizable (CLI, Hermes skill, Doctor).
  */
 import { resolveBrain } from './manifest-loader.mjs';
+import { checkOwnerGate } from './owner-gate.mjs';
 import { preloadContext, autowriteDelta } from './memory-local.mjs';
 import { inferBrain } from './brain-tx402.mjs';
 import {
@@ -42,6 +43,21 @@ export async function runTurn({
 }) {
   if (syncMemory && !pay) {
     throw new Error('syncMemory requiere pay=true');
+  }
+
+  const ownerGate = await checkOwnerGate({
+    manifest,
+    tokenId: manifest.identity?.agentId,
+    force,
+  });
+  if (!ownerGate.ok && !force) {
+    return {
+      ok: false,
+      dormant: true,
+      reason: ownerGate.reason,
+      ownerGateBlocked: true,
+      exitCode: 2,
+    };
   }
 
   const turnGate = canRunTurn(wiring);

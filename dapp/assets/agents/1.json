@@ -37,8 +37,7 @@
     "nft": "https://basescan.org/token/0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839?a=1",
     "tba": "https://basescan.org/address/0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB"
   },
-  "updatedAt": "2026-07-16T22:03:14.944Z",
-  "mintTx": "0x15c195568dbeaebdc43ed774746cdb6a5bc5dac95c2837b6b43d45c2043eae9c",
+  "updatedAt": "2026-08-31T21:02:33.852Z",
   "visual": {
     "name": "URUIRU",
     "series": "Gespenster",
@@ -65,7 +64,7 @@
     {
       "id": "memory",
       "label": "Memoria",
-      "detail": "toju + IPFS",
+      "detail": "kubo",
       "status": "partial",
       "wire": "core"
     },

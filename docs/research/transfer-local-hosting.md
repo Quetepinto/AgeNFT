@@ -1,7 +1,8 @@
 # Transferencia — órganos locales vs hospedados y mudanza fluida
 
 > **Estado:** Diseño · **Jul-2026**  
-> Complementa [`dapp/transfer.html`](../../dapp/transfer.html) y [`design-index-20260716.md`](design-index-20260716.md).
+> Complementa [`dapp/transfer.html`](../../dapp/transfer.html) y [`design-index-20260716.md`](design-index-20260716.md).  
+> **Orden canónico wizard (hosting antes que Telegram):** [`../decisions/runtime-hosting-wizard.md`](../decisions/runtime-hosting-wizard.md).
 
 ---
 
@@ -63,14 +64,17 @@ Nuevo owner conecta wallet
 
 ### Pasos del wizard
 
+> **Orden canónico:** [`../decisions/runtime-hosting-wizard.md`](../decisions/runtime-hosting-wizard.md) — **hosting + Hermes antes que Telegram.**
+
 | Paso | Acción | Default si no hace nada |
 |------|--------|-------------------------|
 | 1 | Verificar NFT + TBA + saldo | — |
-| 2 | **Elegir hosting runtime** | `default-cloud` (plantilla D) |
-| 3 | **Memoria** — importar cápsula IPFS/toju o empezar vacío | último URI del manifiesto |
-| 4 | **Gateways** — nuevo bot Telegram o solo web | web only |
-| 5 | **Órganos locales → default** | ver tabla abajo |
-| 6 | Prueba turno `--pay` desde TBA | checklist 8/8 |
+| 2 | **Elegir hosting** + instalar Hermes (Nous) | plantilla D / Akash objetivo |
+| 3 | `hermes:verify` + owner gate + Vigilante | — |
+| 4 | **Memoria** — importar IPFS/toju o vacío | último URI manifiesto |
+| 5 | Prueba turno `--pay` desde TBA | checklist 8/8 |
+| 6 | **Gateways** — bot Telegram **nuevo** (P001) | web only hasta aquí |
+| 7 | Órganos locales → default | ver tabla abajo |
 
 ### Promoción local → default (automática)
 

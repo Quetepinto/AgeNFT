@@ -2,9 +2,7 @@
  * Estado de configuración de órganos — probes locales (sin secretos en respuesta).
  */
 import { existsSync, readFileSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { join } from 'node:path';
-import { execSync } from 'node:child_process';
 import {
   canRunTurn,
   chatWebEnabled,
@@ -13,6 +11,11 @@ import {
   hasEdge,
   isConnectedToRuntime,
 } from './wiring-loader.mjs';
+import { checkOwnerGate } from './owner-gate.mjs';
+import {
+  isTelegramBotRunning,
+  loadTelegramToken,
+} from './telegram-gateway-utils.mjs';
 
 const CHAT_API_PORT = Number(process.env.AGENFT_CHAT_API_PORT ?? 8787);
 const CHAT_API_HOST = process.env.AGENFT_CHAT_API_HOST ?? '127.0.0.1';
@@ -36,13 +39,7 @@ function statusFromChecks(checks, { unsupported = false, notWired = false } = {}
 }
 
 function telegramTokenPresent() {
-  if (process.env.AGENFT_TELEGRAM_BOT_TOKEN?.trim() || process.env.TELEGRAM_BOT_TOKEN?.trim()) {
-    return true;
-  }
-  const path = join(homedir(), '.credentials/agenft-telegram.env');
-  if (!existsSync(path)) return false;
-  const text = readFileSync(path, 'utf8');
-  return /(?:AGENFT_TELEGRAM_BOT_TOKEN|TELEGRAM_BOT_TOKEN)\s*=\s*\S+/.test(text);
+  return Boolean(loadTelegramToken());
 }
 
 async function probeHttpOk(url) {
@@ -66,26 +63,31 @@ function readDoctorProbe(dataDir) {
   }
 }
 
-function isTelegramBotRunning() {
-  try {
-    const out = execSync('pgrep -af telegram-unit-mainnet-bot.mjs 2>/dev/null || true', {
-      encoding: 'utf8',
-      timeout: 1500,
-    });
-    return out.trim().length > 0;
-  } catch {
-    return false;
-  }
-}
-
-function gatewayTelegramStatus(wiring) {
+async function gatewayTelegramStatus(wiring, ctx) {
   const wired = gatewayEnabled(wiring);
   const tokenOk = telegramTokenPresent();
   const botRunning = isTelegramBotRunning();
-  const sessionActive = wired && tokenOk && botRunning;
+  let ownerGateOk = true;
+  let ownerGateDetail = 'Sin gate (manifiesto)';
+  if (ctx?.manifest && wired) {
+    const gate = await checkOwnerGate({ manifest: ctx.manifest, tokenId: ctx.tokenId });
+    ownerGateOk = gate.ok;
+    ownerGateDetail = gate.ok
+      ? gate.skipped
+        ? 'Gate desactivado en manifiesto'
+        : `ownerOf OK (${gate.onchainOwner ?? '?'})`
+      : gate.reason ?? 'owner mismatch';
+  }
+  const sessionActive = wired && tokenOk && botRunning && ownerGateOk;
   const checks = [
     check('wire', wired, 'Cableado al Motor (runtime → gateway)'),
     check('token', !wired || tokenOk, 'Token bot Telegram', wired ? undefined : 'Opcional si no cableado'),
+    check(
+      'owner_gate',
+      !wired || ownerGateOk,
+      'Wallet operadora = ownerOf (transfer = fin acceso bot)',
+      ownerGateDetail,
+    ),
     check(
       'bot_process',
       !wired || botRunning,
@@ -105,13 +107,21 @@ function gatewayTelegramStatus(wiring) {
   }
   const steps = [
     'Cablear Gateway chat al Motor en Lab y aplicar wiring.',
-    'Crear bot en @BotFather → copiar token.',
+    'Crear bot en @BotFather → copiar token (cada owner su bot — ver transfer.html).',
     'Guardar token en ~/.credentials/agenft-telegram.env (sin commitear).',
-    'En VPS: cd ageNFT/runtime && npm run telegram:mainnet:pay',
+    'AGENFT_OPERATOR_ADDRESS = wallet que es ownerOf del NFT.',
+    'En VPS: cd ageNFT/runtime && npm run owner:gate && npm run telegram:mainnet:pay',
     '(Opcional) AGENFT_TELEGRAM_ALLOWED_USERS=id1,id2 para restringir acceso.',
   ];
   if (botRunning) {
-    steps.push('Para quitar el cable: para el bot en el VPS (Ctrl+C o detén el servicio), luego desconecta y aplica wiring.');
+    steps.push(
+      'Tras transferir el NFT: parar bot + revocar token (ex-owner). Nuevo owner: bot nuevo.',
+    );
+  }
+  if (wired && !ownerGateOk) {
+    steps.unshift(
+      'OWNER GATE: esta wallet ya no es owner del NFT — pare el bot y revoque el token Telegram.',
+    );
   }
   let label = statusFromChecks(checks, { notWired: !wired }).label;
   let state = statusFromChecks(checks, { notWired: !wired }).state;
@@ -255,6 +265,7 @@ function doctorOrganStatus(wiring, ctx) {
   const steps = [
     'Cablear Doctor Qi al Motor.',
     'cd runtime && npm run hermes:doctor',
+    'Tras transfer: npm run transfer:vigilante (Hygiene — precedente P001).',
     'Cron Hermes (--no-agent) usa el mismo probe cada 900s.',
   ];
   return {
@@ -325,7 +336,7 @@ async function buildOrganEntry(wiring, ctx, nodeId) {
   switch (nodeId) {
     case 'gateway':
       return node.option === 'telegram'
-        ? gatewayTelegramStatus(wiring)
+        ? gatewayTelegramStatus(wiring, ctx)
         : gatewayGenericStatus(wiring, node.option);
     case 'chatweb':
       return chatWebStatus(wiring);

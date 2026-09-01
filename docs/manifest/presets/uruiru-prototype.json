@@ -1,11 +1,11 @@
 {
   "type": "ageNFT/v1",
-  "name": "Unit-Mainnet",
-  "description": "Primer ageNFT nativo Base mainnet — URUIRU, un Gespenster como presencia onchain.",
+  "name": "URUIRU",
+  "description": "Prototipo ageNFT — URUIRU, un Gespenster como presencia onchain en Base mainnet.",
   "image": "assets/unit-mainnet.png",
   "imageFallback": "assets/unit-mainnet.svg",
-  "createdAt": "2026-07-15T21:45:00.000Z",
-  "updatedAt": "2026-07-16T01:20:00.000Z",
+  "createdAt": "2026-08-31T00:00:00.000Z",
+  "updatedAt": "2026-08-31T00:00:00.000Z",
 
   "visual": {
     "name": "URUIRU",
@@ -18,22 +18,22 @@
   "identity": {
     "chain": "eip155:8453",
     "registry": "0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839",
-    "agentId": 1,
+    "agentId": null,
     "nft": {
       "standard": "erc721",
       "contract": "0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839",
-      "tokenId": "1"
+      "tokenId": "PENDING"
     },
     "lab": {
       "stack": "ageNFT-Registry/v1",
-      "legacy": "Unit-1 #115 Sepolia VIMS — no migrar token",
-      "fundingWallet": "0xeAf1fe999633B70433cB6B506f9413f73e108C9f"
+      "preset": "uruiru-prototype",
+      "legacy": "Unit-1 #115 Sepolia VIMS — no migrar token"
     }
   },
 
   "treasury": {
     "type": "erc6551",
-    "address": "0x9BF1E8564875fb5927d8F699756Be50eE4e73CCB",
+    "address": "PENDING_TBA",
     "chain": "base",
     "preferredAssets": [
       {
@@ -119,39 +119,20 @@
   "gateways": {
     "policy": {
       "priority": "sovereign-first",
-      "recommended": ["nostr", "matrix", "telegram"],
-      "sovereignDefault": ["nostr", "matrix"]
+      "recommended": ["telegram", "matrix", "nostr"],
+      "sovereignDefault": ["matrix", "nostr"]
     },
     "chat": [
-      { "platform": "telegram", "enabled": true, "handle": "Unit1_agent_bot", "credentials": "runtime-only", "sovereign": false }
+      {
+        "platform": "telegram",
+        "enabled": true,
+        "handle": "Unit1_agent_bot",
+        "credentials": "runtime-only",
+        "sovereign": false
+      }
     ]
   },
 
   "x402Support": true,
-  "supportedTrust": ["reputation"],
-
-  "body": {
-    "model": "compact-core",
-    "core": ["identity", "treasury", "soul", "reflexes", "budget", "visual"],
-    "cables": ["brain", "memory", "gateways", "runtime", "presence", "doctor"]
-  },
-
-  "transfer": {
-    "vault0NeverTravels": true,
-    "transferEndsBotAccess": true,
-    "gateways": {
-      "telegram": {
-        "binding": "owner-vault0",
-        "onOwnerChange": "invalidate-and-rebind",
-        "policy": "new-bot-only",
-        "exOwnerMustRevoke": true,
-        "verifyDeadTokenVia": "telegram-getMe-401"
-      }
-    },
-    "runtimeGate": {
-      "requireOwnerOfMatch": true,
-      "onMismatch": "dormant_refuse_turns",
-      "onTransferDetected": "wipe-vault0-and-stop-gateways"
-    }
-  }
+  "supportedTrust": ["reputation"]
 }
