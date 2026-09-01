@@ -88,7 +88,33 @@ Futuro opcional: tier **G** local (modelo pequeño en VPS) solo para onboarding 
 
 ---
 
-## Hermes = arnés (no cerebro)
+## Hermes = arnés — aclaración importante (dos significados)
+
+En el repo **«Hermes» aparece en dos sentidos**. Por eso dijimos «arnés opcional» y puede sonar contradictorio.
+
+| | **Motor ageNFT** (imprescindible) | **CLI Hermes de Nous** (opcional) |
+|---|-----------------------------------|-------------------------------------|
+| **Qué es** | Carpeta `runtime/` de **este repo** | Programa externo [`hermes-agent`](https://github.com/NousResearch/hermes-agent) |
+| **Instalación** | `cd runtime && npm install` | Instalar CLI `hermes` + `npm run hermes:install` |
+| **Qué hace** | Manifiesto, memoria, Reflejos, tx402, TBA, turnos | Gateway multi-canal, cron en `~/.hermes`, skills |
+| **Scripts** | `npm run hermes:turn:pay` → **Node local** (`run-turn.mjs`) | `hermes gateway` → enruta a skills |
+| **¿Hace falta?** | **Sí** — sin esto no hay agente | **No** para MVP — ya hay adaptadores propios |
+
+**Tu intuición es correcta:** no queremos construir un agente entero desde cero. **Eso ya está hecho** en `runtime/` — es el motor/arnés del producto ageNFT.
+
+Lo **opcional** es instalar **otro** programa (CLI Nous) encima, cuando quieras su gateway unificado. Hoy Telegram y chat web van **directo** al motor:
+
+```
+Telegram  →  telegram-unit-mainnet-bot.mjs  →  run-turn.mjs
+Dashboard →  chat-api.mjs                   →  run-turn.mjs
+(Hermes CLI → skill agenft-core → hermes:turn:pay → run-turn.mjs)  ← vía alternativa
+```
+
+**Resumen en una frase:** ageNFT **sí** usa un arnés (el runtime del repo); **no** obliga a instalar el paquete Hermes de Nous para funcionar.
+
+---
+
+## Hermes = arnés (diagrama)
 
 ```
 Usuario

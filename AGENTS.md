@@ -2,7 +2,9 @@
 
 Este repo es el **cuerpo digital** de **Unit-Mainnet #1** (ageNFT en Base mainnet).
 
-**Hermes** = runtime OSS de [Nous Research](https://github.com/NousResearch/hermes-agent) (gateway, cron, skills). Es el arnés agéntico del producto, no un agente personal externo al repo.
+**Hermes** = runtime OSS de [Nous Research](https://github.com/NousResearch/hermes-agent) (gateway, cron, skills). Es el **modelo de arnés** del producto. El motor concreto vive en **`runtime/`** de este repo (`run-turn.mjs`).
+
+**Importante:** `npm run hermes:turn:pay` ejecuta **Node en este repo**, no exige tener el CLI `hermes` de Nous instalado. El CLI externo es opcional (gateway unificado + cron en `~/.hermes`).
 
 ## Regla obligatoria para el agente Hermes
 
