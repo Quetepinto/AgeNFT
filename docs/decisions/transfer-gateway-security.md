@@ -172,8 +172,8 @@ Objetivo: que el ageNFT **lleve consigo un informe de salud** (no secretos) que 
 | `doctor-probe.mjs` (Vitality lite) | ✅ Budget, cerebro, memoria |
 | `hermes:doctor` | ✅ Cron/manual |
 | `gateway:verify-telegram` (getMe vivo/muerto) | ⏳ |
-| `transfer:vigilante` — informe unificado post-transfer | ⏳ |
-| Hygiene: handle manifiesto vs real, Vault 0 stale | ⏳ |
+| `transfer:vigilante` — informe unificado post-transfer | ✅ |
+| Hygiene: handle manifiesto vs real, Vault 0 stale | ✅ (v1 en vigilante) |
 | Listener `Transfer` → wipe + alarma | ⏳ |
 | Manifiesto `doctor.hygiene.onTransfer`: `"run-vigilante"` | ⏳ |
 
@@ -304,10 +304,11 @@ Todo lo siguiente **permanece con el ex-owner** si no se corta; **nunca** debe s
 |---|------------|--------|
 | 1 | `owner-gate.mjs` | ✅ |
 | 2 | Decisión Telegram + esta doc | ✅ |
-| 3 | `gateway:verify-telegram.mjs` (getMe vivo/muerto) | ⏳ |
-| 4 | Listener `Transfer` → wipe Vault 0 + stop bot | ⏳ |
-| 5 | Wizard dashboard pre/post transfer | ⏳ |
-| 6 | Misma plantilla para Matrix, Discord… | ⏳ Fase posterior |
+| 3 | `gateway:verify-telegram.mjs` (getMe vivo/muerto) | ✅ |
+| 4 | `transfer:vigilante.mjs` (Doctor de mudanza) | ✅ |
+| 5 | Listener `Transfer` → wipe Vault 0 + stop bot | ⏳ |
+| 6 | Wizard dashboard pre/post transfer | ⏳ |
+| 7 | Misma plantilla para Matrix, Discord… (ver [P001](precedents/P001-telegram-handle-transfer.md)) | ⏳ Fase posterior |
 
 ---
 
@@ -323,6 +324,8 @@ Todo lo siguiente **permanece con el ex-owner** si no se corta; **nunca** debe s
 
 ## Docs relacionados
 
+- [`README.md`](README.md) — índice decisiones + marco precedentes
+- [`precedents/P001-telegram-handle-transfer.md`](precedents/P001-telegram-handle-transfer.md)
 - [`transfer-telegram-gateway.md`](transfer-telegram-gateway.md)
 - [`memory-transfer-policy.md`](../research/memory-transfer-policy.md)
 - [`transfer-local-hosting.md`](../research/transfer-local-hosting.md)

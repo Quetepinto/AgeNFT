@@ -153,8 +153,9 @@ Script: `scripts/onchain/transfer-mainnet.mjs <tokenId> <to>`
 | `telegram-unit-mainnet-bot.mjs` | ✅ |
 | `transfer-mainnet.mjs` + checklist | ✅ |
 | `transfer-gateway-security.md` (Vault 0, bot nuevo, probe) | ✅ |
-| `gateway:verify-telegram.mjs` | ⏳ |
+| `gateway:verify-telegram.mjs` | ✅ |
 | Auto-wipe Vault 0 al detectar transfer | ⏳ |
+| `transfer:vigilante.mjs` | ✅ |
 | Wizard Dashboard post-transfer | ⏳ Fase posterior |
 
 ---

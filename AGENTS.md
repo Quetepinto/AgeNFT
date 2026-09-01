@@ -29,6 +29,7 @@ cd runtime && npm run hermes:turn:pay -- --plain --quiet "MENSAJE_DEL_USUARIO"
 ```bash
 cd runtime && npm run budget
 cd runtime && npm run hermes:doctor
+cd runtime && npm run transfer:vigilante
 node scripts/onchain/mainnet-checklist.mjs 1
 ```
 

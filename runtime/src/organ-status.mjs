@@ -2,9 +2,7 @@
  * Estado de configuración de órganos — probes locales (sin secretos en respuesta).
  */
 import { existsSync, readFileSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { join } from 'node:path';
-import { execSync } from 'node:child_process';
 import {
   canRunTurn,
   chatWebEnabled,
@@ -14,6 +12,10 @@ import {
   isConnectedToRuntime,
 } from './wiring-loader.mjs';
 import { checkOwnerGate } from './owner-gate.mjs';
+import {
+  isTelegramBotRunning,
+  loadTelegramToken,
+} from './telegram-gateway-utils.mjs';
 
 const CHAT_API_PORT = Number(process.env.AGENFT_CHAT_API_PORT ?? 8787);
 const CHAT_API_HOST = process.env.AGENFT_CHAT_API_HOST ?? '127.0.0.1';
@@ -37,13 +39,7 @@ function statusFromChecks(checks, { unsupported = false, notWired = false } = {}
 }
 
 function telegramTokenPresent() {
-  if (process.env.AGENFT_TELEGRAM_BOT_TOKEN?.trim() || process.env.TELEGRAM_BOT_TOKEN?.trim()) {
-    return true;
-  }
-  const path = join(homedir(), '.credentials/agenft-telegram.env');
-  if (!existsSync(path)) return false;
-  const text = readFileSync(path, 'utf8');
-  return /(?:AGENFT_TELEGRAM_BOT_TOKEN|TELEGRAM_BOT_TOKEN)\s*=\s*\S+/.test(text);
+  return Boolean(loadTelegramToken());
 }
 
 async function probeHttpOk(url) {
@@ -64,18 +60,6 @@ function readDoctorProbe(dataDir) {
     return JSON.parse(readFileSync(path, 'utf8'));
   } catch {
     return null;
-  }
-}
-
-function isTelegramBotRunning() {
-  try {
-    const out = execSync('pgrep -af telegram-unit-mainnet-bot.mjs 2>/dev/null || true', {
-      encoding: 'utf8',
-      timeout: 1500,
-    });
-    return out.trim().length > 0;
-  } catch {
-    return false;
   }
 }
 
@@ -281,6 +265,7 @@ function doctorOrganStatus(wiring, ctx) {
   const steps = [
     'Cablear Doctor Qi al Motor.',
     'cd runtime && npm run hermes:doctor',
+    'Tras transfer: npm run transfer:vigilante (Hygiene — precedente P001).',
     'Cron Hermes (--no-agent) usa el mismo probe cada 900s.',
   ];
   return {
