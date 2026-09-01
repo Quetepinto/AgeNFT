@@ -77,6 +77,8 @@ export async function initSettingsPage() {
 
   bindWallet();
   bindCopyButtons();
+
+  return agent;
 }
 
 function bindWallet() {

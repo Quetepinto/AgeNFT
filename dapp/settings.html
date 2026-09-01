@@ -29,6 +29,32 @@
         cerebro del agente.
       </div>
 
+      <!-- Mini-chat guiado -->
+      <section class="card" id="section-mini-chat">
+        <h2>
+          Probar aquí
+          <span id="onboarding-chat-pill" class="status-pill status-pill-warn">Modo guía</span>
+        </h2>
+        <p class="help-note">
+          Chat inmediato en el dashboard. <strong>Sin configurar nada</strong> funciona en modo guía (respuestas
+          fijas). Cuando el operador conecte el runtime, URUIRU responde con el cerebro real — mismo agente que
+          en Telegram.
+        </p>
+        <div id="onboarding-chat-chips" class="chat-chips" aria-label="Preguntas sugeridas"></div>
+        <div id="onboarding-chat-host"></div>
+        <details id="onboarding-chat-advanced" class="help-details">
+          <summary>Avanzado — URL del cerebro (operador)</summary>
+          <p class="help-note">
+            Solo si alojas el agente: <code>cd runtime && npm run chat:api</code> y pega
+            <code>http://127.0.0.1:8787</code> (o la URL pública con CORS).
+          </p>
+        </details>
+        <p class="help-note" style="margin-top: 0.75rem">
+          ¿Prefieres móvil? Sigue siendo más fácil
+          <a id="mini-chat-telegram-fallback" href="https://t.me/Unit1_agent_bot">Telegram</a>.
+        </p>
+      </section>
+
       <!-- 1. Empezar -->
       <section class="card" id="section-start">
         <h2>1 · Empezar en tres pasos</h2>
@@ -324,10 +350,20 @@
     </div>
     <script type="module">
       import { initSettingsPage } from './js/settings-guide.js';
-      initSettingsPage().catch((e) => {
-        const st = document.getElementById('wallet-status');
-        if (st) st.textContent = e.message;
-      });
+      import { initOnboardingChat } from './js/onboarding-chat.js';
+      initSettingsPage()
+        .then((agent) => {
+          const name = document.getElementById('guide-agent-name')?.textContent || 'URUIRU';
+          initOnboardingChat(name);
+          const tg = document.getElementById('channel-telegram-link');
+          const fallback = document.getElementById('mini-chat-telegram-fallback');
+          if (tg && fallback && tg.href) fallback.href = tg.href;
+        })
+        .catch((e) => {
+          const st = document.getElementById('wallet-status');
+          if (st) st.textContent = e.message;
+          initOnboardingChat('URUIRU');
+        });
     </script>
   </body>
 </html>

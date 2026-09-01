@@ -9,6 +9,7 @@
 
 | Necesitas… | Ve a… |
 |------------|--------|
+| Dashboard + mini-chat + Hermes | [`dashboard-onboarding-chat.md`](dashboard-onboarding-chat.md) |
 | Política transfer + Telegram | [`transfer-telegram-gateway.md`](transfer-telegram-gateway.md) |
 | Seguridad Vault 0, bot nuevo, Vigilante | [`transfer-gateway-security.md`](transfer-gateway-security.md) |
 | Precedente reusable (casos similares) | [`precedents/`](precedents/) |
@@ -52,6 +53,7 @@ Al diseñar Matrix, Discord, Nostr, tier E, hosting…
 |----|-----|------|--------|
 | D-TG-01 | `transfer-telegram-gateway.md` | Transfer = fin acceso bot | ✅ |
 | D-TG-02 | `transfer-gateway-security.md` | Vault 0, bot nuevo, Vigilante | ✅ |
+| D-DB-01 | `dashboard-onboarding-chat.md` | Mini-chat guiado + arnés Hermes | ✅ |
 | D-CH-01 | `chain-base-mainnet.md` | Base mainnet Unit-Mainnet | ✅ |
 
 ---

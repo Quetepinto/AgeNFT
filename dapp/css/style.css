@@ -2122,10 +2122,32 @@ h1 {
   background: rgba(62, 207, 142, 0.12);
 }
 
-.status-pill-soon {
+.status-pill-soon,
+.status-pill-warn {
   color: var(--warn);
   border-color: rgba(240, 180, 41, 0.45);
   background: rgba(240, 180, 41, 0.1);
+}
+
+.chat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+}
+
+.chat-chip {
+  font-size: 0.82rem;
+}
+
+.chat-widget-status {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+#onboarding-chat-host .chat-log {
+  max-height: 14rem;
 }
 
 details.help-details {
