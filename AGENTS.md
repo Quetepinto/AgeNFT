@@ -2,9 +2,11 @@
 
 Este repo es el **cuerpo digital** de **Unit-Mainnet #1** (ageNFT en Base mainnet).
 
-**Hermes** = runtime OSS de [Nous Research](https://github.com/NousResearch/hermes-agent) (gateway, cron, skills). Es el **modelo de arnés** del producto. El motor concreto vive en **`runtime/`** de este repo (`run-turn.mjs`).
+**Hermes** = agente OSS de [Nous Research](https://github.com/NousResearch/hermes-agent) — **único** significado de «Hermes» en este repo. Gateway, cron, skills, tools, MCPs. Es el arnés sobre el que construimos ageNFT (MVP).
 
-**Importante:** `npm run hermes:turn:pay` ejecuta **Node en este repo**, no exige tener el CLI `hermes` de Nous instalado. El CLI externo es opcional (gateway unificado + cron en `~/.hermes`).
+**No confundir:** Hermesclaw u otros agentes personales **no** se documentan aquí. Ver [`docs/decisions/nomenclatura-hermes-nous.md`](docs/decisions/nomenclatura-hermes-nous.md).
+
+El protocolo ageNFT vive en `runtime/` (`run-turn.mjs`). La skill `agenft-core` conecta Hermes (Nous) → cerebro ageNFT (nunca LLM genérico de Hermes para respuestas del NFT).
 
 ## Regla obligatoria para el agente Hermes
 

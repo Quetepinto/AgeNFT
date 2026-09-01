@@ -21,9 +21,7 @@ Comprueba: \`npm run transfer:vigilante\` en el servidor.`,
 
 Si eres dueño del NFT: crea **tu** bot en @BotFather (no reutilices el del vendedor).`,
 
-  hermes: `Hermes es el **arnés** (gateway, cron, skills) — no el cerebro. ageNFT puede chatear sin instalar Hermes completo (bot Telegram o chat-api bastan).
-
-Instalación opcional del arnés: \`cd runtime && npm run hermes:install\` (requiere CLI Hermes de Nous Research).`,
+  hermes: `Hermes (Nous) es el arnés del MVP — gateway, tools, MCPs, skills. Instalar CLI + npm run hermes:install. Los puentes directos (bot/chat-api) son atajo temporal; la visión es construir encima de Hermes, no reimplementarlo. Ver docs/decisions/nomenclatura-hermes-nous.md.`,
 
   dormir: `«Descansando» (DORMANT) significa que la hucha (TBA) no tiene USDC suficiente o se alcanzó el tope diario. El personaje URUIRU sigue existiendo — solo pausa gasto del cerebro.`,
 };

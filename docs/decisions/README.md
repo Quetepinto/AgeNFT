@@ -53,7 +53,8 @@ Al diseñar Matrix, Discord, Nostr, tier E, hosting…
 |----|-----|------|--------|
 | D-TG-01 | `transfer-telegram-gateway.md` | Transfer = fin acceso bot | ✅ |
 | D-TG-02 | `transfer-gateway-security.md` | Vault 0, bot nuevo, Vigilante | ✅ |
-| D-DB-01 | `dashboard-onboarding-chat.md` | Mini-chat guiado + arnés Hermes | ✅ |
+| D-DB-01 | `dashboard-onboarding-chat.md` | Mini-chat guiado + arnés | ✅ |
+| D-NOM-01 | `nomenclatura-hermes-nous.md` | Solo Hermes = Nous; capas; MVP vs atajo | ✅ |
 | D-CH-01 | `chain-base-mainnet.md` | Base mainnet Unit-Mainnet | ✅ |
 
 ---
