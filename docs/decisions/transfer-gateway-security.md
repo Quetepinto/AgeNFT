@@ -16,8 +16,28 @@
 | ¿Puede seguir sirviendo para *algo*? | Solo en el **@handle antiguo** si no revocó — impostor o confusión, no el ageNFT real. |
 | ¿Cómo dejarlo **totalmente** inservible? | Ex-owner **revoca** en @BotFather → `getMe` **401** → token muerto en Telegram. |
 | ¿Reutilizar el mismo @handle? | **No.** Modo cooperativo descartado. |
+| ¿El @handle viaja con el NFT? | **No.** El manifiesto puede mencionar un handle **histórico** (ej. mint); el comprador usa **otro @handle nuevo**. |
 
 **Regla de oro:** transferir NFT = cortar cables del vendedor + el comprador cablea los suyos desde cero.
+
+### Aclaración: @handle antiguo ≠ ageNFT transferido
+
+Mucha gente confunde estas dos cosas:
+
+```
+Vendedor tenía:     @Unit1_agent_bot  +  Token A  +  wallet A (owner)
+Tras transfer:      NFT → wallet B (nuevo owner)
+
+Comprador crea:     @MiBotNuevo        +  Token B  +  wallet B (owner)
+                    ↑ handle NUEVO, distinto del vendedor
+
+Si vendedor NO revoca Token A:
+  → @Unit1_agent_bot sigue "vivo" en Telegram (bot huérfano)
+  → NO es el ageNFT transferido (gate bloquea wallet A)
+  → Riesgo: confusión / estafa en el enlace VIEJO, no en el cuerpo onchain
+```
+
+El **@handle no es propiedad onchain**. No puede "viajar" con el ERC-721. Lo que viaja es identidad (URUIRU, soul, TBA, manifiesto). El cable Telegram es **siempre** Vault 0 del operador actual.
 
 ---
 
@@ -99,6 +119,72 @@ Token A sigue vivo **solo** para `@Unit1_agent_bot`:
 **Revocar Token A** → `getMe` 401 → **totalmente inservible** incluso para eso.
 
 **Política:** nuevo dueño **siempre** bot nuevo; ex-owner **siempre** revocar (checklist + probe en wizard).
+
+---
+
+## Transfer en BaseScan sin wizard — ¿qué puede salir mal?
+
+**Sí:** `safeTransferFrom` en BaseScan **no ejecuta** checklist ni revocación. Es trustless onchain pero **deja cables humanos sueltos**.
+
+| Riesgo | Quién sufre | ¿Gate lo frena? |
+|--------|-------------|-----------------|
+| Ex-owner sigue con bot + token en su VPS | Comprador (confusión usuarios) + ex-owner (fuga si no apaga) | Gate bloquea **operar ageNFT**; no apaga solo el VPS ajeno |
+| Ex-owner no revoca → @handle viejo activo | Usuarios con enlace antiguo | No es ageNFT real; estafa por confusión |
+| Comprador reutiliza token/handle del vendedor | Comprador | Gate falla si wallet ≠ owner; además viola política |
+| Vault 0 del vendedor intacto (keys, webhooks) | Ex-owner (leak) | No afecta TBA del comprador si no comparten host |
+| Manifiesto menciona handle viejo | Comprador | Metadato **obsoleto** — Doctor debe marcarlo |
+| Comprador arranca runtime sin re-cablear | Comprador | Parcial/DORMANT; datos viejos en disco local del **host** |
+
+**Conclusión:** el NFT transferido **no queda automáticamente "seguro y cableado"**. Queda **despierto onchain** (TBA, soul) pero **desconectado** hasta que el nuevo owner cablee bien — y **expuesto** si el vendedor dejó servicios vivos.
+
+---
+
+## Vigilante / Doctor — alarma de lo que anda mal
+
+Objetivo: que el ageNFT **lleve consigo un informe de salud** (no secretos) que grite cuando algo no cuadra tras un transfer — especialmente si **no hubo wizard**.
+
+### Dos caras (ver [`dual-doctor.md`](../research/dual-doctor.md))
+
+| Doctor | Pregunta | Ejemplos post-transfer |
+|--------|----------|------------------------|
+| **Vitality (Qi)** | ¿Está vivo y alimentado? | TBA baja, cerebro caído, bot parado |
+| **Hygiene (Shield)** | ¿Está limpio y sin fugas? | Token Telegram vivo del ex-owner en **este** host; handle manifiesto ≠ bot configurado; Vault 0 sin rotar; webhooks activos; wallet ≠ ownerOf |
+
+### Checks Vigilante transfer (objetivo implementación)
+
+| Check | Severidad | Acción sugerida |
+|-------|-----------|-----------------|
+| `ownerOf` ≠ wallet operadora | 🔴 crítico | DORMANT — no operar |
+| Manifiesto `gateways.telegram.handle` ≠ `getMe.username` | 🟠 alerta | «Handle obsoleto — crea bot nuevo» |
+| Token Telegram responde 200 pero gate falla | 🔴 crítico | «Token de otro owner — revoca y crea uno nuevo» |
+| Probe token **viejo** del ex-owner aún 200 en este host | 🔴 crítico | Wipe Vault 0 + revocar |
+| Bot proceso corriendo con owner mismatch | 🔴 crítico | Parar servicio |
+| `Transfer` event reciente sin post-checklist | 🟠 alerta | Wizard / `npm run transfer:vigilante` |
+| Memoria local de wallet anterior en disco | 🟡 higiene | Exportar/borrar según política venta |
+| Tier E / SaaS keys del vendedor presentes | 🔴 crítico | Rotar o borrar |
+
+### Qué existe hoy vs roadmap
+
+| Pieza | Estado |
+|-------|--------|
+| `owner-gate.mjs` | ✅ Bloquea operación con wallet ajena |
+| `organ-status.mjs` (gateway + gate) | ✅ Dashboard/Lab |
+| `doctor-probe.mjs` (Vitality lite) | ✅ Budget, cerebro, memoria |
+| `hermes:doctor` | ✅ Cron/manual |
+| `gateway:verify-telegram` (getMe vivo/muerto) | ⏳ |
+| `transfer:vigilante` — informe unificado post-transfer | ⏳ |
+| Hygiene: handle manifiesto vs real, Vault 0 stale | ⏳ |
+| Listener `Transfer` → wipe + alarma | ⏳ |
+| Manifiesto `doctor.hygiene.onTransfer`: `"run-vigilante"` | ⏳ |
+
+### Dónde vive la alarma
+
+- **Onchain (compacto):** manifiesto declara política (`transferEndsBotAccess`, `new-bot-only`) — no estado dinámico.
+- **Offchain (Vigilante):** `runtime/data/<agent>/doctor/latest-probe.json` + futuro `doctor/transfer-vigilante.json`.
+- **Dashboard:** semáforo rojo/naranja con lista accionable (como Doctor hoy, ampliado).
+- **Chat público:** si Hygiene 🔴, el bot puede responder en modo **solo aviso** («Este cuerpo necesita re-cableado — no opero hasta…») en lugar de fingir normalidad.
+
+**Principio:** sin wizard, el ageNFT **no debe fingir** que está listo. El Vigilante es el «Doctor de mudanza».
 
 ---
 
