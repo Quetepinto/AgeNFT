@@ -8,14 +8,7 @@ const STATIC_GUIDE = {
 
 Para hablar de verdad: (1) el operador ejecuta \`npm run chat:api\` en el servidor, o (2) abre Telegram — es lo más fácil.`,
 
-  cables: `Los «cables» conectan órganos al Motor (runtime). El primero crítico es el **cerebro** (modelo IA vía tx402 + USDC en la TBA).
-
-Orden típico para el dueño:
-1. Cerebro — USDC en la hucha (TBA)
-2. Gateway — bot Telegram nuevo
-3. Doctor — \`npm run hermes:doctor\`
-
-Comprueba: \`npm run transfer:vigilante\` en el servidor.`,
+  cables: `Los «cables» conectan órganos al Motor. ORDEN: (1) hosting + Hermes en tu VPS/Akash, (2) cerebro/USDC TBA, (3) Telegram bot nuevo. Ver docs/decisions/runtime-hosting-wizard.md. Sin host propio, Telegram del vendedor no es tuyo.`,
 
   telegram: `Telegram es el canal más fácil. Busca el bot en la sección «Empezar en tres pasos» arriba.
 

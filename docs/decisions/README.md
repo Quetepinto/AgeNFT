@@ -9,7 +9,9 @@
 
 | Necesitas… | Ve a… |
 |------------|--------|
-| Dashboard + mini-chat + Hermes | [`dashboard-onboarding-chat.md`](dashboard-onboarding-chat.md) |
+| **Dónde vive Hermes + orden wizard** | [`runtime-hosting-wizard.md`](runtime-hosting-wizard.md) |
+| Nomenclatura Hermes (Nous) | [`nomenclatura-hermes-nous.md`](nomenclatura-hermes-nous.md) |
+| Dashboard + mini-chat | [`dashboard-onboarding-chat.md`](dashboard-onboarding-chat.md) |
 | Política transfer + Telegram | [`transfer-telegram-gateway.md`](transfer-telegram-gateway.md) |
 | Seguridad Vault 0, bot nuevo, Vigilante | [`transfer-gateway-security.md`](transfer-gateway-security.md) |
 | Precedente reusable (casos similares) | [`precedents/`](precedents/) |
@@ -38,6 +40,8 @@ Cuando un caso concreto (ej. handle Telegram al transferir) encierra un **patró
 
 Al diseñar Matrix, Discord, Nostr, tier E, hosting…
 
+**Orden:** primero [`runtime-hosting-wizard.md`](runtime-hosting-wizard.md) (dónde + Hermes), luego gateways (P001 Telegram).
+
 ```
 1. Leer precedente más cercano (empezar por P001 Telegram).
 2. Tabla: qué tienen en común / en qué difieren.
@@ -55,6 +59,7 @@ Al diseñar Matrix, Discord, Nostr, tier E, hosting…
 | D-TG-02 | `transfer-gateway-security.md` | Vault 0, bot nuevo, Vigilante | ✅ |
 | D-DB-01 | `dashboard-onboarding-chat.md` | Mini-chat guiado + arnés | ✅ |
 | D-NOM-01 | `nomenclatura-hermes-nous.md` | Solo Hermes = Nous; capas; MVP vs atajo | ✅ |
+| D-HOST-01 | `runtime-hosting-wizard.md` | Dónde vive runtime; wizard; Akash; orden | ✅ |
 | D-CH-01 | `chain-base-mainnet.md` | Base mainnet Unit-Mainnet | ✅ |
 
 ---

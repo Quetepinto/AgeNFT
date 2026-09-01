@@ -1,7 +1,7 @@
 # P001 — Handle Telegram al transferir ageNFT
 
 > **Estado:** Aprobado · **Fecha:** 2026-09-01  
-> **Decisión padre:** [`transfer-telegram-gateway.md`](../transfer-telegram-gateway.md) · [`transfer-gateway-security.md`](../transfer-gateway-security.md)
+> **Decisión padre:** [`transfer-telegram-gateway.md`](../transfer-telegram-gateway.md) · [`transfer-gateway-security.md`](../transfer-gateway-security.md) · [`runtime-hosting-wizard.md`](../runtime-hosting-wizard.md) (hosting **antes** que Telegram)
 
 **Usar este precedente** al diseñar cualquier gateway con identidad externa (Matrix `@`, Discord bot, Nostr npub operativo, webhooks con URL fija).
 
@@ -9,7 +9,9 @@
 
 ## Problema
 
-Al transferir el NFT, el **token de Telegram** y el **@handle** viven en Vault 0 del ex-owner. Si no se cortan:
+Al transferir el NFT, el **token de Telegram** y el **@handle** viven en Vault 0 del ex-owner en **su host**. Si no se cortan:
+
+> **Prerequisito:** el comprador debe tener **su propio hosting + Hermes** (pasos 1–3 del wizard) antes de cablear Telegram. Ver [`runtime-hosting-wizard.md`](../runtime-hosting-wizard.md).
 
 - El ex-owner podría seguir respondiendo en el handle viejo (confusión / estafa).
 - El comprador podría arrancar mal cableado (token ajeno, handle obsoleto en manifiesto).
