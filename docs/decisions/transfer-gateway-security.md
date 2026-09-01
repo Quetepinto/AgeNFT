@@ -180,7 +180,7 @@ Objetivo: que el ageNFT **lleve consigo un informe de salud** (no secretos) que 
 ### Dónde vive la alarma
 
 - **Onchain (compacto):** manifiesto declara política (`transferEndsBotAccess`, `new-bot-only`) — no estado dinámico.
-- **Offchain (Vigilante):** `runtime/data/<agent>/doctor/latest-probe.json` + futuro `doctor/transfer-vigilante.json`.
+- **Offchain (Vigilante):** `runtime/data/<agent>/doctor/latest-probe.json` + `doctor/transfer-vigilante.json`.
 - **Dashboard:** semáforo rojo/naranja con lista accionable (como Doctor hoy, ampliado).
 - **Chat público:** si Hygiene 🔴, el bot puede responder en modo **solo aviso** («Este cuerpo necesita re-cableado — no opero hasta…») en lugar de fingir normalidad.
 
