@@ -152,12 +152,16 @@ Script: `scripts/onchain/transfer-mainnet.mjs <tokenId> <to>`
 | `run-turn.mjs` | ✅ |
 | `telegram-unit-mainnet-bot.mjs` | ✅ |
 | `transfer-mainnet.mjs` + checklist | ✅ |
+| `transfer-gateway-security.md` (Vault 0, bot nuevo, probe) | ✅ |
+| `gateway:verify-telegram.mjs` | ⏳ |
+| Auto-wipe Vault 0 al detectar transfer | ⏳ |
 | Wizard Dashboard post-transfer | ⏳ Fase posterior |
 
 ---
 
 ## Docs relacionados
 
+- **[`transfer-gateway-security.md`](transfer-gateway-security.md)** — FAQ bot nuevo, tres capas de cierre, Vault 0, probe `getMe`
 - [`memory-transfer-policy.md`](../research/memory-transfer-policy.md)
 - [`transfer-local-hosting.md`](../research/transfer-local-hosting.md)
 - [`dapp/transfer.html`](../../dapp/transfer.html)

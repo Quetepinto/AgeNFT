@@ -33,7 +33,7 @@ node mint-mainnet.mjs --manifest ../../docs/manifest/examples/uruiru-prototype-d
 node mainnet-checklist.mjs 1
 ```
 
-Política transfer: **transferir el ageNFT = finalizar acceso al bot** — ver [`docs/decisions/transfer-telegram-gateway.md`](../../docs/decisions/transfer-telegram-gateway.md).
+Política transfer: **transferir el ageNFT = finalizar acceso al bot** — ver [`docs/decisions/transfer-telegram-gateway.md`](../../docs/decisions/transfer-telegram-gateway.md) y [`docs/decisions/transfer-gateway-security.md`](../../docs/decisions/transfer-gateway-security.md) (bot nuevo, revocación, Vault 0).
 
 Runtime: `cd ../../runtime && npm run owner:gate`
 

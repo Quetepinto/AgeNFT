@@ -143,12 +143,15 @@
       "telegram": {
         "binding": "owner-vault0",
         "onOwnerChange": "invalidate-and-rebind",
-        "policy": "new-bot-only"
+        "policy": "new-bot-only",
+        "exOwnerMustRevoke": true,
+        "verifyDeadTokenVia": "telegram-getMe-401"
       }
     },
     "runtimeGate": {
       "requireOwnerOfMatch": true,
-      "onMismatch": "dormant_refuse_turns"
+      "onMismatch": "dormant_refuse_turns",
+      "onTransferDetected": "wipe-vault0-and-stop-gateways"
     }
   }
 }
