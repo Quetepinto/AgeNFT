@@ -137,6 +137,17 @@
     ]
   },
 
+  "capabilities": [
+    {
+      "id": "mobility/v0",
+      "enabled": true,
+      "mode": "tool",
+      "packs": ["valencia-es"],
+      "path": "pieces/mobility",
+      "note": "TranXp como tool: Telegram /tranx o prefijo tranx → mobility.py reply (sin LLM). Pack por defecto València; AGENFT_MOBILITY_PACK override."
+    }
+  ],
+
   "x402Support": true,
   "supportedTrust": ["reputation"]
 }

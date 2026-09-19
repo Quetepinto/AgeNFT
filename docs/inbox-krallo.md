@@ -6,6 +6,22 @@ Cosas dichas en chat, para no perderlas. El agente responde debajo con lo que ha
 
 ## 2026-09-19
 
+### TranXp: dualidad pieza + Unit lite (implementado)
+
+**Pedido / plan:** pieza usable ahora; acoplable a AgeNFT completo; Unit lite independiente; mint después.
+
+**Hoy:**
+
+| Pieza | Dónde | Estado |
+|-------|-------|--------|
+| Docs dualidad | `research/mobility-pieces.md` | ✅ |
+| Bot lite (sin LLM) | `npm run telegram:tranxp` | ✅ |
+| Tool en URUIRU | `/tranx` + `capabilities` en unit-mainnet | ✅ |
+| Pack Madrid (genericidad) | `packs/madrid-es` | ✅ |
+| Plantilla Unit lite | `unit-tranxp-lite.json` | ✅ pre-mint |
+
+---
+
 ### TranXp: bot sin modelo + modo pro + scanner de incidencias
 
 **Pedido:** que funcione de forma básica sin IA si el pack de la ciudad está relleno a mano; modo opcional con el modelo preferido del usuario (funciones pro); y una parte que escanee noticias de incidencias/retrasos (esbozo Hermescortes / Camino).

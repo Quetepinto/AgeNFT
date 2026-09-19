@@ -285,12 +285,14 @@
 | Idea del usuario | Capa | Estado | Hogar |
 |----------------|------|--------|-------|
 | Harness genérico de transporte para cualquier ciudad | M3 Capability (skill) | 📐 · ✅ prototipo `pieces/mobility/` | [`mobility-pieces.md`](mobility-pieces.md) |
-| City Pack que cada uno rellena con los datos de su ciudad | B Biblioteca (JSON exportable) | 📐 · ✅ `valencia-es` con 3 checks vivos | idem |
+| City Pack que cada uno rellena con los datos de su ciudad | B Biblioteca (JSON exportable) | 📐 · ✅ `valencia-es` + `madrid-es` | idem |
+| Dualidad: tool en AgeNFT completo **y** Unit lite independiente | Pieza única, dos empaquetados | 📐 acordado | idem § Dualidad |
 | El agente investiga fuentes reales si el pack no cubre | `discovery` + write-back al pack | 📐 | idem |
-| Publicarlo como ageNFT vertical TranXp (nombre provisional) | Unit default = bot reglas; LLM opt-in | 💡 | idem § Fase 3 |
-| Bot básico sin modelo (pack relleno a mano) | Hábitat CLI/`reply` | ✅ v0 `mobility.py reply` | idem § Dos modos |
+| Publicarlo como ageNFT vertical TranXp (nombre provisional) | Unit default = bot reglas; LLM opt-in | 💡 mint después | idem § Fase 3 |
+| Bot básico sin modelo (pack relleno a mano) | Hábitat Telegram/`reply` | ✅ `telegram-tranxp-bot` + CLI | idem § Dos modos |
 | Modo pro con modelo del owner | hose `llmRouter` + skill | 📐 | idem · [`lab/llm-router-hose.md`](lab/llm-router-hose.md) |
-| Scanner noticias incidencias/retrasos de red | Sentidos + cron pack | 📐 · ✅ RSS/Atom v0 | idem § Scanner · esbozo Camino vigilante; Hermescortes no localizado |
-| Mapas y rutas tipo Google Maps | Routing propio / OTP | ⏸ fuera de MVP; enlaces a planificadores oficiales antes | idem § Fase 4–5 |
+| Scanner noticias incidencias/retrasos de red | Sentidos + cron pack | 📐 · ✅ RSS/Atom v0 | idem § Scanner |
+| Capacidad en Unit-Mainnet (`/tranx`) | Tool en cuerpo genérico | ✅ esbozo manifiesto + bot | idem § Dualidad A |
+| Mapas y rutas tipo Google Maps | Routing propio / OTP | ⏸ fuera de MVP | idem § Fase 4–5 |
 
-*Última clasificación: 2026-09-19 — TranXp bot básico + scanner. Revisar qué 💡 pasa a 📐 cuando toque implementar.*
+*Última clasificación: 2026-09-19 — dualidad pieza + Unit lite. Revisar qué 💡 pasa a 📐 cuando toque implementar.*

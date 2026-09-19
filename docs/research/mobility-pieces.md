@@ -20,6 +20,36 @@ No toca TBA, `hands` ni presupuesto más allá del cerebro **cuando el modo pro 
 
 ---
 
+## Dualidad: pieza + Unit lite (decisión 2026-09-19)
+
+**No es un o/u.** TranXp es **una pieza** (`mobility/v0` + City Packs + `reply`/`scan`). Misma implementación, dos empaquetados:
+
+| Empaquetado | Qué es | Cuándo |
+|-------------|--------|--------|
+| **A — tool** | Capacidad en un AgeNFT completo (URUIRU / Unit-Mainnet): `capabilities` → `mobility/v0`, packs en Biblioteca | El cuerpo genérico ya existe; se enchufa transporte |
+| **B — Unit lite** | Unit con canon = movilidad, cerebro off por defecto, mismo harness | Alguien quiere “solo transporte” |
+
+```
+pieza única (pieces/mobility/)
+        │
+        ├── A: AgeNFT completo ── capabilities / M3 + B
+        └── B: Unit TranXp lite ── manifiesto plantilla (cerebro off)
+```
+
+**Prioridad:** pieza usable en un hábitat **ahora** (sin mint); AgeNFT Bloque 3 en paralelo; cable a URUIRU cuando la pieza demuestre; mint lite / NFT-capacidad solo si hay demanda de transferir.
+
+**Qué no hacer:** dos codebases que diverjan; esperar a Hygiene/Presencia/mercado para preguntar el 112; decidir ya colección ERC-721 aparte vs mismo registry.
+
+### Órganos (lite o tool)
+
+- **Heredar:** identidad/manifiesto, gateways, Dashboard, Doctor (probes pack/adapters), memoria capas, hose opt-in, TBA/Reflejos si hay pro de pago.
+- **Pre-cablear en lite:** capacidad fija, cerebro off, cron `scan`.
+- **Recortar:** manos/trading, presencia TTS, voz x402 B2B, scout, Organ Studio, BYOA, cross-chain, OTP propio.
+
+Hábitat básico (empaquetado B hoy): `runtime/src/telegram-tranxp-bot.mjs` → `mobility.py reply`. Tool en Unit-Mainnet (empaquetado A): comando `/tranx` o prefijo `tranx` en el bot URUIRU.
+
+---
+
 ## Dos modos (decisión 2026-09-19)
 
 TranXp **no necesita un LLM** para el caso de uso diario. El City Pack ya es el programa: reglas de red, paradas, adapters. El «agente» básico es un **bot determinista**.
@@ -73,16 +103,26 @@ Retrasos **del vehículo** ya salen del tablón vivo (C6 `delayMinutes`, Met Go 
 
 ---
 
-## Lo que ya funciona (València)
+## Lo que ya funciona
+
+### València (`valencia-es`)
 
 | Red | Vivo | Fuente |
 |---|---|---|
-| MetroBus (Met Go) | ✅ | `api.softoursistemas.com/metrobus/estimacion/ocupacion/{stop}` (descubierto en el iframe de metgovalencia.com) |
+| MetroBus (Met Go) | ✅ | `api.softoursistemas.com/metrobus/estimacion/ocupacion/{stop}` |
 | EMT València | ✅ | TransitApp bgtfs (`is_real_time`) |
 | Cercanías C6 | ✅ | RadarDeTrenes (retrasos, ~30 s) |
 | Metrovalencia | ❌ (programado) | web FGV; candidato a adapter |
 
-`validate --live` = 3/3 checks en verde el 2026-09-19.
+### Madrid (`madrid-es`) — prueba de genericidad
+
+| Red | Vivo | Fuente |
+|---|---|---|
+| Cercanías Madrid | ✅ | Mismo adapter `radardetrenes` (Atocha `18000`, Sol `10200`) |
+| Metro Madrid | ❌ (programado) | metro.madrid.es |
+| EMT Madrid | ❌ (programado) | emtmadrid.es — **112 aquí es EMT Madrid, no MetroBus València** |
+
+`validate --live` València 3/3 · Madrid ≥1 check cercanías (mismo harness, cero código de ciudad).
 
 ## Principios que exporta (aprendidos en Camino)
 
@@ -97,10 +137,10 @@ Retrasos **del vehículo** ya salen del tablón vivo (C6 `delayMinutes`, Met Go 
 |---|---|---|
 | **0** | Harness + pack València + smoke checks | ✅ prototipo |
 | **0b** | Bot básico sin modelo (`reply` / `bot`) + scanner RSS | ✅ v0 |
-| **1** | Cablear `reply` a un hábitat (Telegram o Matrix) con pack fijo; segundo pack (otra ciudad ES) | 📐 |
+| **1** | Hábitat Telegram → `reply` (`telegram-tranxp-bot.mjs`); segundo pack `madrid-es` | ✅ |
 | **1b** | Instalar skill en Hermes (perfil Iggy) como **modo pro**; sustituir el enrutado manual de Camino | 📐 |
-| **2** | Referencia en manifiesto (`capabilities`), pack en Biblioteca IPFS, `libraryInclude` al vender | 📐 |
-| **3** | Unit vertical TranXp: default = bot reglas; LLM opt-in; dApp con favoritos | 💡 |
+| **2** | `capabilities` en manifiesto Unit-Mainnet + `/tranx` en bot URUIRU; packs IPFS / `libraryInclude` al vender | ✅ esbozo manifiesto · 📐 IPFS |
+| **3** | Unit vertical TranXp (mint): default = bot reglas; LLM opt-in; dApp con favoritos | 💡 |
 | **4** | Enlaces a planificadores oficiales (gvEnRuta, OTP públicos) → **no** clonar Google Maps | 💡 |
 | **5** | Mapa/routing propio (OTP self-host, OSM) | ⏸ producto entero, fuera de MVP |
 
@@ -116,7 +156,7 @@ Retrasos **del vehículo** ya salen del tablón vivo (C6 `delayMinutes`, Met Go 
 - **Licencia de datos** por pack (fuentes oficiales vs agregadores; declararla en el pack).
 - Cómo declarar en el manifiesto una capacidad con datos externos sin romper `additionalProperties: false`.
 - Dónde vive Hermescortes / el job de noticias exacto del VPS, para copiar selectores y no inventar parsers.
-- Primer hábitat del bot básico: Telegram propio vs. comando en el bot URUIRU vs. Matrix.
+- Matrix como segundo hábitat del bot básico (Telegram TranXp + `/tranx` en URUIRU ya cubren A/B).
 
 ## Docs hermanos
 

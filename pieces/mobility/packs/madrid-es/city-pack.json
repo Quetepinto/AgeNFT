@@ -1,0 +1,93 @@
+{
+  "type": "agenft-city-pack/v0",
+  "id": "madrid-es",
+  "name": "Madrid (España)",
+  "country": "ES",
+  "timezone": "Europe/Madrid",
+  "language": "es",
+  "updatedAt": "2026-09-19",
+  "maintainers": ["krallo"],
+  "discovery": {
+    "allowed": true,
+    "policy": "official-first",
+    "writeBack": "propose-diff",
+    "notes": "Segundo pack: prueba de que el harness no es València-específico. Mismo adapter radardetrenes, IDs distintos. EMT/Metro aún programado (sin TransitApp globalIds)."
+  },
+  "networks": {
+    "cercanias": {
+      "name": "Cercanías Madrid (Renfe)",
+      "mode": "rail",
+      "scope": "regional",
+      "operator": "Renfe",
+      "keywords": ["cercanías", "cercanias", "renfe", "c10", "c4", "c7", "atocha", "sol", "chamartín", "chamartin", "tren"],
+      "live": {
+        "adapter": "radardetrenes",
+        "base": "https://radardetrenes.com/api/v1/stations/{station}/board-renfe",
+        "note": "~30 s de retraso. Códigos Renfe (no confiar con València 65xxx)."
+      },
+      "scheduled": [
+        { "type": "web", "url": "https://www.renfe.com/es/es/cercanias/cercanias-madrid", "note": "Horarios oficiales; vivo preferido vía RadarDeTrenes" }
+      ],
+      "stops": {
+        "18000": { "name": "Madrid-Atocha Cercanías", "lines": ["C1", "C2", "C3", "C4", "C5", "C7", "C10"], "direction": "varios" },
+        "10200": { "name": "Madrid-Sol", "lines": ["C3", "C4", "C4a"], "direction": "varios" },
+        "17000": { "name": "Madrid-Chamartín", "lines": ["C1", "C2", "C3", "C4", "C7", "C8", "C10"] }
+      },
+      "pitfalls": [
+        "Códigos de estación Madrid ≠ València (18000 Atocha ≠ 65000 Nord).",
+        "«112» en Madrid es EMT urbano, no una línea de cercanías."
+      ]
+    },
+    "metro": {
+      "name": "Metro de Madrid",
+      "mode": "metro",
+      "scope": "urban",
+      "operator": "Metro de Madrid",
+      "keywords": ["metro", "línea 1", "linea 1", "línea 6", "linea 6", "sol metro"],
+      "live": null,
+      "scheduled": [
+        { "type": "web", "url": "https://www.metromadrid.es", "note": "Sin adapter vivo aún; no inventar minutos" }
+      ],
+      "pitfalls": ["No responder metro con datos de cercanías."]
+    },
+    "emt": {
+      "name": "EMT Madrid (urbano)",
+      "mode": "bus",
+      "scope": "urban",
+      "operator": "EMT Madrid",
+      "keywords": ["emt", "bus urbano", "112", "línea 112", "linea 112"],
+      "live": null,
+      "scheduled": [
+        { "type": "web", "url": "https://www.emtmadrid.es", "note": "112 Madrid = EMT Madrid. En València 112A = MetroBus (pack distinto)." }
+      ],
+      "pitfalls": [
+        "112 Madrid ≠ 112A MetroBus València — ciudad y pack distintos.",
+        "Sin globalIds TransitApp aún; modo básico solo apunta al programado."
+      ]
+    }
+  },
+  "routing": {
+    "rules": [
+      { "match": ["atocha", "sol", "chamartín", "chamartin", "cercanías", "cercanias", "c10", "c4", "c7", "tren", "renfe"], "network": "cercanias", "defaultStop": "18000" },
+      { "match": ["metro", "línea 1", "linea 1", "línea 6", "linea 6"], "network": "metro" },
+      { "match": ["emt", "112", "bus urbano"], "network": "emt" }
+    ],
+    "liveTriggers": ["próximo", "proximo", "cuánto falta", "cuanto falta", "ahora", "en vivo", "cuándo pasa", "cuando pasa"],
+    "scheduledTriggers": ["mañana", "a las", "horario", "primer", "último", "ultimo"],
+    "ambiguous": "ask-network"
+  },
+  "incidents": {
+    "maxAgeMin": 30,
+    "sources": [
+      { "id": "adif-red", "network": "cercanias", "type": "web", "url": "https://www.adif.es/w/estado-de-la-red", "note": "Cortes/obras red estatal." },
+      { "id": "metro-madrid", "network": "metro", "type": "web", "url": "https://www.metromadrid.es", "note": "Avisos Metro; parser HTML pendiente." }
+    ]
+  },
+  "favorites": [
+    { "label": "Atocha cercanías", "network": "cercanias", "stop": "18000" },
+    { "label": "Sol cercanías", "network": "cercanias", "stop": "10200" }
+  ],
+  "checks": [
+    { "name": "cercanias-atocha", "network": "cercanias", "stop": "18000" }
+  ]
+}

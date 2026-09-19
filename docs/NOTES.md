@@ -8,6 +8,15 @@ Bitácora de decisiones. Docs temáticos en `docs/research/` y `docs/decisions/`
 
 ## 2026-09-19
 
+### TranXp — dualidad pieza + Unit lite (implementado)
+
+- Docs: dualidad en [`research/mobility-pieces.md`](research/mobility-pieces.md); taxonomía actualizada.
+- Hábitat B: `runtime/src/telegram-tranxp-bot.mjs` (`npm run telegram:tranxp`) → `mobility.py reply`.
+- Hábitat A: `/tranx` en bot Unit-Mainnet + `capabilities` en `unit-mainnet.json`.
+- Segundo pack `madrid-es` (Cercanías vivo vía mismo `radardetrenes`).
+- Plantilla pre-mint: `docs/manifest/examples/unit-tranxp-lite.json`.
+- Schema: campo `capabilities[]`.
+
 ### TranXp — bot básico sin modelo + scanner de incidencias
 
 - **Sí es posible** el mini-agente sin IA: no es un LLM pequeño, es un bot de reglas (`mobility.py reply` / `bot`) sobre el City Pack.

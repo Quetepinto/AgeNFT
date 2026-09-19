@@ -12,6 +12,11 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveAgentEnv } from './agenft-env.mjs';
 import { gatewayEnabled } from './wiring-loader.mjs';
+import {
+  mobilityReply,
+  parseTranxCommand,
+  resolveMobilityFromManifest,
+} from './mobility-reply.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const RUNTIME = join(__dirname, '..');
@@ -113,7 +118,7 @@ async function handleMessage(msg) {
   if (!text || text.startsWith('/start')) {
     await tg('sendMessage', {
       chat_id: chatId,
-      text: `Hola — soy **${BOT_DISPLAY_NAME}** (Unit-Mainnet #1, ageNFT en Base mainnet). Gespenster de Ety Fefer. Escribe tu mensaje.`,
+      text: `Hola — soy **${BOT_DISPLAY_NAME}** (Unit-Mainnet #1, ageNFT en Base mainnet). Gespenster de Ety Fefer. Escribe tu mensaje.\n\nTransporte (TranXp, sin LLM): /tranx próximo bus suecia`,
     });
     return;
   }
@@ -124,6 +129,30 @@ async function handleMessage(msg) {
     });
     return;
   }
+
+  const tranxQ = parseTranxCommand(text);
+  if (tranxQ !== null) {
+    const { pack, enabled } = resolveMobilityFromManifest();
+    if (!enabled && !process.env.AGENFT_MOBILITY_PACK) {
+      await tg('sendMessage', {
+        chat_id: chatId,
+        text: 'Capacidad mobility/v0 no habilitada en el manifiesto (capabilities).',
+      });
+      return;
+    }
+    if (!tranxQ) {
+      await tg('sendMessage', {
+        chat_id: chatId,
+        text: `Uso: /tranx <pregunta>\nPack: ${pack}\nEj.: /tranx próximo bus suecia`,
+      });
+      return;
+    }
+    await tg('sendChatAction', { chat_id: chatId, action: 'typing' });
+    const reply = mobilityReply(pack, tranxQ);
+    await tg('sendMessage', { chat_id: chatId, text: reply.slice(0, 4000) });
+    return;
+  }
+
   await tg('sendChatAction', { chat_id: chatId, action: 'typing' });
   const reply = runBrain(text);
   await tg('sendMessage', { chat_id: chatId, text: reply.slice(0, 4000) });

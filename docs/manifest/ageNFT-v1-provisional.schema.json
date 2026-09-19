@@ -193,6 +193,38 @@
       }
     },
 
+    "capabilities": {
+      "type": "array",
+      "description": "Piezas M3 enchufables (ej. mobility/v0 TranXp). Viajan con el token; no son órganos del loop vital.",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador estable, ej. mobility/v0"
+          },
+          "enabled": { "type": "boolean", "default": true },
+          "packs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "City Packs u otros datasets de Biblioteca (B)"
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["tool", "lite-canon"],
+            "description": "tool = capacidad en cuerpo completo; lite-canon = alma del Unit TranXp"
+          },
+          "path": {
+            "type": "string",
+            "description": "Ruta relativa en el repo o CID IPFS futuro"
+          },
+          "note": { "type": "string", "maxLength": 500 }
+        }
+      }
+    },
+
     "x402Support": { "type": "boolean", "default": true },
     "supportedTrust": {
       "type": "array",

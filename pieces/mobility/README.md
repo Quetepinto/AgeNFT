@@ -1,52 +1,62 @@
 # Pieza `mobility/v0` — transporte por ciudad (City Packs)
 
-> **Estado:** 📐 diseño + **funciona con València** · 2026-09-19  
-> Capa: **M3 Capability** (skill que viaja con el NFT) + **B Biblioteca** (packs por ciudad). No toca TBA ni dinero.
+> **Estado:** 📐 diseño + **València + Madrid** · 2026-09-19  
+> Capa: **M3 Capability** + **B Biblioteca**. Dualidad: tool en AgeNFT completo **o** Unit lite. Doc: [`docs/research/mobility-pieces.md`](../../docs/research/mobility-pieces.md).
 
-Un harness genérico (procedimiento + herramienta) y un pack de datos por ciudad. La ciudad no tiene código propio: declara redes, fuentes, paradas y reglas; el harness enruta y consulta.
+Un harness genérico y un pack de datos por ciudad. La ciudad no tiene código propio: declara redes, fuentes, paradas y reglas; el harness enruta y consulta.
 
 ```
 pieces/mobility/
-├── harness/SKILL.md          # procedimiento del agente (Hermes / cualquier runtime)
+├── harness/SKILL.md
 ├── schema/city-pack.schema.json
-├── tools/mobility.py         # CLI stdlib: packs · validate · route · board · ask
+├── tools/mobility.py         # packs · validate · route · board · ask · reply · bot · scan
 └── packs/
     ├── _template/city-pack.json
-    └── valencia-es/city-pack.json   # MetroBus (Met Go), EMT, C6, Metrovalencia
+    ├── valencia-es/          # MetroBus, EMT, C6, Metrovalencia
+    └── madrid-es/            # Cercanías (vivo) + Metro/EMT programado
 ```
 
-## Probar (València)
+## Probar
 
 ```bash
 cd pieces/mobility
 python3 tools/mobility.py validate valencia-es --live
+python3 tools/mobility.py validate madrid-es --live
 python3 tools/mobility.py reply valencia-es "próximo bus suecia"
-python3 tools/mobility.py ask valencia-es "cuánto falta para el tren en cabanyal"
-python3 tools/mobility.py board valencia-es emt 169 81
-python3 tools/mobility.py scan valencia-es
-python3 tools/mobility.py bot valencia-es   # REPL, sin modelo
+python3 tools/mobility.py reply madrid-es "próximo tren atocha"
+python3 tools/mobility.py bot valencia-es
 ```
 
-`validate --live` ejecuta los `checks[]` del pack contra las APIs reales (smoke test = verificador distinto del que redacta el pack).
+`validate --live` ejecuta los `checks[]` del pack contra APIs reales.
+
+## Hábitats (dualidad)
+
+| Empaquetado | Cómo |
+|-------------|------|
+| **B — lite** | `cd runtime && npm run telegram:tranxp` · `TRANXP_TELEGRAM_BOT_TOKEN` + `TRANXP_CITY_PACK` |
+| **A — tool** | Bot URUIRU: `/tranx próximo bus suecia` · `capabilities` en manifiesto |
+
+Helper: [`runtime/src/mobility-reply.mjs`](../../runtime/src/mobility-reply.mjs).  
+Plantilla lite: [`docs/manifest/examples/unit-tranxp-lite.json`](../../docs/manifest/examples/unit-tranxp-lite.json).
 
 ## Qué es genérico y qué es del pack
 
-| Harness (igual para todas las ciudades) | City Pack (datos locales) |
+| Harness (igual para todas) | City Pack (datos locales) |
 |---|---|
-| Confirmar ciudad → red → medio antes de buscar | `routing.rules`: palabras → red, parada y línea por defecto |
-| Vivo vs programado; nunca vender GTFS como tiempo real | `networks.*.live` (adapter) y `scheduled[]` (PDF, GTFS, planner) |
-| Adaptadores reutilizables: `softour-metrobus`, `transitapp-bgtfs`, `radardetrenes`, `custom` | Qué adapter usa cada red y con qué IDs |
-| Descubrimiento: web oficial → iframe/XHR → agregador → escribir al pack | `discovery` (permiso, política, write-back) y `pitfalls[]` |
-| Checks y salida uniforme (`Row`: línea, destino, minutos, hora, ⚡) | `favorites[]`, `checks[]` |
+| Confirmar ciudad → red → medio | `routing.rules` → red, parada, línea |
+| Vivo ≠ programado | `networks.*.live` / `scheduled[]` |
+| Adapters: softour-metrobus, transitapp-bgtfs, radardetrenes, custom | IDs y pitfalls por ciudad |
+| Checks + `reply` sin LLM | `favorites[]`, `checks[]`, `incidents` |
 
-Añadir ciudad = copiar `_template`, rellenar, `validate`. Añadir adapter = una función en `mobility.py` con la misma salida `Row`.
+Añadir ciudad = copiar `_template`, rellenar, `validate`.
 
 ## Relación con el cuerpo ageNFT
 
-- **Hoy:** pieza local. `mobility.py reply` / `bot` es el modo **básico** (cero LLM). El skill Hermes es el modo **pro** (modelo del owner vía hose).
-- **Cable futuro (📐, sin tocar schema del manifiesto aún):** referencia tipo `capabilities: [{ "id": "mobility/v0", "packs": ["valencia-es"] }]`, los packs en Biblioteca (IPFS) y el skill en M3. Viaja con el token al vender/transferir.
-- **AgeNFT vertical TranXp (nombre provisional):** un Unit cuyo default es el bot de reglas; el cerebro LLM es opt-in. Ver [`docs/research/mobility-pieces.md`](../../docs/research/mobility-pieces.md).
+- Modo **básico:** `reply` / bot Telegram — cero LLM.
+- Modo **pro:** skill Hermes + hose del owner.
+- Capacidad en Unit-Mainnet: `capabilities[{ id: mobility/v0 }]` (esquema v1).
+- Mint del Unit lite: más adelante; la pieza ya funciona sin NFT.
 
-## Fuente de los datos València
+## Fuente València
 
-Descubierto y verificado en Arnés (`plantillas/camino/docs/04-metgo-api-vivo.md`, `03-enrutado-preguntas.md`) y skills vivos del VPS (`board_c6.py`, `emt_board.py`). El pack es la versión portable de ese conocimiento.
+Arnés `plantillas/camino/` · skills VPS (`board_c6.py`, `emt_board.py`, `metgo_board.py`).

@@ -1,0 +1,142 @@
+{
+  "type": "ageNFT/v1",
+  "name": "TranXp-lite",
+  "description": "Plantilla Unit lite — movilidad (TranXp). Canon = mobility/v0; cerebro off por defecto. Sin mint todavía; mismo schema que Unit-Mainnet.",
+  "createdAt": "2026-09-19T21:00:00.000Z",
+  "updatedAt": "2026-09-19T21:00:00.000Z",
+
+  "identity": {
+    "chain": "eip155:8453",
+    "registry": "0x0000000000000000000000000000000000000000",
+    "agentId": 0,
+    "nft": {
+      "standard": "erc721",
+      "contract": "0x0000000000000000000000000000000000000000",
+      "tokenId": "0"
+    },
+    "lab": {
+      "stack": "ageNFT-Registry/v1",
+      "legacy": "Plantilla pre-mint — placeholders de identidad"
+    }
+  },
+
+  "treasury": {
+    "type": "erc6551",
+    "address": "0x0000000000000000000000000000000000000000",
+    "chain": "base",
+    "preferredAssets": [
+      {
+        "symbol": "USDC",
+        "network": "eip155:8453",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+      }
+    ]
+  },
+
+  "runtime": {
+    "engine": "custom",
+    "adapter": "agenft-mobility-reply/v0",
+    "hosting": { "primary": "local", "fallbacks": ["vps"] }
+  },
+
+  "organs": {
+    "brain": {
+      "primary": {
+        "provider": "none",
+        "endpoint": "http://127.0.0.1/disabled",
+        "model": "none",
+        "network": "eip155:8453"
+      },
+      "fallbacks": [],
+      "routing": { "priority": ["hose", "dormant"] },
+      "hose": {
+        "enabled": false,
+        "note": "Modo pro opt-in: enchufar llmRouter del owner",
+        "llmRouter": {
+          "preset": "freellmapi",
+          "endpoint": "http://127.0.0.1:3001",
+          "model": "auto",
+          "apiKeyEnv": "HERMES_CUSTOM_FREELLMAPI_API_KEY"
+        }
+      }
+    },
+    "memory": {
+      "format": "agenft-memory-capsule/v1",
+      "transferPolicy": "owner-choice-at-transfer",
+      "vault0NeverOnChain": true,
+      "operational": {
+        "provider": "custom",
+        "primary": null,
+        "fallbacks": []
+      }
+    },
+    "doctor": {
+      "enabled": true,
+      "probeIntervalSec": 900,
+      "autoFailover": false,
+      "autoTransplant": [],
+      "requireOwnerApproval": ["runtime", "treasury"],
+      "maxTransplantsPerDay": 1
+    },
+    "reflexes": {
+      "circuitBreaker": { "maxRequestsPerMinute": 30, "maxTxPerMinute": 1 },
+      "allowedContracts": []
+    },
+    "hands": { "enabled": [], "dex": "aerodrome" }
+  },
+
+  "budget": {
+    "currency": "USD",
+    "profile": "dormant",
+    "minOperatingBalanceUsdc": "0.00",
+    "organs": {
+      "brain": {
+        "limits": {
+          "perDay": { "requests": 0, "usd": "0.00" },
+          "perMonth": { "usd": "0.00" }
+        },
+        "onCapExceeded": "dormant",
+        "assumptions": { "avgCostPerRequestUsd": 0 }
+      },
+      "gas": {
+        "limits": { "perDay": { "usd": "0.00" } },
+        "onCapExceeded": "pause_non_vital_tx"
+      }
+    },
+    "global": {
+      "perDayUsdHardCap": "0.00",
+      "onGlobalCapExceeded": "dormant_except_doctor_probes"
+    }
+  },
+
+  "gateways": {
+    "policy": {
+      "priority": "reach-first",
+      "recommended": ["telegram"],
+      "sovereignDefault": []
+    },
+    "chat": [
+      {
+        "platform": "telegram",
+        "enabled": true,
+        "handle": "tranxp-bot",
+        "credentials": "runtime-only",
+        "sovereign": false
+      }
+    ]
+  },
+
+  "capabilities": [
+    {
+      "id": "mobility/v0",
+      "enabled": true,
+      "mode": "lite-canon",
+      "packs": ["valencia-es", "madrid-es"],
+      "path": "pieces/mobility",
+      "note": "Alma del Unit: telegram-tranxp-bot.mjs → mobility.py reply. Sin LLM."
+    }
+  ],
+
+  "x402Support": false,
+  "supportedTrust": ["reputation"]
+}

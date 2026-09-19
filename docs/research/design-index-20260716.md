@@ -15,7 +15,7 @@
 | 1.4 | Alquiler puntual / tarea fija / B2A | [`voice-external-income.md`](voice-external-income.md) |
 | 1.5 | Gastos acumulados visibles en Dashboard | [`owner-dashboard.md`](owner-dashboard.md) · [`organ-service-tiers.md`](organ-service-tiers.md) |
 | 1.6 | Piezas trading (estrategias + visor dragón), cable futuro a `hands` | [`trading-pieces.md`](trading-pieces.md) |
-| 1.7 | TranXp (movilidad): bot básico sin LLM + City Packs + scanner incidencias | [`mobility-pieces.md`](mobility-pieces.md) |
+| 1.7 | TranXp: pieza + Unit lite (dualidad); bot sin LLM; City Packs; scanner | [`mobility-pieces.md`](mobility-pieces.md) |
 
 ---
 
