@@ -24,3 +24,4 @@ target/
 contracts/lib/
 contracts/out/
 contracts/cache/
+pieces/mobility/packs/*/incidents-cache.json

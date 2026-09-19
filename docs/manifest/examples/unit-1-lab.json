@@ -63,6 +63,16 @@
       "fallbacks": [],
       "routing": {
         "priority": ["opportunistic", "sovereign", "hose", "dormant"]
+      },
+      "hose": {
+        "enabled": true,
+        "note": "Credentials stored runtime-only, never in public manifest",
+        "llmRouter": {
+          "preset": "freellmapi",
+          "endpoint": "http://127.0.0.1:3001",
+          "model": "auto",
+          "apiKeyEnv": "HERMES_CUSTOM_FREELLMAPI_API_KEY"
+        }
       }
     },
     "memory": {

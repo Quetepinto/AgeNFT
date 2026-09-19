@@ -4,6 +4,56 @@ Cosas dichas en chat, para no perderlas. El agente responde debajo con lo que ha
 
 ---
 
+## 2026-09-19
+
+### TranXp: bot sin modelo + modo pro + scanner de incidencias
+
+**Pedido:** que funcione de forma básica sin IA si el pack de la ciudad está relleno a mano; modo opcional con el modelo preferido del usuario (funciones pro); y una parte que escanee noticias de incidencias/retrasos (esbozo Hermescortes / Camino).
+
+**Hoy:**
+
+| Pieza | Dónde | Estado |
+|-------|-------|--------|
+| Bot básico (cero LLM) | `mobility.py reply` / `bot` | ✅ v0 |
+| Modo pro (hose del owner) | skill `mobility-harness` + `llmRouter` | 📐 no cableado a un hábitat |
+| Scanner incidencias | `incidents.sources` + `scan` | ✅ RSS/Atom; web solo anotada |
+| Hermescortes | — | No está en este repo ni en Arnés con ese nombre. Candidato: cron Camino `transporte-valencia-semanal`. |
+
+Hogar: [`research/mobility-pieces.md`](research/mobility-pieces.md).
+
+---
+
+## 2026-09-18
+
+### Dashboard trading como pieza AgeNFT + visor dragón
+
+**Pedido:** el dashboard de estrategias sea parte de AgeNFT (economía autosustentable cuando las piezas estén listas). Visor de gráficos con pinta de dragón buscando liquidez (alimento). Liquidez en tiempo real puede esperar.
+
+**Hoy:**
+
+| Pieza | Dónde | ¿Cableada a TBA? |
+|-------|-------|------------------|
+| Biblioteca de estrategias | `TRADING` http://127.0.0.1:8788/ | No |
+| Visor dragón (sintético) | `TRADING` `/dragon/` | No |
+| `organs.hands.enabled` Unit-Mainnet | `[]` | Sigue vacío |
+
+Clasificado 📐 / cable ⏸. Hogar: [`research/trading-pieces.md`](research/trading-pieces.md).
+
+---
+
+## 2026-09-07
+
+### OpenClaw 2.0 como arnés alternativo a Hermes
+
+**Decisión:** solo anotado como **opción**. No implementar ahora.
+
+- Host opcional (skill → `runTurn()`), no sustituto de Hermes en Unit-Mainnet.
+- **No** plugin `AgentHarnessV2` (capa equivocada).
+- No instalar 2.0 en el VPS de producto ni mezclar con Hermesclaw.
+- Nota canónica: [`research/runtime-adapters.md`](research/runtime-adapters.md) § OpenClaw 2.0.
+
+---
+
 ## 2026-08-28
 
 ### 1. ¿Qué se puede editar en el contrato una vez minteado?
@@ -62,10 +112,10 @@ Hygiene **no sustituye** una auditoría humana profesional si hay mucho valor en
 |---|-------|---------|
 | P1 | **Matrix → URUIRU** | Cablear bot Matrix al Motor. MXID objetivo: `@uruiru:bo5bvc.duckdns.org` (display name **URUIRU**, no “Unit-Mainnet”). Requiere `matrix-bot.mjs` + registro en Synapse + edge gateway/runtime. |
 | P2 | **Telegram nombre URUIRU** | Bot usa `AGENFT_TELEGRAM_DISPLAY_NAME=URUIRU`; al arrancar llama `setMyName` + `setMyDescription`. El **@username** (`Unit1_agent_bot`) solo cambia en @BotFather si quieres otro handle. |
-| P3 | **OmniRoute hose (lab)** | Gateway gratis en `:20128` para pruebas sin gastar TBA. Ver [`docs/research/lab/omniroute-hose.md`](research/lab/omniroute-hose.md). |
+| P3 | **LLM router hose (lab)** | Preset default **FreeLLMAPI** `:3001` / `auto`; OmniRoute/OpenRouter/Ollama/custom opcionales. Ver [`docs/research/lab/llm-router-hose.md`](research/lab/llm-router-hose.md). |
 | P4 | **Hermesclaw + OmniRoute** | Perfil opcional apuntando a `http://127.0.0.1:20128/v1` + `auto/best-free`. Script: `scripts/omniroute/wire-hermesclaw.sh`. |
 
 ### ¿Qué es “hose” (manguera)?
 
-Metáfora del manifiesto ageNFT: el **owner enchufa su propia manguera** de LLM (API key, OmniRoute, Ollama…) al agente. **No sale USDC de la TBA** — es tier **E / lab**, no el cerebro soberano de producto (tx402). Útil para probar barato; el NFT “de verdad” sigue pagando con su cartera.
+Metáfora del manifiesto ageNFT: el **owner enchufa su propia manguera** de LLM (`llmRouter`: FreeLLMAPI, OmniRoute, Ollama, OpenRouter, custom) al agente. **No sale USDC de la TBA** — es tier **E / lab**, no el cerebro soberano de producto (tx402). Útil para probar barato; el NFT “de verdad” sigue pagando con su cartera.
 

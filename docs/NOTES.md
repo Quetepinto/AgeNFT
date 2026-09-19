@@ -6,6 +6,45 @@ Bitácora de decisiones. Docs temáticos en `docs/research/` y `docs/decisions/`
 
 ---
 
+## 2026-09-19
+
+### TranXp — bot básico sin modelo + scanner de incidencias
+
+- **Sí es posible** el mini-agente sin IA: no es un LLM pequeño, es un bot de reglas (`mobility.py reply` / `bot`) sobre el City Pack.
+- Modo **pro** opcional = skill Hermes + hose `llmRouter` del owner (descubrimiento, preguntas vagas). Default = básico.
+- Scanner de avisos de red: `incidents.sources` en el pack + `scan` (RSS/Atom a caché; web sin scrapear HTML). Banner en `reply` si la caché está fresca.
+- Esbozo Camino: vigilante `transporte-valencia-semanal` + Adif/FGV. **Hermescortes** no está en este repo con ese nombre; se engancha como `source` cuando aparezca.
+- Siguiente: hábitat (Telegram/Matrix) con pack fijo, no mintear el Unit todavía.
+
+### Pieza movilidad — harness + City Packs (prototipo València)
+
+- Nueva pieza `pieces/mobility/`: skill genérico `mobility-harness` + `tools/mobility.py` (stdlib) + `schema/city-pack.schema.json`.
+- Pack `valencia-es`: MetroBus (API Met Go descubierta en el iframe de metgovalencia.com), EMT (TransitApp), C6 (RadarDeTrenes), Metrovalencia (programado). `validate --live` 3/3.
+- Capa: **M3 Capability + B Biblioteca**. Sin cable a manifiesto ni TBA todavía.
+- Doc: [`research/mobility-pieces.md`](research/mobility-pieces.md) · taxonomía actualizada.
+- Origen: proyecto Camino (Arnés `plantillas/camino/`, Hermes VPS).
+
+---
+
+## 2026-09-18
+
+### Piezas trading → AgeNFT (sin cablear TBA)
+
+- Dashboard de estrategias (Mint) = pieza `trading-strategies/v1`: política futura de `hands`.
+- Visor dragón = pieza `dragon-liquidity/v0`: liquidez como alimento; feed **sintético**.
+- Independientes: se enchufan juntas o por separado cuando el cuerpo esté listo.
+- Economía autosustentable: sigue bloque 7.7 **off** hasta opt-in humana.
+- Doc: [`research/trading-pieces.md`](research/trading-pieces.md) · taxonomía actualizada.
+
+### LLM router (hose) — FreeLLMAPI default
+
+- Esquema: `$defs/llmRouter` + `organs.brain.hose.llmRouter` (presets `freellmapi` | `omniroute` | `openrouter` | `ollama` | `custom`)
+- Runtime: `brain-hose.mjs` → `resolveHoseConfig` / `LLM_ROUTER_PRESETS`; default lab **FreeLLMAPI** `:3001` / `auto`
+- Docs: [`lab/llm-router-hose.md`](research/lab/llm-router-hose.md) · OmniRoute histórico redirige desde [`omniroute-hose.md`](research/lab/omniroute-hose.md)
+- Ejemplos: `unit-mainnet.json`, `unit-1-lab.json` · Lab Studio opción `llm-router`
+
+---
+
 ## 2026-08-31
 
 ### Bloque 3.1–3.2 cableado + hose lab (VPS)
@@ -86,7 +125,7 @@ Bitácora de decisiones. Docs temáticos en `docs/research/` y `docs/decisions/`
 
 - **Un solo tipo de ageNFT** — el motor no define otro contrato; campo `runtime.engine` en manifiesto.
 - **MVP:** Hermes + `run-turn.mjs` (Telegram, Doctor, skill `agenft-core`, TBA x402 ✅).
-- **OpenClaw:** segundo adapter recomendado (workspace/Cursor); llama al mismo `runTurn()` — no reimplementar protocolo.
+- **OpenClaw:** segundo adapter recomendado (workspace/Cursor); llama al mismo `runTurn()` — no reimplementar protocolo. **2.0 (2026.8.1) anotado 2026-09-07 como opción** — skill delgado, no `AgentHarnessV2`; no sustituye Hermes; no implementar aún.
 - **ElizaOS:** Fase 5 opcional — swap/bridge/ERC-8004; spike: gap TBA 6551 ↔ AgentAccountV2; **no** migrar solo por x402.
 - Elección en mint wizard o post-transfer; trial vende manifiesto/memoria/biblioteca, no el laptop del vendedor.
 - Doc: [`runtime-adapters.md`](runtime-adapters.md).
@@ -213,7 +252,7 @@ Hitos clave:
 - [x] Chain producto → **Base mainnet**
 - [ ] Spec + deploy ageNFT Registry
 - [ ] TBA firma x402 (session key vs AgentAccountV2)
-- [ ] OpenClaw adapter (skill → run-turn) — post-MVP
+- [ ] OpenClaw adapter (skill → run-turn) — post-MVP · 2.0 anotado como opción 2026-09-07 (no AgentHarnessV2)
 - [ ] ElizaOS adapter — Fase 5 (swap/8004)
 - [ ] ERC-8004 en mint público (Fase 4)
 

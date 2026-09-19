@@ -409,6 +409,15 @@ const OPTION_META = {
     'hygieneGate',
     'reconfigTransfer',
   ],
+  'llm-router': [
+    'free',
+    'selfhost',
+    'oss',
+    'hoseOwner',
+    'experimental',
+    'dormant',
+    'optInExplicit',
+  ],
   'lab-local': ['essentialE1', 'free', 'selfhost', 'privacyHigh', 'optionalOrgan', 'labLegacy'],
   'toju-ipfs': [
     'essentialE1',
@@ -667,6 +676,10 @@ const OPTION_META = {
 
 /** Etiqueta legible en esquema y desplegable (protocolo + pin). */
 export const OPTION_LABELS = {
+  tx402: 'tx402 (TBA)',
+  'openrouter-fallback': 'OpenRouter (fallback)',
+  'ollama-local': 'Ollama local',
+  'llm-router': 'LLM router (hose)',
   'lab-local': 'Lab local (disco)',
   'toju-ipfs': 'toju + IPFS',
   'kubo-ipfs': 'kubo + IPFS',
@@ -705,7 +718,7 @@ const NODE_BLURBS = {
   senses:
     'Los «sentidos» del agente: convierte voz, imágenes o texto escaneado en información que el Cerebro puede usar (STT, OCR, visión).',
   brain:
-    'El Cerebro piensa y redacta respuestas. Elige el modelo de IA y cómo se paga cada inferencia (x402, OpenRouter, Ollama local, etc.).',
+    'El Cerebro piensa y redacta respuestas. Elige el modelo de IA y cómo se paga cada inferencia (x402, LLM router hose, OpenRouter, Ollama local, etc.).',
   memory:
     'Dónde viven conversaciones, archivos y recuerdos del agente: disco del VPS, IPFS con pin, Arweave u otras capas offchain.',
   presence:
@@ -739,6 +752,7 @@ const OPTION_BLURBS = {
   tx402: 'Inferencias pagadas con x402 desde la TBA — modelo soberano en mainnet.',
   'openrouter-fallback': 'Respaldo vía OpenRouter (API centralizada) si x402 no está disponible.',
   'ollama-local': 'Modelo local con Ollama en tu máquina — privado, sin nube.',
+  'llm-router': 'Manguera lab: LLM router OpenAI-compatible (FreeLLMAPI por defecto; OmniRoute/OpenRouter/Ollama/custom). La TBA no paga.',
   'lab-local': 'Memoria solo en disco del VPS (carpeta lab/) — rápido para desarrollo.',
   'toju-ipfs': 'Contenido en IPFS con pin en toju — capa producto recomendada.',
   'kubo-ipfs': 'Nodo IPFS kubo self-hosted — tú mantienes el pin.',
@@ -854,7 +868,7 @@ const DEFAULT_GATEWAYS = [
 const RUNTIME_LIVE_OPTIONS = {
   nft: new Set(['base-mainnet']),
   runtime: new Set(['hermes']),
-  brain: new Set(['tx402', 'openrouter-fallback']),
+  brain: new Set(['tx402', 'openrouter-fallback', 'llm-router', 'ollama-local']),
   memory: new Set(['lab-local', 'toju-ipfs', 'kubo-ipfs', 'w3stor-ipfs', 'export-only', 'arweave']),
   doctor: new Set(['probe', 'probe-900s']),
   gateway: new Set(['telegram']),
@@ -1478,7 +1492,7 @@ const DEFAULT_EDGES = [
 const NODE_OPTIONS = {
   nft: ['base-mainnet', 'sepolia-lab', 'github-pages-manifest'],
   runtime: ['hermes', 'openclaw-adapter', 'akash-runtime'],
-  brain: ['tx402', 'openrouter-fallback', 'ollama-local'],
+  brain: ['tx402', 'llm-router', 'openrouter-fallback', 'ollama-local'],
   memory: ['lab-local', 'toju-ipfs', 'kubo-ipfs', 'w3stor-ipfs', 'arweave', 'export-only'],
   doctor: ['probe', 'probe-900s', 'auto-transplant'],
   gateway: DEFAULT_GATEWAYS,

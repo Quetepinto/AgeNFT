@@ -21,11 +21,10 @@ cp -a "$CONFIG" "$BACKUP_DIR/config.yaml.pre-omniroute-$TS"
 [[ -f "$ENV_FILE" ]] && cp -a "$ENV_FILE" "$BACKUP_DIR/env.pre-omniroute-$TS"
 
 python3 - <<PY
-import pathlib, re, yaml
+import pathlib, yaml
 
 config_path = pathlib.Path("$CONFIG")
-text = config_path.read_text()
-data = yaml.safe_load(text) or {}
+data = yaml.safe_load(config_path.read_text()) or {}
 
 data.setdefault("model", {})
 data["model"]["provider"] = "custom:omniroute"
@@ -34,8 +33,20 @@ data["model"]["default"] = "$OMNI_MODEL"
 data["model"]["context_length"] = data["model"].get("context_length") or 65536
 data["model"]["key_env"] = "HERMES_CUSTOM_OMNIROUTE_API_KEY"
 
+cps = data.get("custom_providers")
+if not isinstance(cps, list):
+    cps = []
+cps = [e for e in cps if str((e or {}).get("name", "")).lower() not in {"omniroute", "omni route"}]
+cps.append({
+    "name": "OmniRoute",
+    "base_url": "$OMNI_ENDPOINT".rstrip("/"),
+    "key_env": "HERMES_CUSTOM_OMNIROUTE_API_KEY",
+    "model": "$OMNI_MODEL",
+})
+data["custom_providers"] = cps
+
 config_path.write_text(yaml.dump(data, default_flow_style=False, allow_unicode=True, sort_keys=False))
-print("config.yaml → OmniRoute ($OMNI_ENDPOINT, $OMNI_MODEL)")
+print("config.yaml → OmniRoute ($OMNI_ENDPOINT, $OMNI_MODEL) + custom_providers")
 PY
 
 touch "$ENV_FILE"

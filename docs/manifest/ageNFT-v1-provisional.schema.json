@@ -174,10 +174,11 @@
 
     "hose": {
       "type": "object",
-      "description": "Manguera owner — NO en chain; runtime only. Opcional en manifiesto público.",
+      "description": "Manguera owner — LLM router OpenAI-compatible; NO en chain; runtime only. Opcional en manifiesto público.",
       "properties": {
         "enabled": { "type": "boolean", "default": false },
-        "note": { "type": "string", "const": "Credentials stored runtime-only, never in public manifest" }
+        "note": { "type": "string", "const": "Credentials stored runtime-only, never in public manifest" },
+        "llmRouter": { "$ref": "#/$defs/llmRouter" }
       }
     },
 
@@ -362,8 +363,43 @@
               "items": { "type": "string", "enum": ["opportunistic", "sovereign", "hose", "dormant"] }
             }
           }
+        },
+        "hose": {
+          "type": "object",
+          "description": "Tier E lab: owner conecta un LLM router; la TBA no paga. Ver $defs/llmRouter.",
+          "properties": {
+            "enabled": { "type": "boolean", "default": false },
+            "note": { "type": "string" },
+            "llmRouter": { "$ref": "#/$defs/llmRouter" }
+          }
         }
       }
+    },
+
+    "llmRouter": {
+      "type": "object",
+      "description": "LLM router = endpoint OpenAI-compatible que agrega modelos. Presets runtime: freellmapi (default lab), omniroute, openrouter, ollama, custom. Overrides: AGENFT_HOSE_PRESET / ENDPOINT / MODEL / API_KEY.",
+      "properties": {
+        "preset": {
+          "type": "string",
+          "enum": ["freellmapi", "omniroute", "openrouter", "ollama", "custom"],
+          "default": "freellmapi",
+          "description": "Preset nombrado; el owner puede cambiarlo o usar custom + endpoint/model."
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Base URL del router (sin path /v1/chat/completions obligatorio). Ej. http://127.0.0.1:3001"
+        },
+        "model": {
+          "type": "string",
+          "description": "Modelo o alias del router (ej. auto, auto/best-free)."
+        },
+        "apiKeyEnv": {
+          "type": "string",
+          "description": "Nombre de variable de entorno con la API key. Nunca poner la key en el manifiesto público."
+        }
+      },
+      "additionalProperties": false
     },
 
     "memoryOrgan": {

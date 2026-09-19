@@ -1,6 +1,6 @@
 # Runtime adapters — Hermes, OpenClaw, ElizaOS
 
-> **Estado:** Diseño · **Jul-2026**  
+> **Estado:** Diseño · **Jul-2026** · nota OpenClaw 2.0 **2026-09-07**  
 > Responde: ¿un ageNFT distinto por motor? ¿OpenClaw en lugar de Hermes?
 
 ---
@@ -115,6 +115,18 @@ OpenClaw encaja con la tesis “wrapper con valor” (vídeo G Bascunana): ageNF
 
 **Ventaja:** el usuario que ya usa OpenClaw no instala Hermes.  
 **Coste:** mantener segundo adapter + docs de instalación.
+
+### OpenClaw 2.0 (v2026.8.1) — anotado 2026-09-07
+
+**Opción, no implementación.** Sigue siendo el segundo host previsto; no sustituye Hermes en Unit-Mainnet.
+
+| Hacer | No hacer |
+|-------|----------|
+| Skill delgado → `runTurn()` (mismo patrón que `agenft-core`) | Plugin `AgentHarnessV2` — SPI de runtimes nativos (Codex/Pi), no de protocolo ageNFT |
+| Apagar dreaming / memoria nativa 2.0 | Mezclar URUIRU con Hermesclaw ni sesiones cloud/multiplayer |
+| Lab / owners que ya tienen Gateway | Instalar 2.0 en el VPS de producto hasta que asiente el release |
+
+SKILL.md no cambia en 2.0; el port es barato cuando toque. Preset mint: `docs/backups/openclaw.json`.
 
 ---
 

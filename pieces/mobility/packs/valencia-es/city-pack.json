@@ -1,0 +1,137 @@
+{
+  "type": "agenft-city-pack/v0",
+  "id": "valencia-es",
+  "name": "València (España)",
+  "country": "ES",
+  "timezone": "Europe/Madrid",
+  "language": "es",
+  "updatedAt": "2026-09-19",
+  "maintainers": ["krallo"],
+  "discovery": {
+    "allowed": true,
+    "policy": "official-first",
+    "writeBack": "propose-diff",
+    "notes": "Buscadores desde VPS devuelven ruido; ir a la web oficial del operador. Si la web embebe un iframe, mirar de dónde saca los datos (caso Met Go → api.softoursistemas.com)."
+  },
+  "networks": {
+    "metrobus": {
+      "name": "MetroBus (Met Go / ATMV)",
+      "mode": "bus",
+      "scope": "interurban",
+      "operator": "Generalitat Valenciana / Softour Sistemas",
+      "keywords": ["metrobus", "met go", "112", "112a", "112b", "suecia", "suècia", "el puig bus", "port saplatja", "interurbano", "ricardo micó"],
+      "live": {
+        "adapter": "softour-metrobus",
+        "base": "https://api.softoursistemas.com/metrobus",
+        "note": "GET /estimacion/ocupacion/{stop_code} → minutos, ocupación, GPS. Catálogo: GET /old/stops"
+      },
+      "scheduled": [
+        { "type": "pdf", "url": "https://metgovalencia.com/", "note": "PDF por línea enlazado en la home (Linea_112.pdf). Solo publica hora en 3 paradas." },
+        { "type": "gtfs", "url": "https://dadesobertes.gva.es/api/3/action/package_show?id=tra-hyr-atmv-horaris-i-rutes", "note": "Excluye zona metropolitana: la L112 NO está aquí." },
+        { "type": "planner", "url": "https://gvenruta.gva.es", "note": "Planificador multimodal oficial (pruebas)" }
+      ],
+      "stops": {
+        "168": { "name": "Blasco Ibáñez - Suècia", "lines": ["112A", "114A", "116A", "116B"], "direction": "→ El Puig", "lat": 39.476261, "lon": -0.356927 },
+        "166": { "name": "Blasco Ibáñez - Facultat de Geografia i Història", "lines": ["112A"], "lat": 39.477482, "lon": -0.361295 }
+      },
+      "pitfalls": [
+        "stop_code Met Go ≠ código de parada EMT (168 Met Go no es 169 EMT).",
+        "«112» en Madrid es EMT Madrid; «112A» València es MetroBus.",
+        "minutesToArrival 0 = llegando o en parada, no «no pasa».",
+        "La misma parada devuelve otras líneas (114A, 116A); filtrar por la línea preguntada."
+      ]
+    },
+    "emt": {
+      "name": "EMT València (urbano)",
+      "mode": "bus",
+      "scope": "urban",
+      "operator": "EMT València",
+      "keywords": ["emt", "urbano", "l30", "l31", "l81", "l93", "169", "1085", "1211", "bèlgica", "belgica"],
+      "live": {
+        "adapter": "transitapp-bgtfs",
+        "base": "https://bgtfs.transitapp.com/v4/public/stop_departures",
+        "linePage": "https://transitapp.com/en/region/val%C3%A8ncia/emt/bus-{line}",
+        "note": "emtvalencia.es bloquea el VPS (firewall). TransitApp expone el feed oficial; is_real_time marca ⚡."
+      },
+      "scheduled": [
+        { "type": "web", "url": "https://www.emtvalencia.es", "note": "No accesible desde VPS" }
+      ],
+      "stops": {
+        "169": { "name": "Blasco Ibáñez / Bèlgica", "lines": ["30", "31", "71", "81"], "lat": 39.475828, "lon": -0.354836, "globalIds": { "30": "EMTVCES:3028", "31": "EMTVCES:3031", "81": "EMTVCES:5319" } },
+        "1085": { "name": "Aragó / Xile", "lines": ["10", "12", "93"], "lat": 39.470171, "lon": -0.358289, "globalIds": { "10": "EMTVCES:4440", "12": "EMTVCES:4440" } },
+        "764": { "name": "Plaça d'Amèrica / Pont d'Aragó", "lines": ["4", "10", "23"], "globalIds": { "4": "EMTVCES:4312", "10": "EMTVCES:1313", "23": "EMTVCES:4312" } },
+        "1211": { "name": "Blasco Ibáñez (imparell) / José María Haro", "lines": ["31", "81"], "lat": 39.471214, "lon": -0.337308, "globalIds": { "31": "EMTVCES:4837", "81": "EMTVCES:2949" } }
+      },
+      "pitfalls": [
+        "TransitApp renumera: EMTVCES:169 NO es la parada EMT 169. Una parada física tiene un global_stop_id distinto por línea.",
+        "Blasco Ibáñez tiene paradas por sentido (parell/imparell): indicar siempre la dirección."
+      ]
+    },
+    "renfe-c6": {
+      "name": "Cercanías València C6",
+      "mode": "rail",
+      "scope": "regional",
+      "operator": "Renfe",
+      "keywords": ["c6", "cercanías", "cercanias", "tren", "renfe", "cabanyal", "nord", "el puig tren", "estació del nord"],
+      "live": {
+        "adapter": "radardetrenes",
+        "base": "https://radardetrenes.com/api/v1/stations/{station}/board-renfe",
+        "lineFilter": "C6",
+        "note": "~30 s de retraso. Máx 20 salidas. renfe.com y WS ADIF bloqueados desde VPS."
+      },
+      "scheduled": [
+        { "type": "web", "url": "https://www.renfe.com/es/es/cercanias/cercanias-valencia", "note": "403 desde VPS; patrón C6 :23 y :57 cada 30 min hacia València" }
+      ],
+      "stops": {
+        "65007": { "name": "El Puig", "direction": "→ València (trenes que paran en Cabanyal)" },
+        "65003": { "name": "València-Cabanyal", "direction": "→ El Puig" },
+        "65000": { "name": "València-Estació del Nord" }
+      },
+      "pitfalls": [
+        "Tren con hora estimada superada que sigue en lista = retrasado en camino, no fantasma."
+      ]
+    },
+    "metrovalencia": {
+      "name": "Metrovalencia (FGV)",
+      "mode": "metro",
+      "scope": "urban",
+      "operator": "FGV",
+      "keywords": ["metro", "l3", "l4", "metrovalencia", "fgv", "tranvía", "tranvia"],
+      "live": null,
+      "scheduled": [
+        { "type": "web", "url": "https://www.metrovalencia.es", "note": "Publica incidencias en tiempo real; sin adapter aún." }
+      ],
+      "pitfalls": ["No responder metro con datos de bus (GTFS ATMV no cubre FGV)."]
+    }
+  },
+  "routing": {
+    "rules": [
+      { "match": ["suecia", "suècia", "112", "metrobus", "met go", "el puig bus", "port saplatja"], "network": "metrobus", "defaultStop": "168", "defaultLine": "112A", "note": "Krallo en Suècia coge MetroBus, no EMT" },
+      { "match": ["c6", "cercanías", "cercanias", "tren", "renfe", "cabanyal"], "network": "renfe-c6", "defaultStop": "65003" },
+      { "match": ["emt", "urbano", "l30", "l31", "l81", "l93", "169", "1085", "1211"], "network": "emt", "defaultStop": "169" },
+      { "match": ["metro", "l3", "l4", "metrovalencia", "tranvía", "tranvia"], "network": "metrovalencia" }
+    ],
+    "liveTriggers": ["próximo", "proximo", "cuánto falta", "cuanto falta", "ahora", "en vivo", "cuándo pasa", "cuando pasa", "ya viene"],
+    "scheduledTriggers": ["mañana", "a las", "horario", "primer", "último", "ultimo", "domingo", "sábado", "sabado"],
+    "ambiguous": "ask-network"
+  },
+  "incidents": {
+    "maxAgeMin": 30,
+    "sources": [
+      { "id": "metrovalencia", "network": "metrovalencia", "type": "web", "url": "https://www.metrovalencia.es", "note": "Avisos en portada FGV; parser HTML pendiente. Camino ya lo señalaba." },
+      { "id": "adif-red", "network": "renfe-c6", "type": "web", "url": "https://www.adif.es/w/estado-de-la-red", "note": "Cortes/obras red estatal. En Camino: consultar siempre en larga distancia." },
+      { "id": "metgo-home", "network": "metrobus", "type": "web", "url": "https://metgovalencia.com/", "note": "Avisos MetroBus si salen en home; sin feed conocido." }
+    ]
+  },
+  "favorites": [
+    { "label": "Suècia → El Puig (MetroBus)", "network": "metrobus", "stop": "168", "line": "112A" },
+    { "label": "Cabanyal → El Puig (C6)", "network": "renfe-c6", "stop": "65003" },
+    { "label": "El Puig → València (C6)", "network": "renfe-c6", "stop": "65007" },
+    { "label": "EMT 169 L81", "network": "emt", "stop": "169", "line": "81" }
+  ],
+  "checks": [
+    { "name": "metgo-suecia", "network": "metrobus", "stop": "168" },
+    { "name": "c6-cabanyal", "network": "renfe-c6", "stop": "65003" },
+    { "name": "emt-169-l81", "network": "emt", "stop": "169", "line": "81" }
+  ]
+}

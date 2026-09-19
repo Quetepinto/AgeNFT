@@ -76,7 +76,7 @@
 | **Sentidos** (oídos + ojos) | E2 | ⏳ | STT, OCR, visión, traducción — ver [`senses-organ.md`](senses-organ.md) |
 | Manos (DeFi) | O-N | ⏳ | `enabled: []` |
 | Gas | E1* | ✅ | Implícito en cada TX onchain |
-| Manguera (hose) | O-N | ⏳ | Owner aporta LLM key (no cuenta TBA) |
+| Manguera (hose) / LLM router | O-N | ✅ lab | Owner aporta LLM router (`llmRouter`: FreeLLMAPI default, OmniRoute, Ollama, OpenRouter, custom) — no cuenta TBA |
 | Privacidad (Nym…) | O-N | ⏳ | `enabled: false` |
 | Reputación | O-N | ⏳ | ERC-8004 disponible; sin scores aún |
 | Colaboradores | O-N | ⏳ | `trusted: []` |
@@ -152,7 +152,7 @@ node scripts/validation/organ-assembly-audit.mjs 115
 | **ICP HTTPS outcalls** | Cycles | Canister | OSS | Descentralizado | ✅ | ✅ | Sí | ⏳ |
 | **OpenRouter directo** | $5–50 prepago | Email + API key | Propietario | Centralizado | ❌ | ❌ | No | ❌ |
 | **OpenAI / Anthropic directo** | Suscripción | Email + tarjeta | Propietario | Centralizado | ❌ | ❌ | No | ❌ |
-| **Manguera (hose)** — key del owner | Gratis para TBA* | API key owner | — | — | ⚠️ | ⚠️ | No | ⏳ |
+| **Manguera (hose) / LLM router** — key del owner | Gratis para TBA* | FreeLLMAPI / OmniRoute / Ollama / OpenRouter / custom | — | — | ⚠️ | ⚠️ | No | ✅ lab |
 
 \* *No cuenta contra presupuesto TBA; útil como respaldo humano.*
 
@@ -364,6 +364,10 @@ node scripts/validation/organ-assembly-audit.mjs 115
 | **Aave / Compound** | Gas | Wallet | OSS | Onchain | ✅ | ✅ | ⏳ |
 | **Jupiter** (Solana) | Gas | Wallet | OSS | Onchain | ✅ | ✅ | ⏳ |
 | **Coinbase AgentKit** | — | CDP cuenta | Propietario | Centralizado | ❌ | ❌ | ❌ |
+| **Pieza `trading-strategies`** (Mint) | — | Local | OSS | Local | ⚠️ opt-in | ⚠️ | 📐 política, no ejecuta |
+| **Pieza `dragon-liquidity`** (visor) | — | Local | OSS | Local | ✅ solo mira | ✅ | 📐 feed sintético |
+
+**Política ≠ manos:** el dashboard emite YAML; `hands` no opera hasta `enabled` + Reflejos. Ver [`trading-pieces.md`](trading-pieces.md).
 
 ---
 

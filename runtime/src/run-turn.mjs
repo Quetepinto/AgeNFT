@@ -4,7 +4,7 @@
 import { resolveBrain } from './manifest-loader.mjs';
 import { preloadContext, autowriteDelta } from './memory-local.mjs';
 import { inferBrain } from './brain-tx402.mjs';
-import { inferHoseBrain, hoseConfigFromEnv } from './brain-hose.mjs';
+import { inferHoseBrain, resolveHoseConfig } from './brain-hose.mjs';
 import {
   checkBrainBudget,
   recordBrainSpend,
@@ -84,8 +84,16 @@ export async function runTurn({
   log('agent:', manifest.name, `#${manifest.identity.agentId}`);
   log('TBA:', manifest.treasury.address);
   log('pack:', packId);
+  const hoseCfg = resolveHoseConfig(manifest?.organs?.brain?.hose?.llmRouter);
   log('brain:', brain.primary.provider, brain.primary.model);
-  log('mode:', hoseMode ? `hose (${hoseConfigFromEnv().model})` : pay ? 'paid (x402)' : 'probe (sin USDC)');
+  log(
+    'mode:',
+    hoseMode
+      ? `hose/${hoseCfg.preset} (${hoseCfg.model} @ ${hoseCfg.endpoint})`
+      : pay
+        ? 'paid (x402)'
+        : 'probe (sin USDC)',
+  );
   if (wiring) {
     log('wiring:', 'active', effectiveSync ? `memory sync (${memoryProvider})` : 'memory sync off');
   }
@@ -170,7 +178,7 @@ export async function runTurn({
     ? await inferHoseBrain({
         systemPrompt: ctx.systemPrompt,
         userMessage,
-        ...hoseConfigFromEnv(),
+        ...hoseCfg,
       })
     : await inferBrain({
         brain,

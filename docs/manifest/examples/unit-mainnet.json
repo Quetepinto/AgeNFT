@@ -64,7 +64,17 @@
         "network": "eip155:8453"
       },
       "fallbacks": [],
-      "routing": { "priority": ["sovereign", "opportunistic", "hose", "dormant"] }
+      "routing": { "priority": ["sovereign", "opportunistic", "hose", "dormant"] },
+      "hose": {
+        "enabled": false,
+        "note": "Credentials stored runtime-only, never in public manifest",
+        "llmRouter": {
+          "preset": "freellmapi",
+          "endpoint": "http://127.0.0.1:3001",
+          "model": "auto",
+          "apiKeyEnv": "HERMES_CUSTOM_FREELLMAPI_API_KEY"
+        }
+      }
     },
     "memory": {
       "format": "agenft-memory-capsule/v1",

@@ -111,6 +111,8 @@ flowchart TB
 
 **Trading:** lo recordabais en notas de economía (sesión 4). Sigue en el mapa con ⚠️ — no es el primer intento.
 
+**Piezas locales (Mint, 2026-09-18):** el dashboard de estrategias y el visor-dragón (liquidez = alimento) viven en `~/Projects/TRADING`. Son **órganos enchufables** hacia `hands` / visión de mercado. **No están cableados** a la TBA. Doc: [`trading-pieces.md`](trading-pieces.md).
+
 ---
 
 ## El loop “milagroso” (objetivo de diseño)
@@ -232,7 +234,8 @@ Unit-Mainnet hoy: `hands.enabled: []` — correcto para MVP.
 | **F3** | Runway en Dashboard + export dApp | 3 + Dashboard |
 | **F4** | Spike ConvoHunter / scout social manual | 7.2 |
 | **F5** | Yield USDC en savings (Aave Base) | 7.3 opt-in |
-| **F6** | Trading cap risk bucket | 7.4 opt-in |
+| **F6** | Trading cap risk bucket | 7.7 opt-in |
+| **F6b** | Enchufar pieza `trading-strategies` + (opcional) `dragon-liquidity` | 7.7 · [`trading-pieces.md`](trading-pieces.md) |
 
 ---
 

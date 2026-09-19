@@ -102,7 +102,7 @@ OpenSea Base, orfanato, trial — después de Bloque 3 estable.
 | 7.4 | **Scout social** (ConvoHunter-style) — leads | Medio | off |
 | 7.5 | **Zora** — Creator Coin / posts → TBA | Medio | off |
 | 7.6 | **Yield USDC** (Aave/savings bucket) | Medio | off |
-| 7.7 | **Trading / DEX** (`hands`, risk 5 %) | Alto ⚠️ | **off** |
+| 7.7 | **Trading / DEX** (`hands`, risk 5 %) | Alto ⚠️ | **off** · piezas locales [`trading-pieces.md`](../trading-pieces.md) |
 
 **Orden de intento:** 7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 7.6 → 7.7
 

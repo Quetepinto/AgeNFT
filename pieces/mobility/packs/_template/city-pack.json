@@ -1,0 +1,47 @@
+{
+  "type": "agenft-city-pack/v0",
+  "id": "ciudad-cc",
+  "name": "Nombre ciudad (País)",
+  "country": "CC",
+  "timezone": "Continent/City",
+  "language": "es",
+  "updatedAt": "AAAA-MM-DD",
+  "maintainers": ["tu-handle"],
+  "discovery": {
+    "allowed": true,
+    "policy": "official-first",
+    "writeBack": "propose-diff",
+    "notes": "Qué fuentes fallan desde servidor, qué agregadores funcionan."
+  },
+  "networks": {
+    "red-ejemplo": {
+      "name": "Nombre de la red",
+      "mode": "bus",
+      "scope": "urban",
+      "operator": "Operador",
+      "keywords": ["palabras", "que", "identifican", "esta", "red"],
+      "live": null,
+      "scheduled": [
+        { "type": "gtfs", "url": "https://…/gtfs.zip", "note": "programado, no vivo" }
+      ],
+      "stops": {
+        "CODIGO": { "name": "Nombre parada", "lines": ["1"], "direction": "→ destino" }
+      },
+      "pitfalls": ["Cosas que confunden en esta ciudad (números repetidos, sentidos, IDs)."]
+    }
+  },
+  "routing": {
+    "rules": [
+      { "match": ["palabra"], "network": "red-ejemplo", "defaultStop": "CODIGO" }
+    ],
+    "liveTriggers": ["próximo", "cuánto falta", "ahora"],
+    "scheduledTriggers": ["mañana", "a las", "horario"],
+    "ambiguous": "ask-network"
+  },
+  "incidents": {
+    "maxAgeMin": 30,
+    "sources": []
+  },
+  "favorites": [],
+  "checks": []
+}

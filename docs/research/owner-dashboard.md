@@ -41,6 +41,7 @@ Un ageNFT = muchos órganos × muchos gateways × presupuestos × opcionales
 | **Órganos G/D/E** | Gratis / descentralizado / fácil por órgano |
 | **Identidad** | Manifiesto, URUIRU/visual, transfer |
 | **Runtime** | Host, session keys (futuro) |
+| **Economía / Manos** | Toggles 7.x; trading **off**. Piezas Mint: [`trading-pieces.md`](trading-pieces.md) |
 
 ---
 

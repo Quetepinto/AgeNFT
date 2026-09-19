@@ -59,7 +59,9 @@
 | **Sentidos** | 5 | 📐 | [`senses-organ.md`](senses-organ.md) |
 | **Voz x402** | ingreso externo | 📐 | [`voice-external-income.md`](voice-external-income.md) |
 | **Scout** | ahorro / leads | 💡 | [`self-funding.md`](self-funding.md) |
-| **Manos** | swap DEX | ⏸ | manifiesto `hands` |
+| **Manos** | swap DEX / trading opt-in | ⏸ | manifiesto `hands` · [`trading-pieces.md`](trading-pieces.md) |
+| **Política trading** (pieza) | Biblioteca de estrategias YAML | 📐 | [`trading-pieces.md`](trading-pieces.md) · repo `TRADING` |
+| **Visor dragón** (pieza) | Liquidez = alimento; no opera | 📐 preview sintético | idem |
 | **Colaboradores A2A** | subtareas entre NFTs | 💡 | [`voice-external-income.md`](voice-external-income.md) |
 
 ### 2.3 Tiers G · D · E (por órgano)
@@ -97,7 +99,7 @@
 |-------|-----|--------|-----|
 | **ageNFT protocol** | `run-turn.mjs`, budget, memoria | ✅ | `runtime/src/` |
 | **hermes-agent** | MVP gateway+cron | ✅ | [`runtime-adapters.md`](runtime-adapters.md) |
-| **openclaw** | Adapter Cursor/workspace | 💡 post-MVP | idem |
+| **openclaw** | Adapter Cursor/workspace | 💡 post-MVP · 2.0 opción 2026-09-07 | idem |
 | **elizaos** | Swap/8004 Fase 5 | ⏸ | spike [`backups/spike-web3-runtime-comparison-20260713.md`](../backups/spike-web3-runtime-comparison-20260713.md) |
 | **minimal** | Solo chat-api / CLI | ✅ API | [`lab/chat-api-wiring.md`](lab/chat-api-wiring.md) |
 | `runtime.engine` | Campo manifiesto | ✅ schema | `ageNFT-v1-provisional.schema.json` |
@@ -150,7 +152,8 @@
 | Owner fondea TBA (gasto) | ✅ | [`voice-external-income.md`](voice-external-income.md) |
 | Ingresos solo externos x402 | 📐 | idem |
 | Autofinanciación sin garantía | 📐 | [`self-funding.md`](self-funding.md) |
-| Trading último recurso opt-in | 📐 | idem |
+| Trading último recurso opt-in | 📐 | idem · [`trading-pieces.md`](trading-pieces.md) |
+| Piezas `TRADING` cableables a `hands` | 📐 sin cable TBA | [`trading-pieces.md`](trading-pieces.md) |
 | Scout ahorra costes | 💡 | idem |
 | Alquiler / rental session | 📐 | [`memory-layers-access.md`](memory-layers-access.md) |
 | Trial → compra hash | 📐 | idem |
@@ -207,7 +210,7 @@
 | **3 Núcleo** | 1→2→6→3→7 | chat-api, memoria, fallbacks, estética, checklist | [`lab/next-steps.md`](lab/next-steps.md) |
 | **4 Presencia** | 4→5→7 opcional | TTS, URUIRU anim | [`presence-optional.md`](presence-optional.md) |
 | **5 Sentidos** | tras 4 | STT, OCR, visión | [`senses-organ.md`](senses-organ.md) |
-| **7 Autofinanc.** | último núcleo | scout, voice externo | [`self-funding.md`](self-funding.md) |
+| **7 Autofinanc.** | último núcleo | scout, voice externo; trading 7.7 **off** | [`self-funding.md`](self-funding.md) · [`trading-pieces.md`](trading-pieces.md) |
 | **BYOA** | paralelo visión | extensión, WebMCP | [`companion-agent-byoa.md`](companion-agent-byoa.md) |
 | **OpenClaw adapter** | post-MVP | skill → run-turn | [`runtime-adapters.md`](runtime-adapters.md) |
 
@@ -231,6 +234,7 @@
 | [`organ-assembly-catalog.md`](organ-assembly-catalog.md) | Catálogo servicios por órgano |
 | [`voice-external-income.md`](voice-external-income.md) | Pagador, ingresos, A2A |
 | [`self-funding.md`](self-funding.md) | Bloque 7 economía agente |
+| [`trading-pieces.md`](trading-pieces.md) | Piezas Mint: estrategias + visor dragón → `hands`/`senses` |
 | [`senses-organ.md`](senses-organ.md) | STT, OCR, visión |
 | [`presence-optional.md`](presence-optional.md) | TTS, cara, Bloque 4 |
 | [`design-index-20260716.md`](design-index-20260716.md) | Índice narrativo §1–13 |
@@ -265,4 +269,28 @@
 
 ---
 
-*Última clasificación: 2026-07-16 — sesión inspirada. Revisar qué 💡 pasa a 📐 cuando toque implementar.*
+## Sesión 2026-09-18 — trading como piezas AgeNFT
+
+| Idea del usuario | Capa | Estado | Hogar |
+|----------------|------|--------|-------|
+| Dashboard de estrategias como parte de AgeNFT | Hábitat + política de `hands` | 📐 | trading-pieces |
+| Cablear a economía autosustentable cuando el cuerpo esté listo | Bloque 7.7 opt-in | ⏸ cable TBA | self-funding |
+| Visor de gráficos-dragón (liquidez = alimento) | Hábitat visual / sentidos | 📐 preview sintético | trading-pieces |
+| Liquidez en tiempo real | Feed `senses.market` | ⏸ | trading-pieces § espera |
+
+---
+
+## Sesión 2026-09-19 — movilidad como pieza AgeNFT
+
+| Idea del usuario | Capa | Estado | Hogar |
+|----------------|------|--------|-------|
+| Harness genérico de transporte para cualquier ciudad | M3 Capability (skill) | 📐 · ✅ prototipo `pieces/mobility/` | [`mobility-pieces.md`](mobility-pieces.md) |
+| City Pack que cada uno rellena con los datos de su ciudad | B Biblioteca (JSON exportable) | 📐 · ✅ `valencia-es` con 3 checks vivos | idem |
+| El agente investiga fuentes reales si el pack no cubre | `discovery` + write-back al pack | 📐 | idem |
+| Publicarlo como ageNFT vertical TranXp (nombre provisional) | Unit default = bot reglas; LLM opt-in | 💡 | idem § Fase 3 |
+| Bot básico sin modelo (pack relleno a mano) | Hábitat CLI/`reply` | ✅ v0 `mobility.py reply` | idem § Dos modos |
+| Modo pro con modelo del owner | hose `llmRouter` + skill | 📐 | idem · [`lab/llm-router-hose.md`](lab/llm-router-hose.md) |
+| Scanner noticias incidencias/retrasos de red | Sentidos + cron pack | 📐 · ✅ RSS/Atom v0 | idem § Scanner · esbozo Camino vigilante; Hermescortes no localizado |
+| Mapas y rutas tipo Google Maps | Routing propio / OTP | ⏸ fuera de MVP; enlaces a planificadores oficiales antes | idem § Fase 4–5 |
+
+*Última clasificación: 2026-09-19 — TranXp bot básico + scanner. Revisar qué 💡 pasa a 📐 cuando toque implementar.*

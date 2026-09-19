@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agenft.dev/schemas/city-pack-v0.json",
+  "title": "ageNFT City Pack v0 (mobility)",
+  "description": "Datos de transporte de una ciudad para el harness de movilidad. Cada red declara qué es vivo (adapter) y qué es programado (fuentes). El agente enruta por palabras y nunca mezcla redes.",
+  "type": "object",
+  "required": ["type", "id", "name", "timezone", "networks", "routing"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "const": "agenft-city-pack/v0" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "description": "slug, ej. valencia-es" },
+    "name": { "type": "string" },
+    "country": { "type": "string", "description": "ISO 3166-1 alpha-2" },
+    "timezone": { "type": "string", "description": "IANA, ej. Europe/Madrid" },
+    "language": { "type": "string", "description": "Idioma de las palabras clave" },
+    "updatedAt": { "type": "string" },
+    "maintainers": { "type": "array", "items": { "type": "string" } },
+    "discovery": {
+      "type": "object",
+      "description": "Permiso al agente para investigar fuentes nuevas cuando el pack no cubre la pregunta",
+      "properties": {
+        "allowed": { "type": "boolean", "default": true },
+        "policy": { "type": "string", "enum": ["official-first", "aggregators-ok", "none"] },
+        "writeBack": { "type": "string", "enum": ["propose-diff", "append-notes", "none"], "description": "Cómo devuelve lo aprendido al pack" },
+        "notes": { "type": "string" }
+      }
+    },
+    "networks": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/network" }
+    },
+    "routing": {
+      "type": "object",
+      "required": ["rules"],
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["match", "network"],
+            "properties": {
+              "match": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+              "network": { "type": "string" },
+              "defaultStop": { "type": "string" },
+              "defaultLine": { "type": "string" },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "liveTriggers": { "type": "array", "items": { "type": "string" } },
+        "scheduledTriggers": { "type": "array", "items": { "type": "string" } },
+        "ambiguous": { "type": "string", "enum": ["ask-network", "first-rule"] }
+      }
+    },
+    "incidents": {
+      "type": "object",
+      "description": "Fuentes de avisos de red (huelgas, cortes, retrasos). El bot básico lee RSS/Atom a caché; no scrapea HTML.",
+      "properties": {
+        "maxAgeMin": { "type": "integer", "minimum": 1, "default": 30, "description": "Minutos que la caché se considera fresca" },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "url"],
+            "properties": {
+              "id": { "type": "string" },
+              "network": { "type": "string", "description": "Red del pack a la que aplica, si hay una" },
+              "type": { "type": "string", "enum": ["rss", "atom", "web", "api"] },
+              "url": { "type": "string" },
+              "note": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "favorites": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "network", "stop"],
+        "properties": {
+          "label": { "type": "string" },
+          "network": { "type": "string" },
+          "stop": { "type": "string" },
+          "line": { "type": "string" }
+        }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "description": "Smoke checks que debe pasar el pack (validate --live)",
+      "items": {
+        "type": "object",
+        "required": ["name", "network", "stop"],
+        "properties": {
+          "name": { "type": "string" },
+          "network": { "type": "string" },
+          "stop": { "type": "string" },
+          "line": { "type": "string" },
+          "expectRows": { "type": "boolean", "default": true }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "network": {
+      "type": "object",
+      "required": ["name", "mode", "keywords"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "mode": { "type": "string", "enum": ["bus", "rail", "metro", "tram", "ferry", "multimodal"] },
+        "scope": { "type": "string", "enum": ["urban", "interurban", "regional", "long-distance"] },
+        "operator": { "type": "string" },
+        "keywords": { "type": "array", "items": { "type": "string" } },
+        "live": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "required": ["adapter"],
+              "properties": {
+                "adapter": {
+                  "type": "string",
+                  "enum": ["softour-metrobus", "transitapp-bgtfs", "radardetrenes", "gtfs-rt", "custom"],
+                  "description": "Implementado en tools/mobility.py. custom = script propio en el pack"
+                },
+                "base": { "type": "string" },
+                "lineFilter": { "type": "string" },
+                "linePage": { "type": "string" },
+                "script": { "type": "string", "description": "solo adapter=custom; ruta relativa al pack" },
+                "note": { "type": "string" }
+              }
+            }
+          ]
+        },
+        "scheduled": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "url"],
+            "properties": {
+              "type": { "type": "string", "enum": ["gtfs", "pdf", "web", "api", "planner"] },
+              "url": { "type": "string" },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "stops": {
+          "type": "object",
+          "description": "Paradas conocidas por código de la red",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "lines": { "type": "array", "items": { "type": "string" } },
+              "direction": { "type": "string" },
+              "lat": { "type": "number" },
+              "lon": { "type": "number" },
+              "globalIds": {
+                "type": "object",
+                "description": "adapter transitapp-bgtfs: línea → global_stop_id",
+                "additionalProperties": { "type": "string" }
+              },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "pitfalls": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
