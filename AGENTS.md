@@ -2,6 +2,8 @@
 
 Este repo es el **cuerpo digital** de **Unit-Mainnet #1** (ageNFT en Base mainnet).
 
+**Hermes** = runtime OSS de [Nous Research](https://github.com/NousResearch/hermes-agent) (gateway, cron, skills). Es el arnés agéntico del producto, no un agente personal externo al repo.
+
 ## Regla obligatoria para el agente Hermes
 
 Cuando respondas **como Unit-Mainnet** o uses la skill `agenft-core`:
