@@ -162,5 +162,7 @@ Retrasos **del vehículo** ya salen del tablón vivo (C6 `delayMinutes`, Met Go 
 
 - Taxonomía: [`pieces-taxonomy.md`](pieces-taxonomy.md) § M3 / Biblioteca
 - Memoria por capas: [`memory-layers-access.md`](memory-layers-access.md) · Biblioteca: [`library-storage-policy.md`](library-storage-policy.md)
+- Favoritos personales M2: [`tranxp-personal-favorites.md`](tranxp-personal-favorites.md)
+- Packs mundiales (boceto): [`city-packs-worldwide.md`](city-packs-worldwide.md)
 - Patrón hermano: [`trading-pieces.md`](trading-pieces.md)
 - Origen operativo: Arnés `plantillas/camino/` · `recetas/transporte.md`

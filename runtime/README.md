@@ -42,6 +42,7 @@ Tras cada turno la memoria vive en `data/unit-1/memory/`. Sync offchain:
 npm run wiring:show
 npm run wiring:apply    # desde .cursor/lab-inbox/wiring-draft.json
 npm run lab:bridge      # Lab Studio → inbox (8799)
+npm run settings:bridge # Dashboard owner → wiring + host-prefs (8800)
 npm run memory:sync
 npm run memory:restart-test
 npm run once:pay:sync

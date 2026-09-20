@@ -133,7 +133,7 @@
       "mode": "lite-canon",
       "packs": ["valencia-es", "madrid-es"],
       "path": "pieces/mobility",
-      "note": "Alma del Unit: telegram-tranxp-bot.mjs → mobility.py reply. Sin LLM."
+      "note": "Alma del Unit: telegram-tranxp-bot.mjs → mobility.py reply. Sin LLM. Sin ciudad por defecto: /ciudad. Favoritos en M2 (tranxp-personal), no en el pack."
     }
   ],
 
