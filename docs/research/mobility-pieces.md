@@ -165,5 +165,6 @@ Retrasos **del vehículo** ya salen del tablón vivo (C6 `delayMinutes`, Met Go 
 - Favoritos personales M2: [`tranxp-personal-favorites.md`](tranxp-personal-favorites.md)
 - Packs mundiales (boceto): [`city-packs-worldwide.md`](city-packs-worldwide.md)
 - God's Eye View + wiring: [`trnxp-gods-eye-view.md`](trnxp-gods-eye-view.md)
+- Feeds modo agente (sin Google): [`trnxp-agent-feeds.md`](trnxp-agent-feeds.md)
 - Patrón hermano: [`trading-pieces.md`](trading-pieces.md)
 - Origen operativo: Arnés `plantillas/camino/` · `recetas/transporte.md`

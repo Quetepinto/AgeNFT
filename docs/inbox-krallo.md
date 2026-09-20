@@ -21,6 +21,12 @@ Cosas dichas en chat, para no perderlas. El agente responde debajo con lo que ha
 | GEV instalado en VPS | fuera del repo | ⏸ operador |
 | Skill Iggy → GEV | — | 📐 G1 |
 
+### Feeds modo agente (sin GEV / sin Google)
+
+**Pedido:** usar capas de datos para que el agente obtenga info, no el globo 3D.
+
+**Hoy:** diseño + opción Lab `geo-feeds` · doc [`research/trnxp-agent-feeds.md`](research/trnxp-agent-feeds.md). Implementación `pieces/geo-feeds` = F1 pendiente.
+
 ---
 
 ## 2026-09-19

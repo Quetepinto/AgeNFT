@@ -73,6 +73,13 @@ En Lab Studio ya aparece la opción `gods-eye-view` (experimental). Aplicar wiri
 
 Dashboard settings (futuro): toggle “Mapa GEV” + URL del host (mismo patrón que settings-bridge).
 
+## Relación con feeds “modo agente” (sin Google)
+
+Si el objetivo es que Iggy/TRNXP **obtenga datos** (aviones cerca, sismos, meteo, ISS…), **no uses GEV**.  
+Capa prevista: [`trnxp-agent-feeds.md`](trnxp-agent-feeds.md) — adapters públicos → JSON/texto.
+
+GEV solo cuando el owner quiera **ver** el globo 3D (con `GOOGLE_MAPS_API_KEY`).
+
 ## Relación con TRNXP lite / mint
 
 - Manifiesto lite: `capabilities[{ id: mobility/v0 }]` sigue siendo el alma TRNXP.

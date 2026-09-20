@@ -14,6 +14,11 @@ Bitácora de decisiones. Docs temáticos en `docs/research/` y `docs/decisions/`
 - Diseño GEV en VPS + wiring `presence.gods-eye-view` + skill Iggy por fases: [`research/trnxp-gods-eye-view.md`](research/trnxp-gods-eye-view.md).
 - Lab: opción `gods-eye-view` en Presencia.
 
+### Feeds modo agente (sin Google)
+
+- Decisión: info OSINT para el agente ≠ globo GEV. Doc: [`research/trnxp-agent-feeds.md`](research/trnxp-agent-feeds.md).
+- Lab: Sentidos → opción `geo-feeds`. MVP adapters: OpenSky, USGS, ISS/TLE, Nominatim, Open-Meteo.
+
 ---
 
 ## 2026-09-19
