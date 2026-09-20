@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Bot Telegram TRNXP — sin ciudad por defecto (agente “nuevo”).
+ * Bot Telegram TranXp — sin ciudad por defecto (agente “nuevo”).
  *
  * Flujo: /start → elegir City Pack → preguntas de transporte.
  * Favoritos personales = M2 (`runtime/data/tranxp/personal-store.json`) — no viajan con el NFT.
@@ -71,7 +71,7 @@ if (!existsSync(MOBILITY_PY)) {
 }
 
 const API = `https://api.telegram.org/bot${TOKEN}`;
-const DISPLAY = process.env.TRANXP_TELEGRAM_DISPLAY_NAME ?? 'TRNXP';
+const DISPLAY = process.env.TRANXP_TELEGRAM_DISPLAY_NAME ?? 'TranXp';
 
 function listPacks() {
   const out = [];
@@ -348,7 +348,7 @@ async function poll(offset = 0) {
 }
 
 console.log(
-  `TRNXP Telegram — sin ciudad por defecto — packs=${PACKS.length} — personal=${personalStorePath()} — allowlist=${allowed.length || 'open'}`,
+  `TranXp Telegram — sin ciudad por defecto — packs=${PACKS.length} — personal=${personalStorePath()} — allowlist=${allowed.length || 'open'}`,
 );
 if (ENV_PACK_HINT) {
   console.log(`(hint TRANXP_CITY_PACK=${ENV_PACK_HINT} solo si el chat aún no eligió)`);

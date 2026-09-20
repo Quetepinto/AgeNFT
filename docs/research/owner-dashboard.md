@@ -52,12 +52,14 @@ Un ageNFT = muchos órganos × muchos gateways × presupuestos × opcionales
 URL estable por agente, ej.:
 
 ```
-https://quetepinto.github.io/AgeNFT/agent/1/settings
+https://quetepinto.github.io/AgeNFT/settings.html?id=1
 ```
 
-(o `dashboard.html?id=1` — una sola convención en todo el proyecto)
+(o `settings.html?id=1` — una sola convención en todo el proyecto)
 
-La dApp ya existe como ficha pública; el Dashboard es la **capa owner** (wallet conectada = owner del token #1).
+La dApp ya existe como ficha pública; el Dashboard es la **capa owner** (wallet conectada = `ownerOf` del token).
+
+**MVP vivo (2026-09-20):** `dapp/settings.html` + `npm run settings:bridge` (:8800). El owner elige destino (navegador / local / VPS), carga y guarda wiring sin pasar por Lab/Cursor. Host prefs en `runtime/data/{packId}/host-prefs.json`.
 
 ### Acceso desde cada hábitat (siempre visible)
 
