@@ -142,9 +142,9 @@
       "id": "mobility/v0",
       "enabled": true,
       "mode": "tool",
-      "packs": ["valencia-es"],
+      "packs": ["valencia-es", "madrid-es"],
       "path": "pieces/mobility",
-      "note": "TranXp como tool: Telegram /tranx o prefijo tranx → mobility.py reply (sin LLM). Pack por defecto València; AGENFT_MOBILITY_PACK override."
+      "note": "TranXp tool: /tranx → mobility.py reply (sin LLM). Primer pack = activo para este cuerpo; AGENFT_MOBILITY_PACK override. Bot lite (telegram-tranxp) no hereda ciudad: el usuario elige /ciudad. Favoritos personales = M2 (tranxp-personal), no el City Pack."
     }
   ],
 
