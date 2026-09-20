@@ -22,9 +22,36 @@ Owner
               └── Iggy skill (opt-in): “abre escena”, “resume viewport”, “ruta a pie”
 ```
 
+## Decisión de producto (2026-09-20)
+
+**GEV no es pieza clave de TRNXP.** Es una **opción visual** opt-in:
+
+| Qué | Dónde |
+|-----|--------|
+| Transporte (bus/tren/metro) | City Packs — obligatorio para el valor TRNXP |
+| OSINT texto (aviones, sismos…) | `geo-feeds` — sin Google |
+| Globo 3D, ruta a pie “fly”, capas cinematic | GEV — **solo si el owner pega su API Google** |
+
+El usuario **puede** poner su `GOOGLE_MAPS_API_KEY` (y opcionales) en el Dashboard / host prefs · Vault 0.  
+Funciones “centralizadas en la app”: enlace Abrir mapa, share-link a una parada/ciudad, toggles de capas — **no** el cerebro del agente.
+
+Sin clave Google → TRNXP y geo-feeds siguen; el toggle GEV queda deshabilitado o “falta key”.
+
+### Dónde guarda la key (futuro settings)
+
+```
+Dashboard → Ajustes → Superficies → God's Eye View
+  ☐ Activar mapa GEV
+  URL host: https://gev.mi-vps/…
+  GOOGLE_MAPS_API_KEY: ••••••   (solo en el host / V0, nunca onchain)
+  TomTom (opcional): ••••••
+```
+
+Wiring: `presence.gods-eye-view` + prefs en `host-prefs` / env. Misma idea que settings-bridge.
+
 ## Instalar GEV en VPS (MVP operador)
 
-Requisitos: Node **24.14+** o 26.x · clave **Google Maps** (obligatoria para el planeta 3D) · OpenAI solo si quieres voz.
+Requisitos: Node **24.14+** o 26.x · clave **Google Maps** **solo si activas GEV** · OpenAI solo si quieres voz.
 
 ```bash
 git clone https://github.com/bilawalsidhu/gods-eye-view.git
@@ -71,7 +98,28 @@ Nodo sugerido: **Presencia** (superficie espacial) o, si se separa, órgano `map
 
 En Lab Studio ya aparece la opción `gods-eye-view` (experimental). Aplicar wiring **no** despliega GEV solo: el Doctor/probe debe comprobar `GEV_BASE_URL/health` o la home cuando exista probe.
 
-Dashboard settings (futuro): toggle “Mapa GEV” + URL del host (mismo patrón que settings-bridge).
+Dashboard settings: toggle “Mapa GEV” + URL del host + campo key Google (V0) — mismo patrón que settings-bridge.
+
+## TomTom — ¿hace falta registrarse?
+
+**Para tráfico “de verdad” dentro de GEV: sí.** Cuenta en [developer.tomtom.com](https://developer.tomtom.com/), API key, cupos de desarrollador (revisar términos actuales).
+
+| Modo | Registro TomTom | Qué ves / qué usa el agente |
+|------|-----------------|------------------------------|
+| GEV **sin** TomTom | No | Tráfico **simulado / aproximado** (GEV lo etiqueta así) |
+| GEV **con** TomTom | Sí | Congestión real en el globo |
+| TRNXP / geo-feeds **sin** TomTom | No | No dependemos de TomTom para bus/tren ni para MVP OSINT |
+
+### Alternativas sin registro TomTom
+
+| Necesidad | Alternativa | Notas |
+|-----------|-------------|-------|
+| Rutas a pie / bici A→B | **OSRM** / Valhalla (OSM), públicos o self-host | Mejor para el **agente** que GEV |
+| Geocode | Nominatim | Con User-Agent y cache |
+| “¿Hay atasco?” a nivel ciudad | Feeds oficiales / Open data local; o decir “sin dato vivo” | No inventar |
+| Tráfico visual real en GEV | TomTom (o no usar esa capa) | Sin key = simulación |
+
+**Recomendación producto:** no exigir TomTom. GEV opcional con Google; TomTom solo si el owner quiere jams reales en el mapa. El agente no debe presentar la simulación keyless como tráfico oficial.
 
 ## Relación con feeds “modo agente” (sin Google)
 
@@ -96,4 +144,5 @@ GEV solo cuando el owner quiera **ver** el globo 3D (con `GOOGLE_MAPS_API_KEY`).
 
 - Meter API keys GEV en el City Pack o en IPFS público.
 - Presentar capas GEV (vuelos/AIS) como “próximo EMT”.
-- Depender de GEV para el MVP minteable de TRNXP (sigue siendo bot + packs).
+- Depender de GEV ni de Google/TomTom para el MVP minteable de TRNXP (sigue siendo bot + packs).
+- Tratar el tráfico keyless de GEV como dato oficial de atascos.

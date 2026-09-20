@@ -19,6 +19,12 @@ Bitácora de decisiones. Docs temáticos en `docs/research/` y `docs/decisions/`
 - Decisión: info OSINT para el agente ≠ globo GEV. Doc: [`research/trnxp-agent-feeds.md`](research/trnxp-agent-feeds.md).
 - Lab: Sentidos → opción `geo-feeds`. MVP adapters: OpenSky, USGS, ISS/TLE, Nominatim, Open-Meteo.
 
+### GEV opt-in + TomTom
+
+- Google key = **opción del owner** para superficie visual GEV; no bloquea TRNXP.
+- TomTom: registro solo si quieres jams reales en GEV; sin él = simulación. Agente: OSRM/Valhalla, no TomTom obligatorio.
+- Detalle: [`research/trnxp-gods-eye-view.md`](research/trnxp-gods-eye-view.md).
+
 ---
 
 ## 2026-09-19

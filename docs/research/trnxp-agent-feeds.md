@@ -29,6 +29,8 @@ Prioridad = útil + API pública estable + sin Google.
 | `nominatim-geocode` | Ciudad ↔ lat/lon | OSM Nominatim | 🟢 | **User-Agent** obligatorio; cachear; no martillar |
 | `weather-openmeteo` | Tiempo actual / aviso simple | Open-Meteo | 🟢 | Sin key; útil para “¿llueve en la parada?” |
 
+**Tráfico vial vivo:** no entra en MVP sin key. GEV sin TomTom = simulación (no usar como verdad). Alternativa agente: OSRM/Valhalla para rutas, no jams; ver [`trnxp-gods-eye-view.md`](trnxp-gods-eye-view.md) § TomTom.
+
 ### Fase v1 (cuando v0 demuestre cable)
 
 | ID | Qué | Fuente | Auth |
