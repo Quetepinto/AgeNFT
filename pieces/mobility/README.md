@@ -1,7 +1,7 @@
 # Pieza `mobility/v0` — transporte por ciudad (City Packs)
 
 > **Estado:** 📐 diseño + **València + Madrid** · 2026-09-19  
-> Capa: **M3 Capability** + **B Biblioteca**. Dualidad: tool en AgeNFT completo **o** Unit lite. Doc: [`docs/research/mobility-pieces.md`](../../docs/research/mobility-pieces.md).
+> **Producto:** **TRNXP** · Capa: **M3 Capability** + **B Biblioteca**. Dualidad: tool en AgeNFT completo **o** Unit lite. Doc: [`docs/research/mobility-pieces.md`](../../docs/research/mobility-pieces.md) · GEV: [`trnxp-gods-eye-view.md`](../../docs/research/trnxp-gods-eye-view.md).
 
 Un harness genérico y un pack de datos por ciudad. La ciudad no tiene código propio: declara redes, fuentes, paradas y reglas; el harness enruta y consulta.
 
@@ -33,7 +33,7 @@ python3 tools/mobility.py bot valencia-es
 
 | Empaquetado | Cómo |
 |-------------|------|
-| **B — lite** | `cd runtime && npm run telegram:tranxp` · `TRANXP_TELEGRAM_BOT_TOKEN` · **sin ciudad por defecto** (`/ciudad`) · hint opcional `TRANXP_CITY_PACK` |
+| **B — lite** | `cd runtime && npm run telegram:trnxp` (alias `telegram:tranxp`) · `TRANXP_TELEGRAM_BOT_TOKEN` · **sin ciudad por defecto** (`/ciudad`) · hint opcional `TRANXP_CITY_PACK` |
 | **A — tool** | Bot URUIRU: `/tranx …` · `capabilities` en manifiesto · primer `packs[]` o `AGENFT_MOBILITY_PACK` |
 
 Helper: [`runtime/src/mobility-reply.mjs`](../../runtime/src/mobility-reply.mjs).  

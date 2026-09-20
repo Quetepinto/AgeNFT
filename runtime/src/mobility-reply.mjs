@@ -1,5 +1,5 @@
 /**
- * Helper compartido: TranXp / mobility reply sin LLM.
+ * Helper compartido: TRNXP / mobility reply sin LLM.
  * Usado por telegram-tranxp-bot y por el bot Unit-Mainnet (/tranx).
  *
  * Sin ciudad por defecto: si no hay env ni packs en manifiesto, pack vacío.
@@ -67,7 +67,7 @@ export function resolveMobilityFromManifest() {
 /**
  * Si el mensaje es /tranx … o "tranx …", extrae el resto.
  * @param {string} text
- * @returns {string|null} pregunta o null si no es comando TranXp
+ * @returns {string|null} pregunta o null si no es comando TRNXP
  */
 export function parseTranxCommand(text) {
   const t = (text || '').trim();

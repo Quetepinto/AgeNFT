@@ -6,9 +6,19 @@ Bitácora de decisiones. Docs temáticos en `docs/research/` y `docs/decisions/`
 
 ---
 
+## 2026-09-20
+
+### TRNXP (rename) + God's Eye View
+
+- Marca producto: **TRNXP** (antes TranXp). IDs código `tranxp*` se mantienen en transición; alias `npm run telegram:trnxp`.
+- Diseño GEV en VPS + wiring `presence.gods-eye-view` + skill Iggy por fases: [`research/trnxp-gods-eye-view.md`](research/trnxp-gods-eye-view.md).
+- Lab: opción `gods-eye-view` en Presencia.
+
+---
+
 ## 2026-09-19
 
-### TranXp — dualidad pieza + Unit lite (implementado)
+### TRNXP — dualidad pieza + Unit lite (implementado)
 
 - Docs: dualidad en [`research/mobility-pieces.md`](research/mobility-pieces.md); taxonomía actualizada.
 - Hábitat B: `runtime/src/telegram-tranxp-bot.mjs` (`npm run telegram:tranxp`) → `mobility.py reply`.
@@ -17,7 +27,7 @@ Bitácora de decisiones. Docs temáticos en `docs/research/` y `docs/decisions/`
 - Plantilla pre-mint: `docs/manifest/examples/unit-tranxp-lite.json`.
 - Schema: campo `capabilities[]`.
 
-### TranXp — bot básico sin modelo + scanner de incidencias
+### TRNXP — bot básico sin modelo + scanner de incidencias
 
 - **Sí es posible** el mini-agente sin IA: no es un LLM pequeño, es un bot de reglas (`mobility.py reply` / `bot`) sobre el City Pack.
 - Modo **pro** opcional = skill Hermes + hose `llmRouter` del owner (descubrimiento, preguntas vagas). Default = básico.

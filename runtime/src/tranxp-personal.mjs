@@ -1,5 +1,5 @@
 /**
- * Datos personales TranXp (capa M2) — NO viajan con el NFT al vender.
+ * Datos personales TRNXP (capa M2) — NO viajan con el NFT al vender.
  * Vault 0 / PII del owner: favoritos de paradas, ciudad elegida por chat.
  *
  * Archivo: runtime/data/tranxp/personal-store.json (gitignored vía data/)

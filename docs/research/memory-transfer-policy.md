@@ -126,7 +126,7 @@ Campo o evento `MemoryPolicyAtTransfer(full|reset)` en contrato AgeNFT — **pru
 - ⚠️ Capa 2 (M2/M3): según política acordada en la venta  
 - ⚠️ Biblioteca: solo docs empaquetados (IPFS); local/nube del vendedor no viajan  
 - ❌ Nunca: Vault 0  
-- ❌ Por defecto: favoritos / ciudad elegida en chat TranXp (`runtime/data/tranxp/personal-store.json`, capa M2) — ver [`tranxp-personal-favorites.md`](tranxp-personal-favorites.md)
+- ❌ Por defecto: favoritos / ciudad elegida en chat TRNXP (`runtime/data/tranxp/personal-store.json`, capa M2) — ver [`tranxp-personal-favorites.md`](tranxp-personal-favorites.md)
 
 ---
 
@@ -138,4 +138,4 @@ Campo o evento `MemoryPolicyAtTransfer(full|reset)` en contrato AgeNFT — **pru
 | [`library-storage-policy.md`](library-storage-policy.md) | Biblioteca: IPFS vs local/nube |
 | [`dual-doctor.md`](dual-doctor.md) | Hygiene — fugas |
 | [`owner-dashboard.md`](owner-dashboard.md) | Wizard transfer |
-| [`tranxp-personal-favorites.md`](tranxp-personal-favorites.md) | Favoritos TranXp ≠ City Pack |
+| [`tranxp-personal-favorites.md`](tranxp-personal-favorites.md) | Favoritos TRNXP ≠ City Pack |

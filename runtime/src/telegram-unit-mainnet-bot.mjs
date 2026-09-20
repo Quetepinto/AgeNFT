@@ -118,7 +118,7 @@ async function handleMessage(msg) {
   if (!text || text.startsWith('/start')) {
     await tg('sendMessage', {
       chat_id: chatId,
-      text: `Hola — soy **${BOT_DISPLAY_NAME}** (Unit-Mainnet #1, ageNFT en Base mainnet). Gespenster de Ety Fefer. Escribe tu mensaje.\n\nTransporte (TranXp, sin LLM): /tranx próximo bus suecia`,
+      text: `Hola — soy **${BOT_DISPLAY_NAME}** (Unit-Mainnet #1, ageNFT en Base mainnet). Gespenster de Ety Fefer. Escribe tu mensaje.\n\nTransporte (TRNXP, sin LLM): /tranx próximo bus suecia`,
     });
     return;
   }

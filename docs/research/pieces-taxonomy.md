@@ -288,7 +288,7 @@
 | City Pack que cada uno rellena con los datos de su ciudad | B Biblioteca (JSON exportable) | 📐 · ✅ `valencia-es` + `madrid-es` | idem |
 | Dualidad: tool en AgeNFT completo **y** Unit lite independiente | Pieza única, dos empaquetados | 📐 acordado | idem § Dualidad |
 | El agente investiga fuentes reales si el pack no cubre | `discovery` + write-back al pack | 📐 | idem |
-| Publicarlo como ageNFT vertical TranXp (nombre provisional) | Unit default = bot reglas; LLM opt-in | 💡 mint después | idem § Fase 3 |
+| Publicarlo como ageNFT vertical **TRNXP** | Unit default = bot reglas; LLM opt-in; GEV mapa opt-in | 💡 mint después | [`mobility-pieces.md`](mobility-pieces.md) · [`trnxp-gods-eye-view.md`](trnxp-gods-eye-view.md) |
 | Bot básico sin modelo (pack relleno a mano) | Hábitat Telegram/`reply` | ✅ `telegram-tranxp-bot` + CLI | idem § Dos modos |
 | Modo pro con modelo del owner | hose `llmRouter` + skill | 📐 | idem · [`lab/llm-router-hose.md`](lab/llm-router-hose.md) |
 | Scanner noticias incidencias/retrasos de red | Sentidos + cron pack | 📐 · ✅ RSS/Atom v0 | idem § Scanner |

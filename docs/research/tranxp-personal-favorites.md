@@ -1,4 +1,4 @@
-# TranXp — favoritos personales (M2) vs City Pack
+# TRNXP — favoritos personales (M2) vs City Pack
 
 > **2026-09-20** · Código: [`runtime/src/tranxp-personal.mjs`](../../runtime/src/tranxp-personal.mjs)  
 > Política: [`memory-transfer-policy.md`](memory-transfer-policy.md) · [`memory-layers-access.md`](memory-layers-access.md)
