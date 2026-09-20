@@ -1,7 +1,7 @@
 {
   "type": "ageNFT/v1",
-  "name": "TranXp-lite",
-  "description": "Plantilla Unit lite — movilidad (TranXp). Canon = mobility/v0; cerebro off por defecto. Sin mint todavía; mismo schema que Unit-Mainnet.",
+  "name": "TRNXP-lite",
+  "description": "Plantilla Unit lite — movilidad (TRNXP). Canon = mobility/v0; cerebro off por defecto. Sin mint todavía; mismo schema que Unit-Mainnet.",
   "createdAt": "2026-09-19T21:00:00.000Z",
   "updatedAt": "2026-09-19T21:00:00.000Z",
 
@@ -133,7 +133,7 @@
       "mode": "lite-canon",
       "packs": ["valencia-es", "madrid-es"],
       "path": "pieces/mobility",
-      "note": "Alma del Unit: telegram-tranxp-bot.mjs → mobility.py reply. Sin LLM."
+      "note": "Alma del Unit: telegram-tranxp-bot.mjs → mobility.py reply. Sin LLM. Sin ciudad por defecto: /ciudad. Favoritos en M2 (tranxp-personal), no en el pack."
     }
   ],
 

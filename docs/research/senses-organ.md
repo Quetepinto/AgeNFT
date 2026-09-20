@@ -15,8 +15,9 @@ Un ageNFT **no solo habla y piensa** — también **escucha** y **ve**.
 | Idioma distinto | Texto/audio en otro idioma | **Traductor** | Texto en idioma del agente |
 | Imagen | Foto, captura, NFT | **Ojos** (visión) | Descripción + objetos + contexto |
 | Texto en imagen | Cartel, documento, meme | **OCR** | Texto plano extraído |
+| Mundo físico / OSINT | Aviones, sismos, meteo, ISS… | **Geo feeds** (adapters) | JSON/texto vivo — **sin** globo Google; ver [`trnxp-agent-feeds.md`](trnxp-agent-feeds.md) |
 
-Todo debe poder pagarse desde la **TBA** (x402), con **fallbacks** en manifiesto y caps en Reflejos — igual que el cerebro.
+Todo debe poder pagarse desde la **TBA** (x402), con **fallbacks** en manifiesto y caps en Reflejos — igual que el cerebro. Los geo-feeds MVP son mayormente **G (gratis)**; keys opcionales en el host.
 
 ---
 
@@ -176,6 +177,7 @@ Telegram ya entrega `voice` y `photo` en la API — el bot debe descargar el arc
 | Fase | Entregable | Bloque roadmap |
 |------|------------|----------------|
 | **S0** | Este doc + catálogo órganos | — |
+| **S0b** | Geo feeds modo agente (sin GEV) — [`trnxp-agent-feeds.md`](trnxp-agent-feeds.md) | TRNXP / sentidos |
 | **S1** | OCR vía LLM vision | Bloque 5 |
 | **S2** | STT x402 | Bloque 5 |
 | **S3** | Traducción + `defaultLocale` | Bloque 5 |
@@ -202,3 +204,5 @@ Configuración ON/OFF y caps: **Dashboard** — [`owner-dashboard.md`](owner-das
 | [`presence-voice-stack.md`](../backups/presence-voice-stack.md) | TTS / habla (salida) |
 | [`lab/next-steps.md`](lab/next-steps.md) | Bloque 4 — Sentidos + Presencia |
 | [`presence-context-layers.md`](../backups/presence-context-layers.md) | Qué ve el usuario por hábitat |
+| [`trnxp-agent-feeds.md`](trnxp-agent-feeds.md) | OSINT / geo feeds sin Google |
+| [`trnxp-gods-eye-view.md`](trnxp-gods-eye-view.md) | Globo 3D opt-in |

@@ -6,9 +6,30 @@ Bitácora de decisiones. Docs temáticos en `docs/research/` y `docs/decisions/`
 
 ---
 
+## 2026-09-20
+
+### TRNXP (rename) + God's Eye View
+
+- Marca producto: **TRNXP** (antes TranXp). IDs código `tranxp*` se mantienen en transición; alias `npm run telegram:trnxp`.
+- Diseño GEV en VPS + wiring `presence.gods-eye-view` + skill Iggy por fases: [`research/trnxp-gods-eye-view.md`](research/trnxp-gods-eye-view.md).
+- Lab: opción `gods-eye-view` en Presencia.
+
+### Feeds modo agente (sin Google)
+
+- Decisión: info OSINT para el agente ≠ globo GEV. Doc: [`research/trnxp-agent-feeds.md`](research/trnxp-agent-feeds.md).
+- Lab: Sentidos → opción `geo-feeds`. MVP adapters: OpenSky, USGS, ISS/TLE, Nominatim, Open-Meteo.
+
+### GEV opt-in + TomTom
+
+- Google key = **opción del owner** para superficie visual GEV; no bloquea TRNXP.
+- TomTom: registro solo si quieres jams reales en GEV; sin él = simulación. Agente: OSRM/Valhalla, no TomTom obligatorio.
+- Detalle: [`research/trnxp-gods-eye-view.md`](research/trnxp-gods-eye-view.md).
+
+---
+
 ## 2026-09-19
 
-### TranXp — dualidad pieza + Unit lite (implementado)
+### TRNXP — dualidad pieza + Unit lite (implementado)
 
 - Docs: dualidad en [`research/mobility-pieces.md`](research/mobility-pieces.md); taxonomía actualizada.
 - Hábitat B: `runtime/src/telegram-tranxp-bot.mjs` (`npm run telegram:tranxp`) → `mobility.py reply`.
@@ -17,7 +38,7 @@ Bitácora de decisiones. Docs temáticos en `docs/research/` y `docs/decisions/`
 - Plantilla pre-mint: `docs/manifest/examples/unit-tranxp-lite.json`.
 - Schema: campo `capabilities[]`.
 
-### TranXp — bot básico sin modelo + scanner de incidencias
+### TRNXP — bot básico sin modelo + scanner de incidencias
 
 - **Sí es posible** el mini-agente sin IA: no es un LLM pequeño, es un bot de reglas (`mobility.py reply` / `bot`) sobre el City Pack.
 - Modo **pro** opcional = skill Hermes + hose `llmRouter` del owner (descubrimiento, preguntas vagas). Default = básico.
