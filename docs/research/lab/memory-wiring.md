@@ -1,6 +1,6 @@
 # Cableado memoria — memoria que viaja
 
-> **Estado:** vivo (kubo lab) · **2026-08-31**
+> **Estado:** vivo (kubo lab) · **actualizado 2026-09-26** — transfer sim lab-remote
 
 ## Piezas
 
@@ -9,6 +9,7 @@
 | Cápsula | `runtime/src/memory-toju.mjs` → `agenft-memory-capsule/v1` |
 | Sync / hydrate | `npm run memory:sync`, `npm run memory:hydrate` |
 | Restart test | `npm run memory:restart-test` |
+| Transfer simulado | `npm run memory:transfer-sim` (`--policy=full\|reset-total`, `--seed`) |
 | Wiring | `runtime/wiring/unit-mainnet.json` → `memory` = `kubo-ipfs` |
 | Probes Lab | `organ-status.mjs` → `GET /v1/organs/status?nodeId=memory` |
 
@@ -36,9 +37,24 @@ npm run memory:sync
 # Borrar local y recuperar desde pointer
 npm run memory:restart-test -- --skip-upload
 
+# Transfer simulado (lab-remote, sin USDC / sin onchain)
+npm run memory:transfer-sim -- --seed --policy=full
+npm run memory:transfer-sim -- --seed --policy=reset-total
+
 # Tras turno con pago + sync (wiring brain→memory)
 npm run once:pay:sync
 ```
+
+## Transfer simulado (Bloque 3.2)
+
+Simula vendedor → comprador offline:
+
+| Política | Comprador recibe |
+|----------|------------------|
+| `full` | Misma cápsula / mismo `experientialHash` |
+| `reset-total` | Cuerpo limpio (hechos vacíos, hash nuevo) |
+
+Vault 0 nunca viaja (`vault0Excluded: true`). **No** sustituye toju primary ni transfer onchain; cierra el hueco de “transfer simulado” en lab.
 
 ## E2E esperado (restart-test)
 
