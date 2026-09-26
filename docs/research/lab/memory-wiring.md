@@ -9,7 +9,8 @@
 | Cápsula | `runtime/src/memory-toju.mjs` → `agenft-memory-capsule/v1` |
 | Sync / hydrate | `npm run memory:sync`, `npm run memory:hydrate` |
 | Restart test | `npm run memory:restart-test` |
-| Transfer simulado | `npm run memory:transfer-sim` (`--policy=full\|reset-total`, `--seed`) |
+| Transfer simulado | `npm run memory:transfer-sim` (`--policy=full\|reset-total`, `--seed`, `--isolated`) |
+| Smoke offline | `npm run memory:smoke` (CI: `.github/workflows/memory-smoke.yml`) |
 | Wiring | `runtime/wiring/unit-mainnet.json` → `memory` = `kubo-ipfs` |
 | Probes Lab | `organ-status.mjs` → `GET /v1/organs/status?nodeId=memory` |
 
@@ -38,8 +39,12 @@ npm run memory:sync
 npm run memory:restart-test -- --skip-upload
 
 # Transfer simulado (lab-remote, sin USDC / sin onchain)
+# --isolated (default con --seed): no escribe en runtime/data/
 npm run memory:transfer-sim -- --seed --policy=full
 npm run memory:transfer-sim -- --seed --policy=reset-total
+
+# Smoke CI/local (policies + restart-style hydrate)
+npm run memory:smoke
 
 # Tras turno con pago + sync (wiring brain→memory)
 npm run once:pay:sync
@@ -47,14 +52,18 @@ npm run once:pay:sync
 
 ## Transfer simulado (Bloque 3.2)
 
-Simula vendedor → comprador offline:
+Simula vendedor → comprador offline (`applyMemoryTransferPolicy` en `memory-toju.mjs`):
 
 | Política | Comprador recibe |
 |----------|------------------|
 | `full` | Misma cápsula / mismo `experientialHash` |
 | `reset-total` | Cuerpo limpio (hechos vacíos, hash nuevo) |
 
-Vault 0 nunca viaja (`vault0Excluded: true`). **No** sustituye toju primary ni transfer onchain; cierra el hueco de “transfer simulado” en lab.
+Vault 0 nunca viaja (`vault0Excluded: true`). **No** sustituye toju primary ni transfer onchain.
+
+## Gap toju (sin inventar API)
+
+Upload x402 a `api.toju.network` sigue fallando históricamente (402 persistente post-pago). Stack actual: **kubo lab** o **lab-remote** como fallback. No hay probe de upload de pago en smoke/CI a propósito (cero USDC).
 
 ## E2E esperado (restart-test)
 

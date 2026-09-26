@@ -9,7 +9,9 @@
  *   npm run memory:transfer-sim
  *   npm run memory:transfer-sim -- --policy=full
  *   npm run memory:transfer-sim -- --policy=reset-total
- *   npm run memory:transfer-sim -- --seed   # fixture si no hay memoria local
+ *   npm run memory:transfer-sim -- --seed              # fixture si no hay memoria
+ *   npm run memory:transfer-sim -- --seed --isolated   # dataDir temporal (default con --seed)
+ *   npm run memory:transfer-sim -- --no-isolated       # escribe en runtime/data/<pack>
  */
 import {
   mkdirSync,
@@ -26,6 +28,7 @@ import { resolveAgentEnv } from './agenft-env.mjs';
 import { preloadContext } from './memory-local.mjs';
 import {
   buildCapsule,
+  applyMemoryTransferPolicy,
   syncCapsuleToLabRemote,
   hydrateLocalFromPointer,
   loadPointer,
@@ -35,6 +38,8 @@ const args = process.argv.slice(2);
 const policy =
   args.find((a) => a.startsWith('--policy='))?.split('=')[1] ?? 'full';
 const seed = args.includes('--seed');
+const noIsolated = args.includes('--no-isolated');
+const wantIsolated = args.includes('--isolated') || (seed && !noIsolated);
 const manifestArg = args.find((a) => !a.startsWith('--'));
 if (manifestArg) {
   process.env.AGENFT_MANIFEST_PATH = resolve(manifestArg);
@@ -46,6 +51,13 @@ if (!ALLOWED.has(policy)) {
   process.exit(1);
 }
 
+let isolatedRoot = null;
+if (wantIsolated) {
+  isolatedRoot = mkdtempSync(join(tmpdir(), 'agenft-transfer-sim-'));
+  process.env.AGENFT_DATA_DIR = join(isolatedRoot, 'data');
+  mkdirSync(process.env.AGENFT_DATA_DIR, { recursive: true });
+}
+
 const { manifest, packDir, dataDir, packId } = resolveAgentEnv();
 const memDir = join(dataDir, 'memory');
 const latestPath = join(memDir, 'latest.json');
@@ -55,6 +67,7 @@ console.log('agent:', manifest.name, `#${manifest.identity.agentId}`);
 console.log('pack:', packId);
 console.log('policy:', policy);
 console.log('provider: lab-remote (sin pago)');
+console.log('dataDir:', wantIsolated ? `${dataDir} (isolated)` : dataDir);
 
 function hashJson(obj) {
   return `0x${createHash('sha256').update(JSON.stringify(obj)).digest('hex')}`;
@@ -116,29 +129,13 @@ console.log('   experientialHash vendedor:', hashBefore?.slice(0, 18) + '…');
 
 console.log('2/5 aplicar política de transfer…');
 let outgoingCapsule;
-if (policy === 'full') {
-  outgoingCapsule = {
-    ...sellerCapsule,
-    packagedAt: new Date().toISOString(),
-    transferApplied: 'full',
-  };
-} else {
-  const emptyFacts = [];
-  const l0Summary = `${manifest.name}: cuerpo limpio post-transfer (reset-total)`;
-  const latest = {
-    updatedAt: new Date().toISOString(),
-    l0Summary,
-    recentFacts: emptyFacts,
-    experientialHash: hashJson({ recentFacts: emptyFacts, l0Summary }),
-    deltaCount: 0,
-  };
-  outgoingCapsule = {
-    ...sellerCapsule,
-    packagedAt: new Date().toISOString(),
-    transferApplied: 'reset-total',
-    latest,
-    recentDeltas: [],
-  };
+try {
+  outgoingCapsule = applyMemoryTransferPolicy(sellerCapsule, policy, {
+    agentName: manifest.name,
+  });
+} catch (e) {
+  console.error('❌', e.message ?? e);
+  process.exit(1);
 }
 console.log('   transferApplied:', outgoingCapsule.transferApplied);
 
@@ -200,11 +197,13 @@ console.log(
 console.log('preload comprador:', preloadOk ? '✅' : '❌');
 console.log('L0 comprador:', (hydrated.l0Summary ?? '').slice(0, 100));
 
-// Limpieza best-effort del tmp
-try {
-  rmSync(buyerRoot, { recursive: true, force: true });
-} catch {
-  /* ignore */
+for (const root of [buyerRoot, isolatedRoot]) {
+  if (!root) continue;
+  try {
+    rmSync(root, { recursive: true, force: true });
+  } catch {
+    /* ignore */
+  }
 }
 
 if (vaultOk && hashOk && preloadOk) {
