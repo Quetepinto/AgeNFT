@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { execSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { privateKeyToAccount } from 'viem/accounts';
 import { checkPayerBalanceUsdc } from './budget-tracker.mjs';
 
@@ -82,6 +83,51 @@ export function buildCapsule({ manifest, dataDir }) {
     latest,
     recentDeltas,
   };
+}
+
+/**
+ * Aplica política de transfer a una cápsula ya construida (sin tocar Vault 0).
+ * @param {'full'|'reset-total'} policy
+ */
+export function applyMemoryTransferPolicy(capsule, policy, { agentName } = {}) {
+  if (!capsule || capsule.type !== 'agenft-memory-capsule/v1') {
+    throw new Error('applyMemoryTransferPolicy: cápsula inválida');
+  }
+  if (capsule.vault0Excluded !== true) {
+    throw new Error('applyMemoryTransferPolicy: vault0Excluded debe ser true');
+  }
+  const name = agentName ?? capsule.agent ?? 'ageNFT';
+  const base = {
+    ...capsule,
+    packagedAt: new Date().toISOString(),
+    vault0Excluded: true,
+  };
+
+  if (policy === 'full') {
+    return { ...base, transferApplied: 'full' };
+  }
+
+  if (policy === 'reset-total') {
+    const emptyFacts = [];
+    const l0Summary = `${name}: cuerpo limpio post-transfer (reset-total)`;
+    const latest = {
+      updatedAt: new Date().toISOString(),
+      l0Summary,
+      recentFacts: emptyFacts,
+      experientialHash: `0x${createHash('sha256')
+        .update(JSON.stringify({ recentFacts: emptyFacts, l0Summary }))
+        .digest('hex')}`,
+      deltaCount: 0,
+    };
+    return {
+      ...base,
+      transferApplied: 'reset-total',
+      latest,
+      recentDeltas: [],
+    };
+  }
+
+  throw new Error(`Política de transfer desconocida: ${policy}`);
 }
 
 async function createPaidX402(privateKey) {

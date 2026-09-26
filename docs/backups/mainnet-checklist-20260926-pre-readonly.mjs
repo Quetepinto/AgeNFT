@@ -4,16 +4,12 @@
  *
  * Usage:
  *   node mainnet-checklist.mjs [tokenId] [--dry-run]
- *   node mainnet-checklist.mjs 1 --read-only   # RPC + probes; sin firma TBA
- *
- * Sin `~/.credentials/agenft-base-sepolia.json` → modo lectura automático
- * (owner vs fundingWallet del manifiesto; item 8 marcado skip).
  */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createPublicClient, formatEther, formatUnits, getAddress, http } from 'viem';
+import { createPublicClient, formatEther, formatUnits, getAddress, hashTypedData, http } from 'viem';
 import { base } from 'viem/chains';
 import { verifyTypedDataSignature } from '../../runtime/node_modules/@x402/evm/dist/esm/index.mjs';
 import { createTbaPayerSigner } from '../../runtime/src/tba-payer-signer.mjs';
@@ -22,30 +18,15 @@ import { ageNftAbi, BASE_MAINNET, erc20Abi } from './abis.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = join(__dirname, '../..');
 const MANIFEST = join(REPO, 'docs/manifest/examples/unit-mainnet.json');
-const CREDS_PATH = join(homedir(), '.credentials', 'agenft-base-sepolia.json');
 
 const args = process.argv.slice(2);
 const tokenId = BigInt(args.find((a) => /^\d+$/.test(a)) ?? 1);
 const dryRun = args.includes('--dry-run');
-const wantReadOnly = args.includes('--read-only');
 
+const creds = JSON.parse(
+  readFileSync(join(homedir(), '.credentials', 'agenft-base-sepolia.json'), 'utf8'),
+);
 const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8'));
-const expectedOwner =
-  manifest.identity?.lab?.fundingWallet ??
-  manifest.identity?.lab?.owner ??
-  null;
-
-let creds = null;
-let readOnly = wantReadOnly;
-if (existsSync(CREDS_PATH)) {
-  creds = JSON.parse(readFileSync(CREDS_PATH, 'utf8'));
-} else {
-  readOnly = true;
-  console.warn(
-    `⚠️  Sin credentials (${CREDS_PATH}) — checklist en modo lectura (sin firma TBA).`,
-  );
-}
-if (wantReadOnly) readOnly = true;
 
 const publicClient = createPublicClient({
   chain: base,
@@ -79,21 +60,12 @@ async function main() {
     }),
   ]);
 
-  const ownerExpected = readOnly
-    ? (expectedOwner ?? creds?.address)
-    : creds.address;
-  const ownerOk =
-    Boolean(ownerExpected) &&
-    owner.toLowerCase() === ownerExpected.toLowerCase();
-
   const items = [
     check(
       1,
       'NFT existe y owner coincide con wallet operacional',
-      ownerOk,
-      readOnly
-        ? `owner=${owner} (esperado manifiesto fundingWallet)`
-        : `owner=${owner}`,
+      owner.toLowerCase() === creds.address.toLowerCase(),
+      `owner=${owner}`,
     ),
     check(
       2,
@@ -131,30 +103,15 @@ async function main() {
       await probeBrain(manifest.organs.brain.primary.endpoint),
       'tx402.ai',
     ),
-  ];
-
-  if (readOnly || !creds?.privateKey) {
-    const skip = check(
+    check(
       8,
       'Firma EIP-3009 soberana TBA (ERC-1271)',
-      true,
-      'SKIP — modo lectura (sin owner key)',
-    );
-    skip.skip = true;
-    items.push(skip);
-  } else {
-    items.push(
-      check(
-        8,
-        'Firma EIP-3009 soberana TBA (ERC-1271)',
-        await probeTbaSovereignSign(agent.tba, creds.privateKey),
-        'owner firma digest → TBA isValidSignature',
-      ),
-    );
-  }
+      await probeTbaSovereignSign(agent.tba, creds.privateKey),
+      'owner firma digest → TBA isValidSignature',
+    ),
+  ];
 
-  const scored = items.filter((i) => !i.skip);
-  const passed = scored.filter((i) => i.ok).length;
+  const passed = items.filter((i) => i.ok).length;
   const report = {
     network: BASE_MAINNET.network,
     tokenId: tokenId.toString(),
@@ -162,8 +119,7 @@ async function main() {
     tba: agent.tba,
     owner,
     checklist: items,
-    score: `${passed}/${scored.length}`,
-    readOnly,
+    score: `${passed}/${items.length}`,
     dryRun,
     at: new Date().toISOString(),
   };
@@ -176,7 +132,7 @@ async function main() {
 
   console.log(JSON.stringify(report, null, 2));
   if (!dryRun) console.log('\nSaved:', outPath);
-  process.exit(passed === scored.length ? 0 : passed >= 6 ? 0 : 1);
+  process.exit(passed === items.length ? 0 : passed >= 6 ? 0 : 1);
 }
 
 async function probeTbaSovereignSign(tbaAddress, ownerPrivateKey) {

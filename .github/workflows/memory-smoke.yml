@@ -1,0 +1,33 @@
+name: Memory smoke (Bloque 3.2)
+
+on:
+  pull_request:
+    paths:
+      - 'runtime/**'
+      - 'docs/manifest/examples/unit-mainnet.json'
+      - '.github/workflows/memory-smoke.yml'
+  push:
+    branches: [main, master]
+    paths:
+      - 'runtime/**'
+      - 'docs/manifest/examples/unit-mainnet.json'
+      - '.github/workflows/memory-smoke.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: runtime/package-lock.json
+
+      - name: Install runtime deps
+        run: cd runtime && npm ci
+
+      - name: Memory smoke (offline, sin USDC)
+        run: cd runtime && npm run memory:smoke
