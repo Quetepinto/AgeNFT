@@ -1,7 +1,7 @@
 # Pieza `mobility/v0` — transporte por ciudad (City Packs)
 
 > **Estado:** 📐 diseño + **València + Madrid** · 2026-09-19  
-> Capa: **M3 Capability** + **B Biblioteca**. Dualidad: tool en AgeNFT completo **o** Unit lite. Doc: [`docs/research/mobility-pieces.md`](../../docs/research/mobility-pieces.md).
+> **Producto:** **TRNXP** · Capa: **M3 Capability** + **B Biblioteca**. Dualidad: tool en AgeNFT completo **o** Unit lite. Doc: [`docs/research/mobility-pieces.md`](../../docs/research/mobility-pieces.md) · GEV: [`trnxp-gods-eye-view.md`](../../docs/research/trnxp-gods-eye-view.md).
 
 Un harness genérico y un pack de datos por ciudad. La ciudad no tiene código propio: declara redes, fuentes, paradas y reglas; el harness enruta y consulta.
 
@@ -33,20 +33,22 @@ python3 tools/mobility.py bot valencia-es
 
 | Empaquetado | Cómo |
 |-------------|------|
-| **B — lite** | `cd runtime && npm run telegram:tranxp` · `TRANXP_TELEGRAM_BOT_TOKEN` + `TRANXP_CITY_PACK` |
-| **A — tool** | Bot URUIRU: `/tranx próximo bus suecia` · `capabilities` en manifiesto |
+| **B — lite** | `cd runtime && npm run telegram:trnxp` (alias `telegram:tranxp`) · `TRANXP_TELEGRAM_BOT_TOKEN` · **sin ciudad por defecto** (`/ciudad`) · hint opcional `TRANXP_CITY_PACK` |
+| **A — tool** | Bot URUIRU: `/tranx …` · `capabilities` en manifiesto · primer `packs[]` o `AGENFT_MOBILITY_PACK` |
 
 Helper: [`runtime/src/mobility-reply.mjs`](../../runtime/src/mobility-reply.mjs).  
+Favoritos personales (M2): [`runtime/src/tranxp-personal.mjs`](../../runtime/src/tranxp-personal.mjs) · doc [`docs/research/tranxp-personal-favorites.md`](../../docs/research/tranxp-personal-favorites.md).  
+Packs globales (boceto): [`docs/research/city-packs-worldwide.md`](../../docs/research/city-packs-worldwide.md).  
 Plantilla lite: [`docs/manifest/examples/unit-tranxp-lite.json`](../../docs/manifest/examples/unit-tranxp-lite.json).
 
 ## Qué es genérico y qué es del pack
 
-| Harness (igual para todas) | City Pack (datos locales) |
-|---|---|
-| Confirmar ciudad → red → medio | `routing.rules` → red, parada, línea |
-| Vivo ≠ programado | `networks.*.live` / `scheduled[]` |
-| Adapters: softour-metrobus, transitapp-bgtfs, radardetrenes, custom | IDs y pitfalls por ciudad |
-| Checks + `reply` sin LLM | `favorites[]`, `checks[]`, `incidents` |
+| Harness (igual para todas) | City Pack (datos locales) | M2 personal (owner) |
+|---|---|---|
+| Confirmar ciudad → red → medio | `routing.rules` → red, parada, línea | Ciudad elegida por chat |
+| Vivo ≠ programado | `networks.*.live` / `scheduled[]` | `/fav` casa/trabajo |
+| Adapters reutilizables | IDs y pitfalls por ciudad | `personal-store.json` (no viaja) |
+| Checks + `reply` sin LLM | `favorites[]` de ejemplo, `checks[]` | — |
 
 Añadir ciudad = copiar `_template`, rellenar, `validate`.
 

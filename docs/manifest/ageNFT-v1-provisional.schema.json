@@ -195,7 +195,7 @@
 
     "capabilities": {
       "type": "array",
-      "description": "Piezas M3 enchufables (ej. mobility/v0 TranXp). Viajan con el token; no son órganos del loop vital.",
+      "description": "Piezas M3 enchufables (ej. mobility/v0 TRNXP). Viajan con el token; no son órganos del loop vital.",
       "items": {
         "type": "object",
         "required": ["id"],
@@ -214,7 +214,7 @@
           "mode": {
             "type": "string",
             "enum": ["tool", "lite-canon"],
-            "description": "tool = capacidad en cuerpo completo; lite-canon = alma del Unit TranXp"
+            "description": "tool = capacidad en cuerpo completo; lite-canon = alma del Unit TRNXP"
           },
           "path": {
             "type": "string",

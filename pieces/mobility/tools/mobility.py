@@ -570,7 +570,7 @@ def format_reply(pack: dict, text: str) -> str:
 
 
 def bot_loop(pack: dict) -> int:
-    print(f"TranXp básico · {pack.get('name')} · sin modelo. Escribe un mensaje (salir / quit).")
+    print(f"TRNXP básico · {pack.get('name')} · sin modelo. Escribe un mensaje (salir / quit).")
     print("Comandos: /scan  /help")
     while True:
         try:

@@ -16,8 +16,8 @@
 | **Construcción** | Dev / Cursor | Cablear código, probar órganos nuevos, inbox, CLI | **Lab Studio** + `lab-bridge` :8799 | Sigue en repo; no es lo que ve el usuario final |
 | **Configuración** | Owner del ageNFT | Elegir entre **opciones que ofrecemos** (gateways, memoria, tiers…) | Lab Studio (prototipo) | **Organ Studio / Dashboard** — wallet + su `tokenId` |
 
-El **bridge de lab** (`npm run lab:bridge`) es herramienta **interna de construcción**.  
-El **bridge de configuración** del usuario será otro canal (API del Dashboard, autenticado por wallet) que escribe el **mismo** `runtime/wiring/{packId}.json` — o lo equivalente en hosting gestionado.
+El **bridge de lab** (`npm run lab:bridge` :8799) es herramienta **interna de construcción**.  
+El **bridge de configuración** del owner es `npm run settings:bridge` (:8800) — API del Dashboard (`dapp/settings.html`, wallet = `ownerOf`) que escribe el **mismo** `runtime/wiring/{packId}.json`. Preferencias de dónde corre el host: `runtime/data/{packId}/host-prefs.json`.
 
 ```
                     ┌─────────────────────────────────────┐
@@ -100,12 +100,24 @@ Si **no existe** archivo wiring → modo legacy (todo permitido).
 
 ```bash
 cd runtime
-npm run lab:bridge          # puerto 8799 — buzón + wiring API
+npm run lab:bridge          # puerto 8799 — buzón + wiring API (dev)
+npm run settings:bridge     # puerto 8800 — Dashboard owner (producto)
 npm run wiring:show         # ver wiring activo
 npm run wiring:apply        # aplicar wiring-draft.json del inbox
 ```
 
-### Lab bridge API (127.0.0.1)
+### Settings bridge API (producto · 127.0.0.1:8800)
+
+| Método | Ruta | Qué hace |
+|--------|------|----------|
+| GET | `/v1/health` | Ping |
+| GET/POST | `/v1/wiring` | Leer / **aplicar** wiring al runtime |
+| GET/POST | `/v1/host-prefs` | Preferencias de host (mode, URL, mobilityPack) |
+
+Token opcional: `AGENFT_SETTINGS_TOKEN` → header `X-Settings-Token`.  
+UI: [`dapp/settings.html`](../../../dapp/settings.html).
+
+### Lab bridge API (construcción · 127.0.0.1:8799)
 
 | Método | Ruta | Qué hace |
 |--------|------|----------|

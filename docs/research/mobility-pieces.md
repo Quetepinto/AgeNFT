@@ -1,7 +1,7 @@
 # Pieza movilidad — harness genérico + City Packs
 
 > **Estado:** 📐 diseño · ✅ **prototipo funcionando con València** · **2026-09-19**  
-> **Nombre de producto (provisional):** TranXp · Código: [`pieces/mobility/`](../../pieces/mobility/README.md) · Origen: proyecto Camino (Arnés / Hermes VPS).
+> **Nombre de producto:** **TRNXP** (antes TranXp) · Código: [`pieces/mobility/`](../../pieces/mobility/README.md) · Origen: proyecto Camino (Arnés / Hermes VPS).
 
 ## Idea
 
@@ -22,7 +22,7 @@ No toca TBA, `hands` ni presupuesto más allá del cerebro **cuando el modo pro 
 
 ## Dualidad: pieza + Unit lite (decisión 2026-09-19)
 
-**No es un o/u.** TranXp es **una pieza** (`mobility/v0` + City Packs + `reply`/`scan`). Misma implementación, dos empaquetados:
+**No es un o/u.** TRNXP es **una pieza** (`mobility/v0` + City Packs + `reply`/`scan`). Misma implementación, dos empaquetados:
 
 | Empaquetado | Qué es | Cuándo |
 |-------------|--------|--------|
@@ -33,7 +33,7 @@ No toca TBA, `hands` ni presupuesto más allá del cerebro **cuando el modo pro 
 pieza única (pieces/mobility/)
         │
         ├── A: AgeNFT completo ── capabilities / M3 + B
-        └── B: Unit TranXp lite ── manifiesto plantilla (cerebro off)
+        └── B: Unit TRNXP lite ── manifiesto plantilla (cerebro off)
 ```
 
 **Prioridad:** pieza usable en un hábitat **ahora** (sin mint); AgeNFT Bloque 3 en paralelo; cable a URUIRU cuando la pieza demuestre; mint lite / NFT-capacidad solo si hay demanda de transferir.
@@ -52,7 +52,7 @@ Hábitat básico (empaquetado B hoy): `runtime/src/telegram-tranxp-bot.mjs` → 
 
 ## Dos modos (decisión 2026-09-19)
 
-TranXp **no necesita un LLM** para el caso de uso diario. El City Pack ya es el programa: reglas de red, paradas, adapters. El «agente» básico es un **bot determinista**.
+TRNXP **no necesita un LLM** para el caso de uso diario. El City Pack ya es el programa: reglas de red, paradas, adapters. El «agente» básico es un **bot determinista**.
 
 | Modo | Qué es | Modelo | Cuándo |
 |------|--------|--------|--------|
@@ -81,7 +81,7 @@ Mismo contrato HTTP/CLI para Telegram, Matrix o dApp:
 POST/CLI  reply(pack, texto) → string
 ```
 
-Un bot de Telegram de 30 líneas que reenvía `reply` ya es TranXp usable. El NFT/manifiesto puede llegar después (Fase 2–3).
+Un bot de Telegram de 30 líneas que reenvía `reply` ya es TRNXP usable. El NFT/manifiesto puede llegar después (Fase 2–3).
 
 ---
 
@@ -140,7 +140,7 @@ Retrasos **del vehículo** ya salen del tablón vivo (C6 `delayMinutes`, Met Go 
 | **1** | Hábitat Telegram → `reply` (`telegram-tranxp-bot.mjs`); segundo pack `madrid-es` | ✅ |
 | **1b** | Instalar skill en Hermes (perfil Iggy) como **modo pro**; sustituir el enrutado manual de Camino | 📐 |
 | **2** | `capabilities` en manifiesto Unit-Mainnet + `/tranx` en bot URUIRU; packs IPFS / `libraryInclude` al vender | ✅ esbozo manifiesto · 📐 IPFS |
-| **3** | Unit vertical TranXp (mint): default = bot reglas; LLM opt-in; dApp con favoritos | 💡 |
+| **3** | Unit vertical TRNXP (mint): default = bot reglas; LLM opt-in; dApp con favoritos | 💡 |
 | **4** | Enlaces a planificadores oficiales (gvEnRuta, OTP públicos) → **no** clonar Google Maps | 💡 |
 | **5** | Mapa/routing propio (OTP self-host, OSM) | ⏸ producto entero, fuera de MVP |
 
@@ -156,11 +156,14 @@ Retrasos **del vehículo** ya salen del tablón vivo (C6 `delayMinutes`, Met Go 
 - **Licencia de datos** por pack (fuentes oficiales vs agregadores; declararla en el pack).
 - Cómo declarar en el manifiesto una capacidad con datos externos sin romper `additionalProperties: false`.
 - Dónde vive Hermescortes / el job de noticias exacto del VPS, para copiar selectores y no inventar parsers.
-- Matrix como segundo hábitat del bot básico (Telegram TranXp + `/tranx` en URUIRU ya cubren A/B).
+- Matrix como segundo hábitat del bot básico (Telegram TRNXP + `/tranx` en URUIRU ya cubren A/B).
 
 ## Docs hermanos
 
 - Taxonomía: [`pieces-taxonomy.md`](pieces-taxonomy.md) § M3 / Biblioteca
 - Memoria por capas: [`memory-layers-access.md`](memory-layers-access.md) · Biblioteca: [`library-storage-policy.md`](library-storage-policy.md)
+- Favoritos personales M2: [`tranxp-personal-favorites.md`](tranxp-personal-favorites.md)
+- Packs mundiales (boceto): [`city-packs-worldwide.md`](city-packs-worldwide.md)
+- God's Eye View + wiring: [`trnxp-gods-eye-view.md`](trnxp-gods-eye-view.md)
 - Patrón hermano: [`trading-pieces.md`](trading-pieces.md)
 - Origen operativo: Arnés `plantillas/camino/` · `recetas/transporte.md`
