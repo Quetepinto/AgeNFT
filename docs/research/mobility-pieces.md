@@ -1,7 +1,7 @@
 # Pieza movilidad — harness genérico + City Packs
 
-> **Estado:** 📐 diseño · ✅ **prototipo funcionando con València** · **2026-09-19**  
-> **Nombre de producto (provisional):** TranXp · Código: [`pieces/mobility/`](../../pieces/mobility/README.md) · Origen: proyecto Camino (Arnés / Hermes VPS).
+> **Estado:** 📐 diseño · ✅ **prototipo tablón València** · ✅ **spike plan A→B TRNXP** · **2026-10-01**  
+> **Nombre de producto:** TRNXP (antes TranXp) · Código: [`pieces/mobility/`](../../pieces/mobility/README.md) · Origen: proyecto Camino (Arnés / Hermes VPS). · Spike: [`trnxp-trip-spike.md`](trnxp-trip-spike.md).
 
 ## Idea
 
@@ -140,13 +140,14 @@ Retrasos **del vehículo** ya salen del tablón vivo (C6 `delayMinutes`, Met Go 
 | **1** | Hábitat Telegram → `reply` (`telegram-tranxp-bot.mjs`); segundo pack `madrid-es` | ✅ |
 | **1b** | Instalar skill en Hermes (perfil Iggy) como **modo pro**; sustituir el enrutado manual de Camino | 📐 |
 | **2** | `capabilities` en manifiesto Unit-Mainnet + `/tranx` en bot URUIRU; packs IPFS / `libraryInclude` al vender | ✅ esbozo manifiesto · 📐 IPFS |
-| **3** | Unit vertical TranXp (mint): default = bot reglas; LLM opt-in; dApp con favoritos | 💡 |
-| **4** | Enlaces a planificadores oficiales (gvEnRuta, OTP públicos) → **no** clonar Google Maps | 💡 |
-| **5** | Mapa/routing propio (OTP self-host, OSM) | ⏸ producto entero, fuera de MVP |
+| **3** | Unit vertical TRNXP (mint): default = bot reglas; LLM opt-in; dApp con favoritos | 💡 |
+| **4** | Plan A→B: IntentParser + OSRM walk + deep-link oficial (gvEnRuta) · CLI `trip.py` | ✅ spike TRNXP · ver [`trnxp-trip-spike.md`](trnxp-trip-spike.md) |
+| **5** | OTP+GTFS self-host (piernas reales); más criterios/modos; cable bot | 📐 gancho `otp_proxy` |
 
 ## Qué **no** es
 
-- No es un planificador multimodal ni un mapa. Da tablones y enrutado textual.
+- **Tablón:** no es un mapa. Da próximos vehículos y enrutado textual por red.
+- **Plan spike:** orquesta providers + ranking; **no** inventa horarios PT (deep-link al oficial hasta OTP).
 - No garantiza cobertura mundial: cada ciudad la cubre quien rellena su pack.
 - No hace scraping agresivo: consultas bajo demanda, APIs que la propia web oficial expone o agregadores públicos.
 

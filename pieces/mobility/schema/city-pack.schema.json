@@ -15,6 +15,32 @@
     "language": { "type": "string", "description": "Idioma de las palabras clave" },
     "updatedAt": { "type": "string" },
     "maintainers": { "type": "array", "items": { "type": "string" } },
+    "tripProviders": {
+      "type": "object",
+      "description": "TRNXP plan A→B: planificador oficial, OSRM, gancho OTP",
+      "properties": {
+        "officialPlannerUrl": { "type": "string" },
+        "officialPlannerName": { "type": "string" },
+        "osrmProfile": { "type": "string" },
+        "otpUrl": { "type": ["string", "null"] },
+        "otpNote": { "type": "string" },
+        "tripPlanning": { "type": "boolean" }
+      }
+    },
+    "places": {
+      "type": "object",
+      "description": "Lugares geocodificables (landmarks) fuera de stops de red",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "lat", "lon"],
+        "properties": {
+          "name": { "type": "string" },
+          "aliases": { "type": "array", "items": { "type": "string" } },
+          "lat": { "type": "number" },
+          "lon": { "type": "number" }
+        }
+      }
+    },
     "discovery": {
       "type": "object",
       "description": "Permiso al agente para investigar fuentes nuevas cuando el pack no cubre la pregunta",
