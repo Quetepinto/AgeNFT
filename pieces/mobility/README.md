@@ -39,7 +39,9 @@ python3 tools/trip.py plan valencia-es "de Suècia a Estació del Nord lo más r
 python3 tools/trip.py plan valencia-es --from "Suècia" --to "Estació del Nord" --criterion fewest_transfers --json
 ```
 
-MVP: **a pie** (OSRM/OSM) + **PT** vía deep-link honesto a gvEnRuta. Sin keys Google. OTP = gancho (`AGENFT_OTP_URL`), no montado en este spike.
+MVP: **a pie** (OSRM/OSM) + **PT** vía deep-link honesto a gvEnRuta.  
+Cuando: `leaveNow` / `departAt` / `arriveBy` (NL o `--leave-now` / `--depart-at` / `--arrive-by`).  
+Sin keys Google. OTP = gancho (`AGENFT_OTP_URL`). Smoke: `python3 tools/trip.py smoke valencia-es`.
 
 ## Hábitats (dualidad)
 

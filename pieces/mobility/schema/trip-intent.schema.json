@@ -11,10 +11,17 @@
     "when": {
       "type": "object",
       "required": ["type", "tz"],
+      "description": "leaveNow (=salir ahora) · departAt · arriveBy. Aliases booleanos leaveNow/departAt/arriveBy.",
       "properties": {
-        "type": { "type": "string", "enum": ["depart_now", "depart_at", "arrive_by"] },
-        "iso": { "type": ["string", "null"] },
-        "tz": { "type": "string" }
+        "type": {
+          "type": "string",
+          "enum": ["leaveNow", "departAt", "arriveBy", "depart_now", "depart_at", "arrive_by"]
+        },
+        "iso": { "type": ["string", "null"], "description": "Instante local ISO para departAt/arriveBy" },
+        "tz": { "type": "string" },
+        "leaveNow": { "type": "boolean" },
+        "departAt": { "type": "boolean" },
+        "arriveBy": { "type": "boolean" }
       }
     },
     "criteria": {

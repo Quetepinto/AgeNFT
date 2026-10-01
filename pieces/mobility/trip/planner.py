@@ -21,6 +21,8 @@ def plan_trip(
     origin: str | None = None,
     destination: str | None = None,
     criterion: str | None = None,
+    when_type: str | None = None,
+    when_iso: str | None = None,
 ) -> dict[str, Any]:
     intent = parse_intent(
         text,
@@ -29,8 +31,11 @@ def plan_trip(
         origin=origin,
         destination=destination,
         criterion=criterion,
+        when_type=when_type,
+        when_iso=when_iso,
     )
-    if intent.get("needsClarify"):
+    hard = [n for n in (intent.get("needsClarify") or []) if n in ("origin", "destination")]
+    if hard:
         return {
             "intent": intent,
             "ranked": [],
@@ -146,9 +151,17 @@ def format_trip_text(intent: dict[str, Any], ranked: list[dict[str, Any]], plann
     o = intent["origin"].get("text") or "?"
     d = intent["destination"].get("text") or "?"
     primary = intent.get("criteria", {}).get("primary") or "fastest"
+    when = intent.get("when") or {}
+    wtype = when.get("type") or "leaveNow"
+    if wtype == "leaveNow" or when.get("leaveNow"):
+        when_s = "salir ahora"
+    elif wtype == "arriveBy" or when.get("arriveBy"):
+        when_s = f"llegar antes de {when.get('iso') or '?'}"
+    else:
+        when_s = f"salir a {when.get('iso') or '?'}"
     lines = [
         f"TRNXP · plan {o} → {d}",
-        f"Criterio: {primary} · confianza parser {intent.get('confidence', 0):.2f}",
+        f"Cuando: {when_s} · criterio: {primary} · conf {intent.get('confidence', 0):.2f}",
         "",
     ]
     if not ranked:
@@ -174,5 +187,7 @@ def format_trip_text(intent: dict[str, Any], ranked: list[dict[str, Any]], plann
             lines.append(f"   ⚠ {offer['disclaimer']}")
         lines.append("")
 
-    lines.append("Nota: PT multimodal no se calcula aquí (deep-link). OTP = siguiente fase.")
+    lines.append(
+        "Nota: PT = deep-link (hora en URL best-effort; gvEnRuta puede ignorarla). OTP = siguiente fase."
+    )
     return "\n".join(lines).rstrip() + "\n"

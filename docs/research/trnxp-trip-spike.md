@@ -1,59 +1,71 @@
 # TRNXP trip spike — plan A→B (València)
 
 > **Fecha:** 2026-10-01 · **Marca:** TRNXP · **Repo:** `pieces/mobility/`  
-> Decisiones qtp: arrancar ahora; MVP **deep-link** oficial (no OTP en VPS); marca TRNXP en lo tocado.
+> Decisiones qtp: arrancar ahora; MVP **deep-link** oficial (no OTP en VPS); marca TRNXP en lo tocado.  
+> Capa tiempo: `leaveNow` / `departAt` / `arriveBy` (NL ES + flags CLI).
 
 ## Qué entrega este spike
 
 | Pieza | Rol |
 |-------|-----|
-| `tools/trip.py` | CLI `plan` / `parse` |
-| `trip/intent_parser.py` | Reglas ES; LLM **off** (`AGENFT_TRIP_LLM` solo gancho) |
+| `tools/trip.py` | CLI `plan` / `parse` / `smoke` |
+| `trip/intent_parser.py` | Reglas ES + **when**; LLM **off** |
 | `providers/osrm.py` | A pie (OSRM público o `AGENFT_OSRM_URL`) |
-| `providers/deeplink.py` | PT multimodal → URL gvEnRuta / `tripProviders.officialPlannerUrl` |
-| `providers/otp_proxy.py` | Gancho si `AGENFT_OTP_URL`; sin parse de itinerarios aún |
-| `trip/ranker.py` | `fastest` y `fewest_transfers` (reglas) |
-| Schemas | `trip-intent.schema.json`, `trip-plan.schema.json` |
+| `providers/deeplink.py` | PT → gvEnRuta + params time/date/arriveBy (best-effort) |
+| `providers/otp_proxy.py` | Gancho si `AGENFT_OTP_URL` |
+| `trip/ranker.py` | `fastest` y `fewest_transfers` |
+| Schemas | `trip-intent` / `trip-plan` |
 
-**No toca** el camino crítico de `mobility.py reply` (tablón).
+**No toca** `mobility.py reply` (tablón).
 
-## Cómo probar (3 pasos)
+## Cómo probar
 
 ```bash
 cd pieces/mobility
 
-# 1) Plan rápido (texto libre)
-python3 tools/trip.py plan valencia-es "de Suècia a Estació del Nord lo más rápido"
+# Smoke offline (parser + URL when)
+python3 tools/trip.py smoke valencia-es
 
-# 2) Menos transbordos (flags) + JSON
-python3 tools/trip.py plan valencia-es --from "Suècia" --to "Estació del Nord" \
-  --criterion fewest_transfers --json
+# Salir ahora / a una hora / llegar antes de
+python3 tools/trip.py plan valencia-es "de Suècia a Nord salir ahora"
+python3 tools/trip.py plan valencia-es "de Suècia a Nord salir a las 18:30"
+python3 tools/trip.py plan valencia-es "de Suècia a Nord llegar antes de las 20:00"
+python3 tools/trip.py plan valencia-es --from "Suècia" --to "Nord" --depart-at 18:30
+python3 tools/trip.py plan valencia-es --from "Suècia" --to "Nord" --arrive-by 20:00 --json
 
-# 3) Regresión tablón
+# Regresión tablón
 python3 tools/mobility.py reply valencia-es "próximo bus suecia"
 ```
 
-Red: hace falta salida a OSRM demo (`router.project-osrm.org`) para la pierna a pie. Nominatim solo si el lugar no está en `places`/`stops` del pack.
+## When → TripIntent
 
-## Deep-link vs OTP (límites honestos)
+| NL / flag | `when.type` | `iso` |
+|-----------|-------------|-------|
+| salir ahora · `--leave-now` · (default) | `leaveNow` | null |
+| salir a las 18:30 · `--depart-at 18:30` | `departAt` | ISO local (si ya pasó → +1 día) |
+| llegar antes de las 20 · `--arrive-by 20:00` | `arriveBy` | ISO local |
+
+## Deep-link: qué puede / no puede
+
+**Puede (TRNXP):**
+- Parsear intención horaria y exponerla en `TripIntent.when` + texto del plan.
+- Añadir a la URL: `timeType`, `date`, `time`, `arriveBy`, `departNow` (estilo OTP).
+
+**No puede garantizar (gvEnRuta):**
+- Que la UI lea esos query params (sin API pública documentada; a veces 503).
+- Calcular itinerarios PT ni respetar “llegar antes de” en el arnés (solo deep-link).
+- Inventar horarios: si la UI ignora params, el usuario ajusta salida/llegada en el planificador.
 
 | | Deep-link (este spike) | OTP+GTFS (después) |
 |--|------------------------|--------------------|
-| Piernas PT | Placeholder + URL oficial | Itinerarios con tiempos/transbordos reales |
-| Ranking | Heurística: walk medido vs “abrir oficial” | Score numérico real (`durationSec`, `transfers`) |
-| Horarios | **No** se inventan | Programados / RT según OTP |
-| Ops | Cero infra VPS | Self-host OTP + feeds GTFS VLC |
-| Riesgo UX | Usuario debe abrir gvEnRuta | Complejidad ops + actualización GTFS |
+| Piernas PT | Placeholder + URL | Itinerarios reales |
+| Hora salida/llegada | Best-effort en URL | Nativo en el grafo |
+| Ranking | Walk medido vs “abrir oficial” | `durationSec` / `transfers` reales |
 
-gvEnRuta **no** expone API pública estable usable desde el arnés → el MVP no finge un proxy. Query params `from`/`to`/coords en la URL son best-effort; si la UI los ignora, la home del planificador sigue siendo el escape honesto.
+## Gancho OTP
 
-## Gancho OTP (fase siguiente)
-
-1. Desplegar OTP con GTFS València (Mobility Database / operadores).  
-2. `export AGENFT_OTP_URL=https://…`  
-3. Completar `providers/otp_proxy.py` para parsear `plan` GraphQL/REST → `ModeOffer.legs`.  
-4. Apagar o relegar deep-link a `fallbacks[]`.
+`AGENFT_OTP_URL` + `providers/otp_proxy.py` — parse de piernas = fase siguiente.
 
 ## Fuera de spike
 
-Madrid trip, LLM IntentParser, GEV, feeds OSINT, tarifas reales, cable bot `/tranx plan`.
+Madrid trip, LLM IntentParser, GEV, feeds OSINT, tarifas, cable bot `/tranx plan`.

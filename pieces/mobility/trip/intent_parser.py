@@ -14,7 +14,7 @@ def norm(s: str) -> str:
 
 
 CRITERIA_PATTERNS: list[tuple[str, list[str]]] = [
-    ("fastest", ["mas rapido", "lo mas rapido", "mas rapida", "rapida", "rapido", "fastest", "antes"]),
+    ("fastest", ["mas rapido", "lo mas rapido", "mas rapida", "rapida", "rapido", "fastest", "lo antes posible"]),
     ("fewest_transfers", ["menos transbordos", "sin transbordos", "sin cambios", "pocos cambios", "fewest", "menos cambios"]),
     ("cheapest", ["mas barata", "barata", "barato", "menos cara", "cheapest"]),
     ("least_walking", ["menos andar", "menos caminar", "poco a pie", "least walking"]),
@@ -50,21 +50,167 @@ def _strip_criteria_noise(place: str) -> str:
         p,
         flags=re.I,
     )
+    # Quitar colas de horario pegadas al destino («Nord salir a las 18», etc.)
+    p = re.sub(
+        r"\s+(salir|salgo|partir|partimos|llegar|llegue|llegaré|llegare|para\s+llegar|"
+        r"ahora|a\s+las|antes\s+de|depart|arrive).*$",
+        "",
+        p,
+        flags=re.I,
+    )
     low = norm(p)
     for _, keys in CRITERIA_PATTERNS:
         for k in sorted(keys, key=len, reverse=True):
             if low.endswith(k):
-                # recortar por longitud del sufijo normalizado (aprox. sobre original)
                 cut = len(k)
-                # buscar última aparición casefold-ish
                 pattern = re.compile(re.escape(k), re.I)
                 matches = list(pattern.finditer(norm(p)))
                 if matches:
-                    # norm length ≈ original; cortar desde el final
                     p = p[: max(0, len(p) - cut)].rstrip(" ,.-")
                 low = norm(p)
     return p.strip(" .,:;\"'")
 
+
+_TIME_RE = re.compile(
+    r"(?P<h>\d{1,2})(?:[:hH\.](?P<m>\d{2}))?(?:\s*(?P<ampm>a\.?\s*m\.?|p\.?\s*m\.?|am|pm))?",
+    re.I,
+)
+
+# Aliases user-facing ↔ schema
+WHEN_LEAVE_NOW = "leaveNow"      # = depart_now
+WHEN_DEPART_AT = "departAt"      # = depart_at
+WHEN_ARRIVE_BY = "arriveBy"      # = arrive_by
+_WHEN_LEGACY = {
+    "depart_now": WHEN_LEAVE_NOW,
+    "depart_at": WHEN_DEPART_AT,
+    "arrive_by": WHEN_ARRIVE_BY,
+    "leave_now": WHEN_LEAVE_NOW,
+}
+
+
+def _parse_clock(fragment: str) -> tuple[int, int] | None:
+    m = _TIME_RE.search(fragment or "")
+    if not m:
+        return None
+    h = int(m.group("h"))
+    minute = int(m.group("m") or 0)
+    ampm = (m.group("ampm") or "").lower().replace(" ", "").replace(".", "")
+    if ampm.startswith("p") and h < 12:
+        h += 12
+    if ampm.startswith("a") and h == 12:
+        h = 0
+    if h > 23 or minute > 59:
+        return None
+    return h, minute
+
+
+def _today_iso_at(tz_name: str, hour: int, minute: int) -> str:
+    """ISO local con offset si ZoneInfo disponible; si la hora ya pasó, +1 día."""
+    from datetime import datetime, timedelta, timezone
+    try:
+        from zoneinfo import ZoneInfo
+        tz = ZoneInfo(tz_name)
+    except Exception:
+        tz = timezone.utc
+    now = datetime.now(tz)
+    target = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    if target < now - timedelta(minutes=2):
+        target = target + timedelta(days=1)
+    return target.isoformat(timespec="seconds")
+
+
+def detect_when(
+    text: str,
+    *,
+    tz: str,
+    override_type: str | None = None,
+    override_iso: str | None = None,
+) -> dict[str, Any]:
+    """Detecta leaveNow / departAt / arriveBy en NL español (+ overrides CLI)."""
+    if override_type:
+        t = _WHEN_LEGACY.get(override_type, override_type)
+        if t not in (WHEN_LEAVE_NOW, WHEN_DEPART_AT, WHEN_ARRIVE_BY):
+            t = WHEN_LEAVE_NOW
+        iso = override_iso
+        if t != WHEN_LEAVE_NOW and not iso and override_iso is None:
+            # override_type sin iso: dejar iso null (CLI debe pasar hora)
+            pass
+        return {
+            "type": t,
+            "iso": iso,
+            "tz": tz,
+            "leaveNow": t == WHEN_LEAVE_NOW,
+            "departAt": t == WHEN_DEPART_AT,
+            "arriveBy": t == WHEN_ARRIVE_BY,
+        }
+
+    n = norm(text)
+    raw = text or ""
+
+    # llegar antes de / llegar a las / para las / arrive by
+    arrive_m = re.search(
+        r"(?:llegar|llegue|llegaré|llegare|llegamos|para\s+llegar|arrive(?:\s+by)?)\s+"
+        r"(?:antes\s+de\s+(?:las?\s+)?|a\s+las?\s+|para\s+las?\s+|before\s+)",
+        raw,
+        re.I,
+    )
+    if arrive_m or re.search(r"llegar\s+antes\s+de", n) or re.search(r"arrive\s+by", n):
+        # reloj tras la marca
+        tail = raw[arrive_m.end():] if arrive_m else raw
+        clock = _parse_clock(tail) or _parse_clock(raw)
+        if clock:
+            h, mi = clock
+            return {
+                "type": WHEN_ARRIVE_BY,
+                "iso": _today_iso_at(tz, h, mi),
+                "tz": tz,
+                "leaveNow": False,
+                "departAt": False,
+                "arriveBy": True,
+            }
+
+    # salir / partir a las … / salgo a las / depart at
+    depart_m = re.search(
+        r"(?:salir|salgo|salimos|partir|partimos|salida|depart(?:\s+at)?)\s+"
+        r"(?:a\s+las?\s+|at\s+)",
+        raw,
+        re.I,
+    )
+    if depart_m or re.search(r"a\s+las\s+\d", n):
+        # Evitar confundir «a las» de arrive ya capturado
+        if not re.search(r"llegar|llegue|llegare|antes\s+de", n):
+            tail = raw[depart_m.end():] if depart_m else raw
+            clock = _parse_clock(tail) or _parse_clock(raw)
+            if clock:
+                h, mi = clock
+                return {
+                    "type": WHEN_DEPART_AT,
+                    "iso": _today_iso_at(tz, h, mi),
+                    "tz": tz,
+                    "leaveNow": False,
+                    "departAt": True,
+                    "arriveBy": False,
+                }
+
+    # salir ahora / ahora mismo / leave now (default si no hay otra señal)
+    if re.search(r"salir\s+ahora|ahora\s+mismo|leave\s+now|\bya\b", n):
+        return {
+            "type": WHEN_LEAVE_NOW,
+            "iso": None,
+            "tz": tz,
+            "leaveNow": True,
+            "departAt": False,
+            "arriveBy": False,
+        }
+
+    return {
+        "type": WHEN_LEAVE_NOW,
+        "iso": None,
+        "tz": tz,
+        "leaveNow": True,
+        "departAt": False,
+        "arriveBy": False,
+    }
 
 def detect_criterion(text: str, override: str | None = None) -> tuple[str, list[str]]:
     if override:
@@ -143,6 +289,8 @@ def parse_intent(
     destination: str | None = None,
     criterion: str | None = None,
     locale: str | None = None,
+    when_type: str | None = None,
+    when_iso: str | None = None,
 ) -> dict[str, Any]:
     """Parser de reglas. LLM solo si AGENFT_TRIP_LLM=1 (gancho; off por defecto)."""
     raw = text or ""
@@ -175,10 +323,17 @@ def parse_intent(
         needs.append("llm_hook_unavailable_in_spike")
 
     tz = pack.get("timezone") or "Europe/Madrid"
+    when = detect_when(raw, tz=tz, override_type=when_type, override_iso=when_iso)
+    if when["type"] in (WHEN_DEPART_AT, WHEN_ARRIVE_BY) and not when.get("iso"):
+        needs.append("when_time")
+        conf = min(conf, 0.45)
+    elif when["type"] != WHEN_LEAVE_NOW:
+        conf = min(1.0, conf + 0.05)
+
     return {
         "origin": {"text": o or "", "lat": None, "lon": None, "stopHint": None, "placeId": None},
         "destination": {"text": d or "", "lat": None, "lon": None, "stopHint": None, "placeId": None},
-        "when": {"type": "depart_now", "iso": None, "tz": tz},
+        "when": when,
         "criteria": {
             "primary": primary,
             "secondary": secondary,
