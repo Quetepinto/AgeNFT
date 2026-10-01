@@ -26,3 +26,6 @@ contracts/out/
 contracts/cache/
 pieces/mobility/packs/*/incidents-cache.json
 backups/
+
+__pycache__/
+*.py[cod]
