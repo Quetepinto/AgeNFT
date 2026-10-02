@@ -1,6 +1,6 @@
 # Runtime adapters — Hermes, OpenClaw, ElizaOS
 
-> **Estado:** Diseño · **Jul-2026** · nota OpenClaw 2.0 **2026-09-07**  
+> **Estado:** Diseño · **Jul-2026** · nota OpenClaw 2.0 **2026-09-07** · lab Pi **2026-09-26**  
 > Responde: ¿un ageNFT distinto por motor? ¿OpenClaw en lugar de Hermes?
 
 ---
@@ -15,6 +15,7 @@ El owner **puede elegir** Hermes, OpenClaw o ElizaOS (futuro), pero:
 |------|-------------------|---------|
 | **MVP hoy** | **Hermes** + `run-turn.mjs` | Telegram, cron Doctor, skill `agenft-core`, checklist 8/8 |
 | **Próximo** | **OpenClaw** como adapter | Workspace dev, integraciones Cursor; llama al mismo `run-turn` |
+| **Lab #3** | **Pi (pi.dev)** vía `custom` | Spike pack `runtime/pack/lab-pi` — host vacío; **no** default ni producto |
 | **Fase 5+** | **ElizaOS** opcional | Swap/bridge/ERC-8004 — no por x402 ni por cerebro base |
 
 **Complejidad real:** mantener **N adapters delgados**, no reimplementar memoria/budget/TBA en cada motor.
@@ -128,6 +129,18 @@ OpenClaw encaja con la tesis “wrapper con valor” (vídeo G Bascunana): ageNF
 
 SKILL.md no cambia en 2.0; el port es barato cuando toque. Preset mint: `docs/backups/openclaw.json`.
 
+### Pi (pi.dev) — lab #3 / `custom` (2026-09-26)
+
+**Spike listo para probar; no es MVP ni “próximo” producto.** OpenClaw sigue siendo el segundo host documentado. Pi es un harness mínimo (tools `read`/`write`/`edit`/`bash`) útil como **host lab / taller**, no como cerebro del NFT.
+
+| Hacer | No hacer |
+|-------|----------|
+| Skill delgado → `hermes:turn:pay` / `runTurn()` (mismo contrato que Hermes) | Sustituir Hermes en VPS / Unit-Mainnet / Telegram |
+| Preset `docs/backups/pi-custom.json` con `runtime.engine: "custom"` + `engineVersion: "pi-lab"` | Ampliar schema enum con `"pi"` antes de un turno lab pagado end-to-end |
+| Pack `runtime/pack/lab-pi/` + `npm run pi:smoke` (sin USDC) | Usar memoria nativa Pi ni SPI OpenClaw `AgentHarnessV2` |
+
+Instalación / prueba: [`runtime/pack/lab-pi/README.md`](../../runtime/pack/lab-pi/README.md). Smoke: `cd runtime && npm run pi:smoke`.
+
 ---
 
 ## ElizaOS — cuándo sí
@@ -184,6 +197,7 @@ Checklist adapter nuevo:
 |--------|------------------|------------------|
 | **Hermes Telegram** | `hermes-agent` | Telegram ☑ |
 | **OpenClaw dev** | `openclaw` | web + opcional Telegram |
+| **Pi lab** | `custom` (`engineVersion: pi-lab`) | Telegram ✗ — solo lab |
 | **Minimal API** | `minimal` | chat-api / dApp |
 | **Eliza advanced** | `elizaos` | configurable (Fase 5) |
 

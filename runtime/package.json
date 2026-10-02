@@ -25,6 +25,7 @@
     "hermes:verify": "node ../scripts/hermes/verify-unit-mainnet.mjs",
     "hermes:verify:mainnet": "node ../scripts/hermes/verify-unit-mainnet.mjs",
     "hermes:verify:lab": "node ../scripts/hermes/verify-unit-1.mjs",
+    "pi:smoke": "node ../scripts/pi/smoke-lab.mjs",
     "dapp:export": "node ../scripts/dapp/export-public-data.mjs",
     "chat:api": "node src/chat-api.mjs",
     "lab:bridge": "node src/lab-bridge.mjs",
