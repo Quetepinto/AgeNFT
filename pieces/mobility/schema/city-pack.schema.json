@@ -37,7 +37,42 @@
           "name": { "type": "string" },
           "aliases": { "type": "array", "items": { "type": "string" } },
           "lat": { "type": "number" },
-          "lon": { "type": "number" }
+          "lon": { "type": "number" },
+          "corridor": { "type": "string", "description": "id de corridors[] si el lugar es una avenida/corredor" },
+          "emtPrefer": { "type": "array", "items": { "type": "string" }, "description": "códigos EMT preferidos" }
+        }
+      }
+    },
+    "corridors": {
+      "type": "object",
+      "description": "Corredores de vía (pasa por / recorre avenida) ≠ near-POI. firstStop + lines con terminusNear.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["id", "name", "network", "firstStop", "lines"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "aliases": { "type": "array", "items": { "type": "string" } },
+          "network": { "type": "string" },
+          "traffic": { "type": "string" },
+          "directionNote": { "type": "string" },
+          "firstStop": { "type": "string" },
+          "stopsAlong": { "type": "array", "items": { "type": "string" } },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["line", "headsign", "lastStop"],
+              "properties": {
+                "line": { "type": "string" },
+                "headsign": { "type": "string" },
+                "lastStop": { "type": "string" },
+                "terminusNear": { "type": "array", "items": { "type": "string" } },
+                "notHeadsigns": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          },
+          "pitfalls": { "type": "array", "items": { "type": "string" } }
         }
       }
     },
@@ -70,6 +105,8 @@
               "network": { "type": "string" },
               "defaultStop": { "type": "string" },
               "defaultLine": { "type": "string" },
+              "mode": { "type": "string", "description": "p.ej. corridor vs board/near" },
+              "corridor": { "type": "string" },
               "note": { "type": "string" }
             }
           }
@@ -190,6 +227,9 @@
                 "description": "adapter transitapp-bgtfs: línea → global_stop_id",
                 "additionalProperties": { "type": "string" }
               },
+              "corridor": { "type": "string" },
+              "role": { "type": "string" },
+              "near": { "type": "array", "items": { "type": "string" } },
               "note": { "type": "string" }
             }
           }

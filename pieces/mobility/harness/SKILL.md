@@ -61,6 +61,7 @@ Si `discovery.allowed` es `true` en el pack (o no hay pack):
 - `minutes: 0` = llegando/en parada; hora estimada superada pero listado = **aún sin pasar**.
 - Uso moderado de APIs (bajo demanda; sin polling agresivo). Sin credenciales en el pack.
 - Sin keys Google para plan. Walk = OSRM; PT MVP = deep-link oficial.
+- **Corredor ≠ near-POI:** si el pack tiene `corridors` y el usuario dice «pasa por / recorre / primera parada de \<avenida\>», usar el corredor (`firstStop` + línea filtrada por `terminusNear`), **no** paradas “cercanas” por geocode. Caso València: Av del Puerto → EMT **1615** L**92**→Malva (**1546**), no L31/1211.
 
 ## Comandos
 
