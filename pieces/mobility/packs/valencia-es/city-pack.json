@@ -5,8 +5,36 @@
   "country": "ES",
   "timezone": "Europe/Madrid",
   "language": "es",
-  "updatedAt": "2026-09-19",
+  "updatedAt": "2026-10-01",
   "maintainers": ["krallo"],
+  "tripProviders": {
+    "officialPlannerUrl": "https://gvenruta.gva.es",
+    "officialPlannerName": "gvEnRuta",
+    "osrmProfile": "foot",
+    "otpUrl": null,
+    "otpNote": "Spike MVP: deep-link oficial. OTP+GTFS self-host = fase siguiente (AGENFT_OTP_URL).",
+    "tripPlanning": true
+  },
+  "places": {
+    "estacio-nord": {
+      "name": "Estació del Nord",
+      "aliases": ["nord", "estacion del nord", "estació del nord", "valencia nord", "estacio del nord"],
+      "lat": 39.4669,
+      "lon": -0.3773
+    },
+    "suecia": {
+      "name": "Suècia / Blasco Ibáñez",
+      "aliases": ["suecia", "suècia", "blasco ibañez suecia"],
+      "lat": 39.476261,
+      "lon": -0.356927
+    },
+    "colón": {
+      "name": "Colón",
+      "aliases": ["colon", "colón", "metro colon"],
+      "lat": 39.4701,
+      "lon": -0.3689
+    }
+  },
   "discovery": {
     "allowed": true,
     "policy": "official-first",
@@ -85,7 +113,7 @@
       "stops": {
         "65007": { "name": "El Puig", "direction": "→ València (trenes que paran en Cabanyal)" },
         "65003": { "name": "València-Cabanyal", "direction": "→ El Puig" },
-        "65000": { "name": "València-Estació del Nord" }
+        "65000": { "name": "València-Estació del Nord", "lat": 39.4669, "lon": -0.3773 }
       },
       "pitfalls": [
         "Tren con hora estimada superada que sigue en lista = retrasado en camino, no fantasma."

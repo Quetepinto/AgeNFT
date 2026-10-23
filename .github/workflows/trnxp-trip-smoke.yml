@@ -1,0 +1,22 @@
+name: TRNXP trip smoke
+
+on:
+  pull_request:
+    paths:
+      - 'pieces/mobility/**'
+      - 'docs/research/trnxp-trip-spike.md'
+      - '.github/workflows/trnxp-trip-smoke.yml'
+  push:
+    branches: [main, master]
+    paths:
+      - 'pieces/mobility/**'
+      - '.github/workflows/trnxp-trip-smoke.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: trip.py smoke (parser + deep-link when, offline)
+        run: python3 pieces/mobility/tools/trip.py smoke valencia-es

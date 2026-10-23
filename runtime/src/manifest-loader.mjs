@@ -13,7 +13,9 @@ export function loadManifest(manifestPath) {
   validateManifest(manifest);
   const packId = slugFromName(manifest.name);
   const packDir = join(REPO_ROOT, 'runtime/pack', packId);
-  const dataDir = join(REPO_ROOT, 'runtime/data', packId);
+  const dataDir = process.env.AGENFT_DATA_DIR
+    ? process.env.AGENFT_DATA_DIR
+    : join(REPO_ROOT, 'runtime/data', packId);
   return { manifest, abs, packDir, dataDir, packId };
 }
 

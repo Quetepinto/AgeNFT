@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agenft.dev/schemas/trip-plan.schema.json",
+  "title": "TripPlan",
+  "description": "TRNXP — plan de viaje rankeado (salida del Ranker).",
+  "type": "object",
+  "required": ["intent", "ranked", "asOf"],
+  "properties": {
+    "intent": { "type": "object", "description": "TripIntent resumido o completo" },
+    "ranked": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rank", "score", "label", "offer", "why"],
+        "properties": {
+          "rank": { "type": "integer", "minimum": 1 },
+          "score": { "type": "number" },
+          "label": { "type": "string" },
+          "offer": { "$ref": "#/$defs/modeOffer" },
+          "why": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "asOf": { "type": "string", "format": "date-time" },
+    "fallbacks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string" },
+          "url": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "text": { "type": "string", "description": "Respuesta chat plantilla (sin LLM)" },
+    "disclaimer": { "type": "string" }
+  },
+  "$defs": {
+    "latLonName": {
+      "type": "object",
+      "properties": {
+        "lat": { "type": ["number", "null"] },
+        "lon": { "type": ["number", "null"] },
+        "name": { "type": ["string", "null"] },
+        "stopId": { "type": ["string", "null"] }
+      }
+    },
+    "leg": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": { "type": "string" },
+        "from": { "$ref": "#/$defs/latLonName" },
+        "to": { "$ref": "#/$defs/latLonName" },
+        "durationSec": { "type": ["integer", "null"] },
+        "distanceM": { "type": ["number", "null"] },
+        "polyline": { "type": ["string", "null"] },
+        "route": { "type": ["string", "null"] },
+        "agency": { "type": ["string", "null"] },
+        "departIso": { "type": ["string", "null"] },
+        "arriveIso": { "type": ["string", "null"] },
+        "realtime": { "type": "boolean" },
+        "costHint": { "type": ["string", "null"] },
+        "note": { "type": ["string", "null"] }
+      }
+    },
+    "modeOffer": {
+      "type": "object",
+      "required": ["providerId", "modes", "legs", "totals"],
+      "properties": {
+        "providerId": { "type": "string" },
+        "modes": { "type": "array", "items": { "type": "string" } },
+        "legs": { "type": "array", "items": { "$ref": "#/$defs/leg" } },
+        "totals": {
+          "type": "object",
+          "properties": {
+            "durationSec": { "type": ["integer", "null"] },
+            "walkM": { "type": ["number", "null"] },
+            "transfers": { "type": ["integer", "null"] },
+            "costEur": { "type": ["number", "null"] },
+            "co2g": { "type": ["number", "null"] },
+            "comfort": { "type": ["number", "null"] }
+          }
+        },
+        "live": { "type": "boolean" },
+        "disclaimer": { "type": "string" },
+        "deepLink": { "type": ["string", "null"] }
+      }
+    }
+  }
+}
