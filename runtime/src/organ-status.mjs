@@ -423,6 +423,8 @@ async function memoryOrganStatus(wiring, ctx) {
     'Turno local: npm run once (escribe latest.json).',
     'Sync offchain: npm run memory:sync (o --provider=kubo|lab-remote).',
     'Prueba viaje: npm run memory:restart-test -- --skip-upload',
+    'Transfer sim: npm run memory:transfer-sim -- --seed --policy=full',
+    'Smoke offline: npm run memory:smoke',
   ];
   if (option === 'kubo-ipfs') {
     steps.push('kubo: ipfs daemon + npm run memory:sync -- --provider=kubo');
