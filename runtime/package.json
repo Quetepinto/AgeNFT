@@ -13,6 +13,8 @@
     "memory:sync": "node src/memory-sync.mjs",
     "memory:hydrate": "node src/memory-sync.mjs --hydrate",
     "memory:restart-test": "node src/memory-restart-test.mjs",
+    "memory:transfer-sim": "node src/memory-transfer-sim.mjs",
+    "memory:smoke": "node src/memory-smoke.mjs",
     "hermes:turn": "node src/hermes-turn.mjs",
     "hermes:turn:pay": "node src/hermes-turn.mjs --pay",
     "once:hose": "AGENFT_BRAIN_MODE=hose node src/run-once.mjs",
