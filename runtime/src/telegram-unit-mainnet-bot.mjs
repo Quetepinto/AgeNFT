@@ -140,6 +140,15 @@ async function handleMessage(msg) {
       });
       return;
     }
+    if (!pack) {
+      await tg('sendMessage', {
+        chat_id: chatId,
+        text:
+          'Sin City Pack en manifiesto ni AGENFT_MOBILITY_PACK.\n' +
+          'Configura packs[] en capabilities o el env. Bot lite: /ciudad.',
+      });
+      return;
+    }
     if (!tranxQ) {
       await tg('sendMessage', {
         chat_id: chatId,
