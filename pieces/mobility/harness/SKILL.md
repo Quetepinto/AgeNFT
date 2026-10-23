@@ -1,25 +1,26 @@
 ---
 name: mobility-harness
-description: "Transporte en cualquier ciudad con City Packs: enrutar por red, vivo vs programado, investigar y devolver lo aprendido al pack."
-version: 0.1.0
+description: "TRNXP: City Packs — tablón por red y plan A→B (walk OSRM + deep-link oficial). Investigar y devolver al pack."
+version: 0.2.0
 author: ageNFT
 license: MIT
 platforms: [linux, macos]
 metadata:
   hermes:
-    tags: [mobility, transit, city-pack, ageNFT, M3-capability]
+    tags: [mobility, transit, city-pack, ageNFT, M3-capability, TRNXP]
 ---
 
-# Mobility harness (City Packs)
+# Mobility harness (TRNXP / City Packs)
 
 Capacidad **M3** del cuerpo ageNFT: moverse por una ciudad. El conocimiento local no está en este skill sino en `packs/<ciudad>/city-pack.json`. Este skill es el **procedimiento**; el pack es la **verdad local**.
 
 ## When to use
 
-- El usuario pregunta por buses, trenes, metro, tranvía, «cuánto falta», «próximo», horarios, cómo llegar.
+- El usuario pregunta por buses, trenes, metro, tranvía, «cuánto falta», «próximo», horarios.
+- **Cómo llegar** de A a B, «ruta más rápida», «menos transbordos» → plan (`trip.py`), no solo tablón.
 - Cualquier ciudad: si hay pack, úsalo; si no, modo descubrimiento (abajo).
 
-## Procedimiento (orden fijo)
+## Procedimiento — tablón (orden fijo)
 
 1. **Ciudad.** Si no está clara → preguntar. Listar packs: `tools/mobility.py packs`.
 2. **Red y medio.** Nunca por el número de línea solo (112 Madrid ≠ 112A València). Ejecutar
@@ -31,6 +32,17 @@ Capacidad **M3** del cuerpo ageNFT: moverse por una ciudad. El conocimiento loca
    - Filas vacías con `hint` → repetir el hint tal cual (qué líneas sí hay, dónde está el programado).
 4. **Dirección.** Si la parada tiene `direction`, mencionarla. Paradas por sentido son paradas distintas.
 5. **Respuesta.** Solo resultado: línea → destino, minutos, hora, ⚡/programado, y una frase si hay pitfall relevante. Sin proceso.
+
+## Procedimiento — plan A→B (spike TRNXP)
+
+Si el texto tiene **origen y destino** («de X a Y», «cómo llego…») o flags `--from`/`--to`:
+
+1. `tools/trip.py plan <pack> "<pregunta>"` (o `--from` / `--to` / `--criterion`).
+2. Devolver el texto o JSON: ofertas rankeadas (`fastest` / `fewest_transfers`), `why[]`, deep-link oficial.
+3. **Nunca** inventar horarios PT. Si solo hay deep-link, decirlo.
+4. Si solo pregunta por parada/próximo → **seguir tablón** (`reply`), no forzar plan.
+
+Detalle: [`docs/research/trnxp-trip-spike.md`](../../../docs/research/trnxp-trip-spike.md).
 
 ## Modo descubrimiento (sin pack o sin fuente)
 
@@ -48,6 +60,7 @@ Si `discovery.allowed` es `true` en el pack (o no hay pack):
 - GTFS/PDF/tablón estático = **programado**, aunque sea de hoy.
 - `minutes: 0` = llegando/en parada; hora estimada superada pero listado = **aún sin pasar**.
 - Uso moderado de APIs (bajo demanda; sin polling agresivo). Sin credenciales en el pack.
+- Sin keys Google para plan. Walk = OSRM; PT MVP = deep-link oficial.
 
 ## Comandos
 
@@ -60,4 +73,8 @@ python3 tools/mobility.py reply <pack> "próximo bus suecia"   # chat, sin model
 python3 tools/mobility.py bot <pack>                         # REPL, sin modelo
 python3 tools/mobility.py scan <pack>                        # incidencias RSS/Atom
 python3 tools/mobility.py board <pack> <red> <parada> [línea] [--json]
+
+python3 tools/trip.py plan <pack> "de Suècia a Estació del Nord lo más rápido"
+python3 tools/trip.py plan <pack> --from "Suècia" --to "Nord" --criterion fewest_transfers --json
+python3 tools/trip.py parse <pack> "de X a Y sin transbordos"
 ```

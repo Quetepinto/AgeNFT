@@ -19,6 +19,8 @@ node probe-organs.mjs 115            # context, memory, x402
 node transfer-checklist.mjs 115      # Fase 2.3 round-trip + checklist
 node transfer-checklist.mjs 115 --dry-run
 node recover-agent.mjs 115           # recuperar NFT si falla return transfer
+node mainnet-checklist.mjs 1         # Unit-Mainnet #1 (pide credentials para firma TBA)
+node mainnet-checklist.mjs 1 --read-only  # RPC + probes sin owner key
 node transfer-test.mjs 115           # transfer simple (legacy)
 node mint-vims-agent.mjs Unit-1       # mint nuevo agente
 ```
