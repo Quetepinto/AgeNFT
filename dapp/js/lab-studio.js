@@ -598,6 +598,23 @@ const OPTION_META = {
   ],
   off: ['free'],
   'uruiru-svg': ['optionalOrgan', 'free', 'staticPresence', 'privacyHigh', 'oss'],
+  'gods-eye-view': [
+    'optionalOrgan',
+    'selfhost',
+    'experimental',
+    'optInExplicit',
+    'privacyHigh',
+    'requiresHuman',
+  ],
+  'geo-feeds': [
+    'optionalOrgan',
+    'free',
+    'selfhost',
+    'experimental',
+    'optInExplicit',
+    'privacyHigh',
+    'oss',
+  ],
   'uruiru-png': ['optionalOrgan', 'free', 'staticPresence', 'privacyHigh'],
   'tts-x402': [
     'optionalOrgan',
@@ -689,6 +706,8 @@ export const OPTION_LABELS = {
   'toju-local': 'Lab local (disco)',
   'ipfs-primary': 'toju + IPFS',
   'w3stor-fallback': 'W3Stor + IPFS',
+  'gods-eye-view': "God's Eye View (mapa VPS)",
+  'geo-feeds': 'Geo feeds (OSINT, sin Google)',
 };
 
 /** IDs antiguos del Lab → nomenclatura protocolo+pin (jul-2026). */
@@ -716,13 +735,13 @@ function optionLabel(optionId) {
 /** Qué es cada órgano del esquema — texto para principiantes. */
 const NODE_BLURBS = {
   senses:
-    'Los «sentidos» del agente: convierte voz, imágenes o texto escaneado en información que el Cerebro puede usar (STT, OCR, visión).',
+    'Los «sentidos» del agente: voz/OCR/visión, o feeds geo OSINT (`geo-feeds`) sin globo Google.',
   brain:
     'El Cerebro piensa y redacta respuestas. Elige el modelo de IA y cómo se paga cada inferencia (x402, LLM router hose, OpenRouter, Ollama local, etc.).',
   memory:
     'Dónde viven conversaciones, archivos y recuerdos del agente: disco del VPS, IPFS con pin, Arweave u otras capas offchain.',
   presence:
-    'Cara y voz en la web: avatar URUIRU, TTS, lip-sync. Lo que ve el usuario además del texto del chat.',
+    'Cara, voz y superficies espaciales: avatar URUIRU, TTS, o mapa God\'s Eye View (GEV) en tu VPS.',
   nft:
     'Identidad onchain del agente (NFT + Token Bound Account en Base). Define quién es propietario y quién puede operarlo.',
   runtime:
@@ -778,6 +797,10 @@ const OPTION_BLURBS = {
   off: 'Desactivado — sin bot Matrix en este cable.',
   'uruiru-svg': 'Avatar URUIRU vectorial en la dApp — ligero y animable.',
   'uruiru-png': 'Avatar PNG estático — falta animación/lip-sync.',
+  'gods-eye-view':
+    "God's Eye View en tu VPS — globo 3D (vuelos, tráfico, CCTV…). Complementa TRNXP; no sustituye City Packs. Keys en el host.",
+  'geo-feeds':
+    'Adapters OSINT para el agente (OpenSky, USGS, Open-Meteo, ISS…) → texto/JSON. Sin clave Google ni GEV. Ver docs/research/trnxp-agent-feeds.md.',
   'tts-x402': 'Voz sintética pagada con x402 — TTS soberano.',
   'elevenlabs-tts': 'Voz ElevenLabs (suscripción) — calidad alta, nube propietaria.',
   'lip-sync-ml': 'Sincronización labial ML — experimental, requiere opt-in.',
@@ -1498,9 +1521,9 @@ const NODE_OPTIONS = {
   gateway: DEFAULT_GATEWAYS,
   chatweb: ['chat-api-local', 'chat-api-caddy', 'dapp-only'],
   matrix: ['matrix-bot', 'hermes-bridge', 'off'],
-  presence: ['uruiru-svg', 'uruiru-png', 'tts-x402', 'elevenlabs-tts', 'lip-sync-ml'],
+  presence: ['uruiru-svg', 'uruiru-png', 'gods-eye-view', 'tts-x402', 'elevenlabs-tts', 'lip-sync-ml'],
   studio: ['lab-mvp', 'organ-studio-s1'],
-  senses: ['stt-ocr', 'vision', 'traductor'],
+  senses: ['stt-ocr', 'vision', 'traductor', 'geo-feeds'],
   mas: ['syn2mas', 'classic-only'],
 };
 

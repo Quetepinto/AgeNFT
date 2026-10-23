@@ -4,9 +4,34 @@ Cosas dichas en chat, para no perderlas. El agente responde debajo con lo que ha
 
 ---
 
+## 2026-09-20
+
+### TRNXP rename + God's Eye View en VPS / wiring
+
+**Pedido:** instalar GEV (p. ej. VPS) para Iggy (Hermes) y opción de cableado para TRNXP; renombrar TranXp → TRNXP (vs TRNXPRT).
+
+**Hoy:**
+
+| Pieza | Dónde | Estado |
+|-------|-------|--------|
+| Doc diseño GEV + fases Iggy | `research/trnxp-gods-eye-view.md` | ✅ 📐 |
+| Opción Lab `gods-eye-view` | `dapp/js/lab-studio.js` → Presencia | ✅ experimental |
+| Marca TRNXP en UI/docs | bots, manifiestos, research | ✅ |
+| Alias npm | `telegram:trnxp` | ✅ |
+| GEV instalado en VPS | fuera del repo | ⏸ operador |
+| Skill Iggy → GEV | — | 📐 G1 |
+
+### Feeds modo agente (sin GEV / sin Google)
+
+**Pedido:** usar capas de datos para que el agente obtenga info, no el globo 3D.
+
+**Hoy:** diseño + opción Lab `geo-feeds` · doc [`research/trnxp-agent-feeds.md`](research/trnxp-agent-feeds.md). Implementación `pieces/geo-feeds` = F1 pendiente.
+
+---
+
 ## 2026-09-19
 
-### TranXp: dualidad pieza + Unit lite (implementado)
+### TRNXP: dualidad pieza + Unit lite (implementado)
 
 **Pedido / plan:** pieza usable ahora; acoplable a AgeNFT completo; Unit lite independiente; mint después.
 
@@ -22,7 +47,7 @@ Cosas dichas en chat, para no perderlas. El agente responde debajo con lo que ha
 
 ---
 
-### TranXp: bot sin modelo + modo pro + scanner de incidencias
+### TRNXP: bot sin modelo + modo pro + scanner de incidencias
 
 **Pedido:** que funcione de forma básica sin IA si el pack de la ciudad está relleno a mano; modo opcional con el modelo preferido del usuario (funciones pro); y una parte que escanee noticias de incidencias/retrasos (esbozo Hermescortes / Camino).
 

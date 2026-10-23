@@ -118,7 +118,7 @@ async function handleMessage(msg) {
   if (!text || text.startsWith('/start')) {
     await tg('sendMessage', {
       chat_id: chatId,
-      text: `Hola — soy **${BOT_DISPLAY_NAME}** (Unit-Mainnet #1, ageNFT en Base mainnet). Gespenster de Ety Fefer. Escribe tu mensaje.\n\nTransporte (TranXp, sin LLM): /tranx próximo bus suecia`,
+      text: `Hola — soy **${BOT_DISPLAY_NAME}** (Unit-Mainnet #1, ageNFT en Base mainnet). Gespenster de Ety Fefer. Escribe tu mensaje.\n\nTransporte (TRNXP, sin LLM): /tranx próximo bus suecia`,
     });
     return;
   }
@@ -137,6 +137,15 @@ async function handleMessage(msg) {
       await tg('sendMessage', {
         chat_id: chatId,
         text: 'Capacidad mobility/v0 no habilitada en el manifiesto (capabilities).',
+      });
+      return;
+    }
+    if (!pack) {
+      await tg('sendMessage', {
+        chat_id: chatId,
+        text:
+          'Sin City Pack en manifiesto ni AGENFT_MOBILITY_PACK.\n' +
+          'Configura packs[] en capabilities o el env. Bot lite: /ciudad.',
       });
       return;
     }
