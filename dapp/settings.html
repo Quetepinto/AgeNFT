@@ -4,26 +4,127 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="agenft-base" content="." />
-    <title>Ajustes — Unit-Mainnet</title>
+    <title>Ajustes — ageNFT</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <div class="wrap">
+    <div class="wrap settings-wrap">
       <header class="hero" style="margin-bottom: 1rem">
         <img id="avatar" class="avatar" alt="" hidden />
         <div id="avatar-fallback" class="avatar avatar-fallback" aria-hidden="true">U</div>
         <div style="flex: 1">
-          <h1>⚙️ Ajustes</h1>
-          <p class="sub">Panel owner — esbozo. Conecta wallet para ver controles sensibles.</p>
+          <p class="badge badge-mainnet" id="token-label">#1</p>
+          <h1>Ajustes · <span id="agent-name">ageNFT</span></h1>
+          <p class="sub">
+            Dashboard owner — wiring y hosting. Pack
+            <code id="pack-label">unit-mainnet</code>. Los secretos no se guardan aquí.
+          </p>
         </div>
-        <a class="btn btn-secondary btn-compact" href="lab.html" title="Lab Studio">🎛️ Lab</a>
-        <a class="btn btn-secondary btn-compact" href="index.html">← Ficha</a>
+        <a class="btn btn-secondary btn-compact" href="lab.html" title="Lab Studio (dev)">Lab</a>
+        <a class="btn btn-secondary btn-compact" href="index.html">Ficha</a>
       </header>
 
+      <p id="settings-status" class="settings-status" role="status"></p>
+
       <section class="card">
-        <h2>Wallet</h2>
-        <button type="button" class="btn btn-secondary" id="btn-connect">Conectar MetaMask</button>
+        <h2>Wallet · owner</h2>
+        <p class="sub">
+          Solo quien tenga el NFT onchain puede guardar en el host. Owner onchain:
+          <span class="mono" id="onchain-owner">…</span>
+        </p>
+        <div class="settings-row">
+          <button type="button" class="btn" id="btn-connect">Conectar wallet</button>
+          <span id="owner-badge" class="settings-badge">Sin wallet</span>
+        </div>
         <p class="mono" id="wallet-status" style="margin-top: 0.75rem"></p>
+      </section>
+
+      <section class="card">
+        <h2>Dónde guardar</h2>
+        <p class="sub">
+          El NFT no guarda tus cables. Eliges navegador, descarga, o el host (local/VPS) donde corre
+          <code>npm run settings:bridge</code>.
+        </p>
+        <label class="lab-field">
+          <span>Destino</span>
+          <select id="host-mode" class="settings-select">
+            <option value="browser">Este navegador (+ descargar JSON)</option>
+            <option value="local">Host local (settings-bridge)</option>
+            <option value="vps">VPS / nube (URL del bridge)</option>
+            <option value="custom">URL personalizada</option>
+          </select>
+        </label>
+        <p id="browser-hint" class="sub">
+          Ideal para probar. Al guardar también descarga
+          <code>wiring-*.json</code> y <code>host-prefs-*.json</code> para copiar a tu máquina.
+        </p>
+        <p id="download-hint" class="sub" hidden></p>
+        <div id="bridge-fields" hidden>
+          <label class="lab-field">
+            <span>URL settings-bridge</span>
+            <input
+              id="bridge-url"
+              class="settings-input"
+              type="url"
+              value="http://127.0.0.1:8800"
+              placeholder="http://127.0.0.1:8800"
+            />
+          </label>
+          <label class="lab-field">
+            <span>Token (opcional · AGENFT_SETTINGS_TOKEN)</span>
+            <input id="bridge-token" class="settings-input" type="password" autocomplete="off" />
+          </label>
+          <div class="settings-row">
+            <button type="button" class="btn btn-secondary" id="btn-probe">Probar bridge</button>
+            <span id="bridge-probe" class="mono settings-probe">—</span>
+          </div>
+        </div>
+        <label class="lab-field" style="margin-top: 1rem">
+          <span>City Pack movilidad (hint host · AGENFT_MOBILITY_PACK)</span>
+          <input
+            id="mobility-pack"
+            class="settings-input"
+            type="text"
+            placeholder="vacío = sin default / elige en bot"
+            list="pack-list"
+          />
+          <datalist id="pack-list">
+            <option value="valencia-es"></option>
+            <option value="madrid-es"></option>
+          </datalist>
+        </label>
+        <label class="lab-field">
+          <span>Notas de host (privadas en este destino)</span>
+          <textarea id="host-notes" class="settings-textarea" rows="2" placeholder="ej. bot en VPS X"></textarea>
+        </label>
+      </section>
+
+      <section class="card">
+        <h2>Wiring (producto)</h2>
+        <p class="sub">
+          Opciones owner. Para cableado experimental usa
+          <a href="lab.html">Lab Studio</a>.
+        </p>
+        <label class="lab-check-inline">
+          <input type="checkbox" id="gw-enabled" />
+          Gateway chat (Telegram) cableado al Motor
+        </label>
+        <label class="lab-check-inline">
+          <input type="checkbox" id="chatweb-enabled" />
+          Chat web cableado al Motor
+        </label>
+        <label class="lab-field" style="margin-top: 0.75rem">
+          <span>Memoria operativa</span>
+          <select id="mem-option" class="settings-select"></select>
+        </label>
+        <label class="lab-field">
+          <span>Notas en wiring (sin secretos)</span>
+          <textarea id="wiring-notes" class="settings-textarea" rows="2"></textarea>
+        </label>
+        <div class="settings-row" style="margin-top: 1rem">
+          <button type="button" class="btn btn-secondary" id="btn-load">Cargar desde destino</button>
+          <button type="button" class="btn" id="btn-save" disabled>Guardar</button>
+        </div>
       </section>
 
       <section class="card">
@@ -32,17 +133,8 @@
       </section>
 
       <section class="card">
-        <h2>Economía (esbozo)</h2>
-        <p class="sub">Desglose por órgano · tier G/D/E · hoy / mes — ver <code>organ-service-tiers.md</code>.</p>
-        <div class="row"><span>Cerebro</span><span class="mono">tx402 · D · —</span></div>
-        <div class="row"><span>Memoria</span><span class="mono">local · G · —</span></div>
-        <div class="row"><span>Doctor</span><span class="mono">probe · G · —</span></div>
-        <div class="row"><span>Runway</span><span class="mono">— días</span></div>
-      </section>
-
-      <section class="card">
         <h2>Lab Studio — visualización</h2>
-        <p class="sub">Tamaño de módulos, textos y emojis en el esquema de cableado.</p>
+        <p class="sub">Preferencias solo de este navegador (no van al wiring).</p>
         <label class="lab-field" style="margin-top: 0.75rem">
           <span>Tamaño de órganos</span>
           <div class="lab-inline" style="align-items: center">
@@ -53,21 +145,15 @@
               max="1.15"
               step="0.05"
               style="flex: 1"
-              aria-describedby="lab-organ-scale-settings-hint"
             />
             <output id="lab-organ-scale-val" class="mono" style="min-width: 3rem">82%</output>
           </div>
         </label>
-        <p id="lab-organ-scale-settings-hint" class="sub">
-          Guardado en este navegador. Abre
-          <a href="lab.html">Lab Studio</a>
-          para ver el cambio (recarga si ya estaba abierto).
-        </p>
         <label class="lab-field" style="margin-top: 1rem">
-          <span>Fondo URUIRU en Lab (marca de agua)</span>
+          <span>Fondo URUIRU en Lab</span>
           <label class="lab-check-inline" style="margin-top: 0.35rem">
             <input type="checkbox" id="lab-watermark-enabled" checked />
-            Mostrar imagen del NFT al final del canvas
+            Mostrar marca de agua
           </label>
         </label>
         <label class="lab-field" style="margin-top: 0.65rem">
@@ -80,72 +166,28 @@
               max="0.28"
               step="0.02"
               style="flex: 1"
-              aria-describedby="lab-watermark-settings-hint"
             />
             <output id="lab-watermark-opacity-val" class="mono" style="min-width: 3rem">10%</output>
           </div>
         </label>
-        <p id="lab-watermark-settings-hint" class="sub">
-          Valores bajos (8–12%) suelen ser suficientes. Desmarca «Mostrar» para ocultar por completo.
-        </p>
-      </section>
-
-      <section class="card">
-        <h2>Órganos opcionales</h2>
-        <p class="sub">Presencia, Sentidos, autofinanciación — toggles futuros.</p>
       </section>
 
       <section class="card card-muted">
         <h2>Post-transfer</h2>
-        <p class="sub">Wizard mudanza local → default: <a href="transfer.html">transfer.html</a></p>
+        <p class="sub">
+          Al cambiar de owner, el comprador vuelve aquí, elige su host y guarda wiring nuevo.
+          <a href="transfer.html">transfer.html</a>
+        </p>
       </section>
 
       <footer class="footer">
-        <p>ageNFT — MVP dashboard esbozo</p>
+        <p>
+          Host API:
+          <code>cd runtime && npm run settings:bridge</code>
+          · puerto 8800 · distinto de lab:bridge 8799
+        </p>
       </footer>
     </div>
-    <script type="module">
-      import { assetUrl, fetchJson, defaultTokenId, applyAvatar, shortAddr } from './js/shared.js';
-      import { renderBodyMap } from './js/body-map.js';
-      import { bindOrganScaleControl, bindWatermarkControls } from './js/lab-display.js';
-
-      const btn = document.getElementById('btn-connect');
-      const st = document.getElementById('wallet-status');
-
-      bindOrganScaleControl(
-        document.getElementById('lab-organ-scale'),
-        document.getElementById('lab-organ-scale-val')
-      );
-
-      bindWatermarkControls({
-        enabledInput: document.getElementById('lab-watermark-enabled'),
-        opacityInput: document.getElementById('lab-watermark-opacity'),
-        valueEl: document.getElementById('lab-watermark-opacity-val'),
-      });
-
-      async function load() {
-        const tokenId = await defaultTokenId();
-        const agent = await fetchJson(assetUrl(`assets/agents/${tokenId}.json`));
-        applyAvatar(agent);
-        renderBodyMap(agent);
-      }
-
-      load().catch((e) => {
-        st.textContent = e.message;
-      });
-
-      if (window.ethereum) {
-        btn.addEventListener('click', async () => {
-          try {
-            const [a] = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            st.textContent = `Conectado: ${shortAddr(a)}`;
-          } catch (e) {
-            st.textContent = e.message;
-          }
-        });
-      } else {
-        st.textContent = 'MetaMask no detectado.';
-      }
-    </script>
+    <script type="module" src="js/settings-app.js"></script>
   </body>
 </html>
