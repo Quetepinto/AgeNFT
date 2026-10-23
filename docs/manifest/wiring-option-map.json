@@ -1,0 +1,62 @@
+{
+  "$schema": "agenft-wiring-option-map/v1",
+  "description": "Mapeo opciones Lab Studio (wiring) → campos manifiesto ageNFT/v1",
+  "runtime": {
+    "hermes": { "engine": "hermes-agent", "adapter": "agenft-run-turn/v1" },
+    "openclaw-adapter": { "engine": "openclaw", "adapter": "agenft-run-turn/v1" },
+    "akash-runtime": { "engine": "custom", "adapter": "agenft-run-turn/v1" }
+  },
+  "brain": {
+    "tx402": {
+      "provider": "tx402.ai",
+      "endpoint": "https://tx402.ai/v1/chat/completions",
+      "model": "minimax/minimax-m3",
+      "network": "eip155:8453"
+    },
+    "openrouter-fallback": {
+      "provider": "openrouter",
+      "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+      "model": "openai/gpt-4o-mini",
+      "network": "eip155:8453"
+    },
+    "ollama-local": {
+      "provider": "ollama",
+      "endpoint": "http://127.0.0.1:11434/v1/chat/completions",
+      "model": "llama3.2",
+      "network": "local"
+    }
+  },
+  "memory": {
+    "lab-local": { "provider": "lab-local", "fallbacks": ["ipfs"] },
+    "toju-ipfs": { "provider": "toju", "fallbacks": ["lab-remote", "w3stor", "ipfs"] },
+    "kubo-ipfs": { "provider": "kubo", "fallbacks": ["lab-remote", "w3stor", "ipfs"] },
+    "w3stor-ipfs": { "provider": "w3stor", "fallbacks": ["ipfs"] },
+    "arweave": { "provider": "arweave", "fallbacks": ["ipfs"] },
+    "export-only": { "provider": "export-only", "fallbacks": [] }
+  },
+  "gateway": {
+    "telegram": { "platform": "telegram", "sovereign": false },
+    "nostr": { "platform": "nostr", "sovereign": true },
+    "matrix": { "platform": "matrix", "sovereign": true },
+    "simplex": { "platform": "simplex", "sovereign": true },
+    "discord": { "platform": "discord", "sovereign": false },
+    "whatsapp": { "platform": "whatsapp", "sovereign": false }
+  },
+  "matrixNode": {
+    "matrix-bot": { "platform": "matrix", "sovereign": true },
+    "hermes-bridge": { "platform": "matrix", "sovereign": true },
+    "off": null
+  },
+  "presence": {
+    "uruiru-svg": { "asset": "assets/unit-mainnet.svg", "format": "svg" },
+    "uruiru-png": { "asset": "assets/unit-mainnet.png", "format": "png" },
+    "tts-x402": { "tts": "dtelecom-x402" },
+    "elevenlabs-tts": { "tts": "elevenlabs" },
+    "lip-sync-ml": { "animation": "lip-sync" }
+  },
+  "nft": {
+    "base-mainnet": { "chain": "eip155:8453", "registry": "0x76FC4f6cfE42dAb418cD5Ca2a5E50cBAf44eB839" },
+    "sepolia-lab": { "chain": "eip155:84532", "registry": "0xfE1ef66Ba95891d3cDf6FB83FE1444Bc3bB9FEeF" },
+    "github-pages-manifest": { "chain": null, "registry": null }
+  }
+}
