@@ -1,6 +1,8 @@
 /**
- * Helper compartido: TranXp / mobility reply sin LLM.
+ * Helper compartido: TRNXP / mobility reply sin LLM.
  * Usado por telegram-tranxp-bot y por el bot Unit-Mainnet (/tranx).
+ *
+ * Sin ciudad por defecto: si no hay env ni packs en manifiesto, pack vacío.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
@@ -18,6 +20,9 @@ const UNIT_MANIFEST = join(REPO, 'docs/manifest/examples/unit-mainnet.json');
  * @returns {string}
  */
 export function mobilityReply(pack, text) {
+  if (!pack) {
+    return 'Sin City Pack activo. Elige ciudad (/ciudad) o define AGENFT_MOBILITY_PACK.';
+  }
   if (!existsSync(MOBILITY_PY)) {
     return `No encuentro mobility.py (${MOBILITY_PY}).`;
   }
@@ -34,7 +39,8 @@ export function mobilityReply(pack, text) {
 }
 
 /**
- * Pack activo para Unit-Mainnet: env > primer capability mobility > valencia-es.
+ * Pack activo para Unit-Mainnet: env > primer capability mobility.
+ * No hay fallback hardcodeado a una ciudad (agente “nuevo” sin ciudad).
  * @returns {{ pack: string, enabled: boolean }}
  */
 export function resolveMobilityFromManifest() {
@@ -43,25 +49,25 @@ export function resolveMobilityFromManifest() {
 
   try {
     if (!existsSync(UNIT_MANIFEST)) {
-      return { pack: 'valencia-es', enabled: false };
+      return { pack: '', enabled: false };
     }
     const man = JSON.parse(readFileSync(UNIT_MANIFEST, 'utf8'));
     const caps = man.capabilities || [];
     const mob = caps.find(
       (c) => c && (c.id === 'mobility/v0' || c.id === 'mobility') && c.enabled !== false,
     );
-    if (!mob) return { pack: 'valencia-es', enabled: false };
-    const pack = (mob.packs && mob.packs[0]) || 'valencia-es';
-    return { pack, enabled: true };
+    if (!mob) return { pack: '', enabled: false };
+    const pack = (mob.packs && mob.packs[0]) || '';
+    return { pack, enabled: Boolean(pack) };
   } catch {
-    return { pack: 'valencia-es', enabled: false };
+    return { pack: '', enabled: false };
   }
 }
 
 /**
  * Si el mensaje es /tranx … o "tranx …", extrae el resto.
  * @param {string} text
- * @returns {string|null} pregunta o null si no es comando TranXp
+ * @returns {string|null} pregunta o null si no es comando TRNXP
  */
 export function parseTranxCommand(text) {
   const t = (text || '').trim();

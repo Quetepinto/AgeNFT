@@ -598,6 +598,14 @@ const OPTION_META = {
   ],
   off: ['free'],
   'uruiru-svg': ['optionalOrgan', 'free', 'staticPresence', 'privacyHigh', 'oss'],
+  'gods-eye-view': [
+    'optionalOrgan',
+    'selfhost',
+    'experimental',
+    'optInExplicit',
+    'privacyHigh',
+    'requiresHuman',
+  ],
   'uruiru-png': ['optionalOrgan', 'free', 'staticPresence', 'privacyHigh'],
   'tts-x402': [
     'optionalOrgan',
@@ -689,6 +697,7 @@ export const OPTION_LABELS = {
   'toju-local': 'Lab local (disco)',
   'ipfs-primary': 'toju + IPFS',
   'w3stor-fallback': 'W3Stor + IPFS',
+  'gods-eye-view': "God's Eye View (mapa VPS)",
 };
 
 /** IDs antiguos del Lab → nomenclatura protocolo+pin (jul-2026). */
@@ -722,7 +731,7 @@ const NODE_BLURBS = {
   memory:
     'Dónde viven conversaciones, archivos y recuerdos del agente: disco del VPS, IPFS con pin, Arweave u otras capas offchain.',
   presence:
-    'Cara y voz en la web: avatar URUIRU, TTS, lip-sync. Lo que ve el usuario además del texto del chat.',
+    'Cara, voz y superficies espaciales: avatar URUIRU, TTS, o mapa God\'s Eye View (GEV) en tu VPS.',
   nft:
     'Identidad onchain del agente (NFT + Token Bound Account en Base). Define quién es propietario y quién puede operarlo.',
   runtime:
@@ -778,6 +787,8 @@ const OPTION_BLURBS = {
   off: 'Desactivado — sin bot Matrix en este cable.',
   'uruiru-svg': 'Avatar URUIRU vectorial en la dApp — ligero y animable.',
   'uruiru-png': 'Avatar PNG estático — falta animación/lip-sync.',
+  'gods-eye-view':
+    "God's Eye View en tu VPS — globo 3D (vuelos, tráfico, CCTV…). Complementa TRNXP; no sustituye City Packs. Keys en el host.",
   'tts-x402': 'Voz sintética pagada con x402 — TTS soberano.',
   'elevenlabs-tts': 'Voz ElevenLabs (suscripción) — calidad alta, nube propietaria.',
   'lip-sync-ml': 'Sincronización labial ML — experimental, requiere opt-in.',
@@ -1498,7 +1509,7 @@ const NODE_OPTIONS = {
   gateway: DEFAULT_GATEWAYS,
   chatweb: ['chat-api-local', 'chat-api-caddy', 'dapp-only'],
   matrix: ['matrix-bot', 'hermes-bridge', 'off'],
-  presence: ['uruiru-svg', 'uruiru-png', 'tts-x402', 'elevenlabs-tts', 'lip-sync-ml'],
+  presence: ['uruiru-svg', 'uruiru-png', 'gods-eye-view', 'tts-x402', 'elevenlabs-tts', 'lip-sync-ml'],
   studio: ['lab-mvp', 'organ-studio-s1'],
   senses: ['stt-ocr', 'vision', 'traductor'],
   mas: ['syn2mas', 'classic-only'],
